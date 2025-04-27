@@ -1,13 +1,12 @@
 import React from "react";
+import { Button } from "@/components/ui/button";
 
-const App = () => {
+function App() {
   return (
-    <div>
-      <h1 className="text-5xl text-center text-blue-500 font-bold bg-gray-100 p-5 rounded-lg shadow-lg hover:bg-blue-200 transition duration-300 transform hover:scale-105">
-        This is App component
-      </h1>
+    <div className="flex flex-col items-center justify-center min-h-svh">
+      <Button variant="secondary">Click me</Button>
     </div>
   );
-};
+}
 
 export default App;
