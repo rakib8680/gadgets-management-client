@@ -15,10 +15,10 @@ const Login = () => {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gradient ">
+    <div className="flex items-center justify-center h-screen bg-gradient">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col space-y-5">
-          <h1 className=" text-2xl font-bold text-slate-600">
+        <div className="flex flex-col space-y-5 border px-5 py-10 rounded-lg shadow">
+          <h1 className=" text-2xl font-bold text-gray-700">
             Please Login to continue
           </h1>
           <div className="flex flex-col space-y-1.5">
