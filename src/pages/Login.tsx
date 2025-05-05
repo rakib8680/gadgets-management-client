@@ -5,6 +5,7 @@ import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { setUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { TLoginInput } from "@/types/auth";
+import verifyToken from "@/utils/verifyToken";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
@@ -12,11 +13,15 @@ import { toast } from "sonner";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { register, handleSubmit, reset } = useForm<TLoginInput>();
-  
-  const [login,{data,error}] = useLoginMutation();
-  const dispatch = useAppDispatch();
+  const { register, handleSubmit, reset } = useForm<TLoginInput>({
+    defaultValues: {
+      email: "rakib@gmail.com",
+      password: "rakib",
+    },
+  });
 
+  const [login, { error }] = useLoginMutation();
+  const dispatch = useAppDispatch();
 
   // console.log(data,error);
 
@@ -27,12 +32,13 @@ const Login = () => {
 
     try {
       const res = await login(loginInfo).unwrap();
+      // console.log(res.data);
+      const user = verifyToken(res.data.token);
+      dispatch(setUser({ user, token: res.data.token }));
       if (res.success) {
         toast.success("Login successful", { id: toastId, duration: 2000 });
         reset();
       }
-      const { user, token } = res.data;
-      dispatch(setUser({ user, token }));
     } catch (error) {
       toast.error("Invalid Email or Password", { id: toastId, duration: 2000 });
     }
