@@ -32,7 +32,6 @@ const Login = () => {
 
     try {
       const res = await login(loginInfo).unwrap();
-      // console.log(res.data);
       const user = verifyToken(res.data.token);
       dispatch(setUser({ user, token: res.data.token }));
       if (res.success) {
