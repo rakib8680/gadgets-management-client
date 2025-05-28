@@ -13,6 +13,7 @@ import { useRegisterMutation } from "@/redux/features/auth/authApi";
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, reset } = useForm<TSignUpInput>();
   const [registerUser] = useRegisterMutation();
@@ -22,7 +23,9 @@ export default function SignUp() {
       return toast.error("Passwords do not match", { position: "top-center" });
     }
 
-    const toastId = toast.loading("Signing up...");
+    setIsLoading(true);
+    const toastId = toast.loading("Signing up...", { position: "top-center" });
+
     try {
       const res = await registerUser({
         name: data.name,
@@ -31,7 +34,10 @@ export default function SignUp() {
       }).unwrap();
 
       if (res.success) {
-        toast.success("Registration successful!", { id: toastId });
+        toast.success("Registration successful!", {
+          id: toastId,
+          position: "top-center",
+        });
         reset();
       }
     } catch (error: any) {
@@ -39,6 +45,8 @@ export default function SignUp() {
         id: toastId,
         position: "top-center",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -56,8 +64,9 @@ export default function SignUp() {
             <Input
               id="name"
               type="text"
-              placeholder="Rakib Hasan"
+              placeholder="Your Name"
               {...register("name", { required: true })}
+              disabled={isLoading}
             />
           </LabelInputContainer>
 
@@ -69,6 +78,7 @@ export default function SignUp() {
               type="email"
               placeholder="you@example.com"
               {...register("email", { required: true })}
+              disabled={isLoading}
             />
           </LabelInputContainer>
 
@@ -80,10 +90,14 @@ export default function SignUp() {
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               {...register("password", { required: true })}
+              disabled={isLoading}
             />
             <div
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-9 text-gray-500 cursor-pointer"
+              onClick={() => !isLoading && setShowPassword(!showPassword)}
+              className={cn(
+                "absolute right-3 top-9 text-gray-500",
+                isLoading ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+              )}
             >
               {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
             </div>
@@ -97,10 +111,16 @@ export default function SignUp() {
               type={showConfirmPassword ? "text" : "password"}
               placeholder="••••••••"
               {...register("confirmPassword", { required: true })}
+              disabled={isLoading}
             />
             <div
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-9 text-gray-500 cursor-pointer"
+              onClick={() =>
+                !isLoading && setShowConfirmPassword(!showConfirmPassword)
+              }
+              className={cn(
+                "absolute right-3 top-9 text-gray-500",
+                isLoading ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+              )}
             >
               {showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
             </div>
@@ -109,10 +129,25 @@ export default function SignUp() {
           {/* Submit Button */}
           <Button
             type="submit"
-            className="cursor-pointer relative w-full h-10 rounded-md bg-gradient-to-br from-black to-neutral-700 text-white font-medium hover:opacity-90 transition"
+            disabled={isLoading}
+            className={cn(
+              "relative w-full h-10 rounded-md bg-gradient-to-br from-black to-neutral-700 text-white font-medium transition",
+              isLoading
+                ? "cursor-not-allowed opacity-70"
+                : "cursor-pointer hover:opacity-90"
+            )}
           >
-            Sign Up &rarr;
-            <BottomGradient />
+            {isLoading ? (
+              <div className="flex items-center justify-center space-x-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span>Signing up...</span>
+              </div>
+            ) : (
+              <>
+                Sign Up &rarr;
+                <BottomGradient />
+              </>
+            )}
           </Button>
 
           {/* Divider */}
