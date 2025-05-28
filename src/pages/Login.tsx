@@ -15,6 +15,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, reset } = useForm<TLoginInput>({
     defaultValues: {
@@ -27,7 +28,8 @@ export default function Login() {
   const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<TLoginInput> = async (loginInfo) => {
-    const toastId = toast.loading("Logging in...");
+    setIsLoading(true);
+    const toastId = toast.loading("Logging in...", { position: "top-center" });
 
     try {
       const res = await login(loginInfo).unwrap();
@@ -36,11 +38,19 @@ export default function Login() {
 
       if (res.success) {
         console.log(res.success);
-        toast.success("Login successful", { id: toastId });
+        toast.success("Login successful", {
+          id: toastId,
+          position: "top-center",
+        });
         reset();
       }
     } catch (error) {
-      toast.error("Invalid Email or Password", { id: toastId });
+      toast.error("Invalid Email or Password", {
+        id: toastId,
+        position: "top-center",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,6 +70,7 @@ export default function Login() {
               type="email"
               placeholder="you@example.com"
               {...register("email", { required: true })}
+              disabled={isLoading}
             />
           </LabelInputContainer>
 
@@ -71,10 +82,14 @@ export default function Login() {
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               {...register("password", { required: true })}
+              disabled={isLoading}
             />
             <div
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-9 text-gray-500 cursor-pointer"
+              onClick={() => !isLoading && setShowPassword(!showPassword)}
+              className={cn(
+                "absolute right-3 top-9 text-gray-500",
+                isLoading ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+              )}
             >
               {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
             </div>
@@ -83,17 +98,33 @@ export default function Login() {
           {/* Submit Button */}
           <Button
             type="submit"
-            className=" cursor-pointer relative w-full h-10 rounded-md bg-gradient-to-br from-black to-neutral-700 text-white font-medium hover:opacity-90 transition"
+            disabled={isLoading}
+            className={cn(
+              "relative w-full h-10 rounded-md bg-gradient-to-br from-black to-neutral-700 text-white font-medium transition",
+              isLoading
+                ? "cursor-not-allowed opacity-70"
+                : "cursor-pointer hover:opacity-90"
+            )}
           >
-            Login &rarr;
-            <BottomGradient />
+            {isLoading ? (
+              <div className="flex items-center justify-center space-x-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span>Logging in...</span>
+              </div>
+            ) : (
+              <>
+                Login &rarr;
+                <BottomGradient />
+              </>
+            )}
           </Button>
+
           {/* Divider */}
           <div className="h-px w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
 
           {/* Sign up */}
           <div className="text-center text-sm text-neutral-500 dark:text-neutral-400">
-            Don’t have an account yet?{" "}
+            Don't have an account yet?{" "}
             <NavLink
               to="/signup"
               className="font-medium underline underline-offset-4 text-neutral-700 hover:text-black dark:text-neutral-200 dark:hover:text-white"
