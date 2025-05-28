@@ -1,46 +1,44 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useLoginMutation } from "@/redux/features/auth/authApi";
-import { setUser } from "@/redux/features/auth/authSlice";
-import { useAppDispatch } from "@/redux/hooks";
-import { TLoginInput } from "@/types/auth";
-import verifyToken from "@/utils/verifyToken";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from "react";
-import { toast } from "sonner";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { NavLink } from "react-router-dom";
+import { TSignUpInput } from "@/types/auth";
+import { useRegisterMutation } from "@/redux/features/auth/authApi";
 
-export default function Login() {
+export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { register, handleSubmit, reset } = useForm<TLoginInput>({
-    defaultValues: {
-      email: "rakib@gmail.com",
-      password: "rakib",
-    },
-  });
+  const { register, handleSubmit, reset } = useForm<TSignUpInput>();
+  const [registerUser] = useRegisterMutation();
 
-  const [login] = useLoginMutation();
-  const dispatch = useAppDispatch();
+  const onSubmit: SubmitHandler<TSignUpInput> = async (data) => {
+    if (data.password !== data.confirmPassword) {
+      return toast.error("Passwords do not match", { position: "top-center" });
+    }
 
-  const onSubmit: SubmitHandler<TLoginInput> = async (loginInfo) => {
-    const toastId = toast.loading("Logging in...");
-
+    const toastId = toast.loading("Signing up...");
     try {
-      const res = await login(loginInfo).unwrap();
-      const user = verifyToken(res.data.token);
-      dispatch(setUser({ user, token: res.data.token }));
+      const res = await registerUser({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      }).unwrap();
 
       if (res.success) {
-        console.log(res.success);
-        toast.success("Login successful", { id: toastId });
+        toast.success("Registration successful!", { id: toastId });
         reset();
       }
-    } catch (error) {
-      toast.error("Invalid Email or Password", { id: toastId });
+    } catch (error: any) {
+      toast.error(error.data.errorMessage || "Registration Failed", {
+        id: toastId,
+        position: "top-center",
+      });
     }
   };
 
@@ -49,8 +47,19 @@ export default function Login() {
       <div className="w-full max-w-md bg-white px-8 py-14 rounded-xl shadow-md dark:bg-zinc-900">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <h2 className="text-xl font-bold text-center text-neutral-800 dark:text-neutral-200">
-            Login to your account
+            Create an account
           </h2>
+
+          {/* Name */}
+          <LabelInputContainer>
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="Rakib Hasan"
+              {...register("name", { required: true })}
+            />
+          </LabelInputContainer>
 
           {/* Email */}
           <LabelInputContainer>
@@ -80,25 +89,43 @@ export default function Login() {
             </div>
           </LabelInputContainer>
 
+          {/* Confirm Password */}
+          <LabelInputContainer className="relative">
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <Input
+              id="confirmPassword"
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="••••••••"
+              {...register("confirmPassword", { required: true })}
+            />
+            <div
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-9 text-gray-500 cursor-pointer"
+            >
+              {showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+            </div>
+          </LabelInputContainer>
+
           {/* Submit Button */}
           <Button
             type="submit"
-            className=" cursor-pointer relative w-full h-10 rounded-md bg-gradient-to-br from-black to-neutral-700 text-white font-medium hover:opacity-90 transition"
+            className="cursor-pointer relative w-full h-10 rounded-md bg-gradient-to-br from-black to-neutral-700 text-white font-medium hover:opacity-90 transition"
           >
-            Login &rarr;
+            Sign Up &rarr;
             <BottomGradient />
           </Button>
+
           {/* Divider */}
           <div className="h-px w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
 
-          {/* Sign up */}
+          {/* Login Link */}
           <div className="text-center text-sm text-neutral-500 dark:text-neutral-400">
-            Don’t have an account yet?{" "}
+            Already have an account?{" "}
             <NavLink
-              to="/signup"
+              to="/login"
               className="font-medium underline underline-offset-4 text-neutral-700 hover:text-black dark:text-neutral-200 dark:hover:text-white"
             >
-              Sign up
+              Login
             </NavLink>
           </div>
         </form>
