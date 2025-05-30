@@ -143,10 +143,7 @@ export default function SignUp() {
                 <span>Signing up...</span>
               </div>
             ) : (
-              <>
-                Sign Up &rarr;
-                <BottomGradient />
-              </>
+              <>Sign Up &rarr;</>
             )}
           </Button>
 
@@ -168,13 +165,6 @@ export default function SignUp() {
     </div>
   );
 }
-
-const BottomGradient = () => (
-  <>
-    <span className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
-    <span className="absolute inset-x-10 -bottom-px mx-auto h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
-  </>
-);
 
 const LabelInputContainer = ({
   children,

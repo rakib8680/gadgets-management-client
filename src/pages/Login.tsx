@@ -14,9 +14,11 @@ import { cn } from "@/lib/utils";
 import { NavLink } from "react-router-dom";
 
 export default function Login() {
+  // states & hooks
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [login] = useLoginMutation();
+  const dispatch = useAppDispatch();
   const { register, handleSubmit, reset } = useForm<TLoginInput>({
     defaultValues: {
       email: "rakib@gmail.com",
@@ -24,9 +26,7 @@ export default function Login() {
     },
   });
 
-  const [login] = useLoginMutation();
-  const dispatch = useAppDispatch();
-
+  //Form submission handler
   const onSubmit: SubmitHandler<TLoginInput> = async (loginInfo) => {
     setIsLoading(true);
     const toastId = toast.loading("Logging in...", { position: "top-center" });
@@ -112,10 +112,7 @@ export default function Login() {
                 <span>Logging in...</span>
               </div>
             ) : (
-              <>
-                Login &rarr;
-                <BottomGradient />
-              </>
+              <>Login &rarr;</>
             )}
           </Button>
 
@@ -138,13 +135,7 @@ export default function Login() {
   );
 }
 
-const BottomGradient = () => (
-  <>
-    <span className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
-    <span className="absolute inset-x-10 -bottom-px mx-auto h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
-  </>
-);
-
+// Reusable component to use common styles for label and input
 const LabelInputContainer = ({
   children,
   className,
