@@ -1,33 +1,27 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { setUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
-import { TLoginInput } from "@/types/auth";
 import verifyToken from "@/utils/verifyToken";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "sonner";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { NavLink } from "react-router-dom";
-
+import GM_Form from "@/components/form/GM_Form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginValidationSchema } from "@/utils/formValidation";
+import GM_Input from "@/components/form/GM_Input";
 export default function Login() {
   // states & hooks
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
-  const { register, handleSubmit, reset } = useForm<TLoginInput>({
-    defaultValues: {
-      email: "rakib@gmail.com",
-      password: "rakib",
-    },
-  });
 
   //Form submission handler
-  const onSubmit: SubmitHandler<TLoginInput> = async (loginInfo) => {
+  const handleLogin = async (loginInfo: FieldValues) => {
     setIsLoading(true);
     const toastId = toast.loading("Logging in...", { position: "top-center" });
 
@@ -42,7 +36,6 @@ export default function Login() {
           id: toastId,
           position: "top-center",
         });
-        reset();
       }
     } catch (error) {
       toast.error("Invalid Email or Password", {
@@ -57,32 +50,37 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-black">
       <div className="w-full max-w-md bg-white px-8 py-14 rounded-xl shadow-md dark:bg-zinc-900">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <GM_Form
+          onSubmit={handleLogin}
+          defaultValues={{ email: "", password: "" }}
+          resolver={zodResolver(loginValidationSchema)}
+          className="space-y-6"
+        >
           <h2 className="text-xl font-bold text-center text-neutral-800 dark:text-neutral-200">
             Login to your account
           </h2>
 
           {/* Email */}
           <LabelInputContainer>
-            <Label htmlFor="email">Email Address</Label>
-            <Input
-              id="email"
+            <GM_Input
               type="email"
               placeholder="you@example.com"
-              {...register("email", { required: true })}
+              name="email"
+              label="Email Address"
               disabled={isLoading}
+              required={true}
             />
           </LabelInputContainer>
 
           {/* Password */}
           <LabelInputContainer className="relative">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
+            <GM_Input
               type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              {...register("password", { required: true })}
+              placeholder="Your password"
+              name="password"
+              label="Password"
               disabled={isLoading}
+              required={true}
             />
             <div
               onClick={() => !isLoading && setShowPassword(!showPassword)}
@@ -129,7 +127,7 @@ export default function Login() {
               Sign up
             </NavLink>
           </div>
-        </form>
+        </GM_Form>
       </div>
     </div>
   );
