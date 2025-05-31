@@ -1,36 +1,39 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { NavLink } from "react-router-dom";
-import { TSignUpInput } from "@/types/auth";
 import { useRegisterMutation } from "@/redux/features/auth/authApi";
+import GM_Form from "@/components/form/GM_Form";
+import GM_Input from "@/components/form/GM_Input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldValues, UseFormReturn } from "react-hook-form";
+import { registerValidationSchema } from "@/utils/formValidation";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { register, handleSubmit, reset } = useForm<TSignUpInput>();
   const [registerUser] = useRegisterMutation();
 
-  const onSubmit: SubmitHandler<TSignUpInput> = async (data) => {
-    if (data.password !== data.confirmPassword) {
+  // Form submission handler
+  const handleSignUp = async (
+    signUpInfo: FieldValues,
+    methods: UseFormReturn<any>
+  ) => {
+    if (signUpInfo.password !== signUpInfo.confirmPassword) {
       return toast.error("Passwords do not match", { position: "top-center" });
     }
-
     setIsLoading(true);
     const toastId = toast.loading("Signing up...", { position: "top-center" });
 
     try {
       const res = await registerUser({
-        name: data.name,
-        email: data.email,
-        password: data.password,
+        name: signUpInfo.name,
+        email: signUpInfo.email,
+        password: signUpInfo.password,
       }).unwrap();
 
       if (res.success) {
@@ -38,10 +41,10 @@ export default function SignUp() {
           id: toastId,
           position: "top-center",
         });
-        reset();
+        methods.reset();
       }
     } catch (error: any) {
-      toast.error(error.data.errorMessage || "Registration Failed", {
+      toast.error(error.data?.errorMessage || "Registration Failed", {
         id: toastId,
         position: "top-center",
       });
@@ -53,44 +56,55 @@ export default function SignUp() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-black">
       <div className="w-full max-w-md bg-white px-8 py-14 rounded-xl shadow-md dark:bg-zinc-900">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Sign Up Form */}
+        <GM_Form
+          onSubmit={handleSignUp}
+          defaultValues={{
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          }}
+          resolver={zodResolver(registerValidationSchema)}
+          className="space-y-6"
+        >
           <h2 className="text-xl font-bold text-center text-neutral-800 dark:text-neutral-200">
             Create an account
           </h2>
 
           {/* Name */}
           <LabelInputContainer>
-            <Label htmlFor="name">Full Name</Label>
-            <Input
-              id="name"
+            <GM_Input
               type="text"
               placeholder="Your Name"
-              {...register("name", { required: true })}
+              name="name"
+              label="Full Name"
               disabled={isLoading}
+              required={true}
             />
           </LabelInputContainer>
 
           {/* Email */}
           <LabelInputContainer>
-            <Label htmlFor="email">Email Address</Label>
-            <Input
-              id="email"
+            <GM_Input
               type="email"
               placeholder="you@example.com"
-              {...register("email", { required: true })}
+              name="email"
+              label="Email Address"
               disabled={isLoading}
+              required={true}
             />
           </LabelInputContainer>
 
           {/* Password */}
           <LabelInputContainer className="relative">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
+            <GM_Input
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
-              {...register("password", { required: true })}
+              name="password"
+              label="Password"
               disabled={isLoading}
+              required={true}
             />
             <div
               onClick={() => !isLoading && setShowPassword(!showPassword)}
@@ -105,12 +119,11 @@ export default function SignUp() {
 
           {/* Confirm Password */}
           <LabelInputContainer className="relative">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input
-              id="confirmPassword"
+            <GM_Input
               type={showConfirmPassword ? "text" : "password"}
               placeholder="••••••••"
-              {...register("confirmPassword", { required: true })}
+              name="confirmPassword"
+              label="Confirm Password"
               disabled={isLoading}
             />
             <div
@@ -160,12 +173,13 @@ export default function SignUp() {
               Login
             </NavLink>
           </div>
-        </form>
+        </GM_Form>
       </div>
     </div>
   );
 }
 
+// Reusable component to use common styles for label and input
 const LabelInputContainer = ({
   children,
   className,

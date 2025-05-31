@@ -3,7 +3,7 @@ import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { setUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import verifyToken from "@/utils/verifyToken";
-import { FieldValues } from "react-hook-form";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "sonner";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
@@ -13,6 +13,7 @@ import GM_Form from "@/components/form/GM_Form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginValidationSchema } from "@/utils/formValidation";
 import GM_Input from "@/components/form/GM_Input";
+
 export default function Login() {
   // states & hooks
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +22,10 @@ export default function Login() {
   const dispatch = useAppDispatch();
 
   //Form submission handler
-  const handleLogin = async (loginInfo: FieldValues) => {
+  const handleLogin = async (
+    loginInfo: FieldValues,
+    methods: UseFormReturn<any>
+  ) => {
     setIsLoading(true);
     const toastId = toast.loading("Logging in...", { position: "top-center" });
 
@@ -36,6 +40,7 @@ export default function Login() {
           id: toastId,
           position: "top-center",
         });
+        methods.reset();
       }
     } catch (error) {
       toast.error("Invalid Email or Password", {

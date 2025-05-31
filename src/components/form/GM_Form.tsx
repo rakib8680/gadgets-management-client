@@ -3,8 +3,8 @@ import {
   useForm,
   FormProvider,
   type FieldValues,
-  type SubmitHandler,
   type UseFormProps,
+  UseFormReturn,
 } from "react-hook-form";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ type FormConfig = {
 
 type TFormProps = {
   children: ReactNode;
-  onSubmit: SubmitHandler<FieldValues>;
+  onSubmit: (data: FieldValues, methods: UseFormReturn<FieldValues>) => void;
   className?: string;
   resetOnSubmit?: boolean;
 } & FormConfig;
@@ -26,7 +26,7 @@ const GM_Form = ({
   resolver,
   defaultValues,
   className,
-  resetOnSubmit = true,
+  resetOnSubmit = false,
 }: TFormProps) => {
   const formConfig: UseFormProps = {};
 
@@ -39,12 +39,13 @@ const GM_Form = ({
   }
 
   const methods = useForm(formConfig);
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit } = methods;
 
   const submit = (data: FieldValues) => {
-    onSubmit(data);
+    onSubmit(data, methods);
+
     if (resetOnSubmit) {
-      reset();
+      methods.reset();
     }
   };
 
