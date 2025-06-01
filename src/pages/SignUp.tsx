@@ -40,6 +40,7 @@ export default function SignUp() {
         toast.success("Registration successful!", {
           id: toastId,
           position: "top-center",
+          className: "!bg-green-700 !text-white",
         });
         methods.reset();
       }
@@ -47,6 +48,7 @@ export default function SignUp() {
       toast.error(error.data?.errorMessage || "Registration Failed", {
         id: toastId,
         position: "top-center",
+        className: "!bg-pink-800 !text-white",
       });
     } finally {
       setIsLoading(false);
@@ -55,6 +57,7 @@ export default function SignUp() {
 
   return (
     <div className="flex items-center gap-10 justify-center min-h-screen bg-gray-100 dark:bg-black">
+      {/* Left Side: Welcome Message */}
       <div className=" py-12 px-6">
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-snug tracking-tight">
           Welcome to

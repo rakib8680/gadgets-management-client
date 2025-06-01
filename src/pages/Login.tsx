@@ -39,6 +39,7 @@ export default function Login() {
         toast.success("Login successful", {
           id: toastId,
           position: "top-center",
+          className: "!bg-green-700 !text-white",
         });
         methods.reset();
       }
@@ -46,6 +47,7 @@ export default function Login() {
       toast.error("Invalid Email or Password", {
         id: toastId,
         position: "top-center",
+        className: "!bg-pink-800 !text-white",
       });
     } finally {
       setIsLoading(false);
@@ -57,7 +59,7 @@ export default function Login() {
       <div className="w-full max-w-md bg-white px-8 py-14 rounded-xl shadow-md dark:bg-zinc-900">
         <GM_Form
           onSubmit={handleLogin}
-          defaultValues={{ email: "", password: "" }}
+          defaultValues={{ email: "rakib@gmail.com", password: "rakib" }}
           resolver={zodResolver(loginValidationSchema)}
           className="space-y-6"
         >
