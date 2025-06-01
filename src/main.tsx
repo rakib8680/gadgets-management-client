@@ -3,12 +3,15 @@ import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes/route";
 import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import { persistor, store } from "./redux/store";
 import { Toaster } from "sonner";
+import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
-    <RouterProvider router={router} />
-    <Toaster />
+    <PersistGate persistor={persistor}>
+      <RouterProvider router={router} />
+      <Toaster />
+    </PersistGate>
   </Provider>
 );
