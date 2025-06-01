@@ -54,7 +54,26 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-black">
+    <div className="flex items-center gap-10 justify-center min-h-screen bg-gray-100 dark:bg-black">
+      <div className=" py-12 px-6">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-snug tracking-tight">
+          Welcome to
+          <br />
+          <span
+            className="
+              text-transparent bg-clip-text bg-gradient-to-r 
+              from-gray-700 to-gray-500 
+              dark:from-gray-300 dark:to-gray-200
+            "
+          >
+            Gadget Management
+          </span>
+        </h1>
+        <p className="mt-4 text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl">
+          Simplify your workflow and manage your gadgets with ease using our
+          intuitive platform.
+        </p>
+      </div>
       <div className="w-full max-w-md bg-white px-8 py-14 rounded-xl shadow-md dark:bg-zinc-900">
         {/* Sign Up Form */}
         <GM_Form
