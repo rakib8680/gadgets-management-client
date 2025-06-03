@@ -8,7 +8,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { cn } from "@/lib/utils";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import GM_Form from "@/components/form/GM_Form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginValidationSchema } from "@/utils/formValidation";
@@ -20,6 +20,9 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
 
   //Form submission handler
   const handleLogin = async (
@@ -35,16 +38,16 @@ export default function Login() {
       dispatch(setUser({ user, token: res.data.token }));
 
       if (res.success) {
-        console.log(res.success);
         toast.success("Login successful", {
           id: toastId,
           position: "top-center",
           className: "!bg-green-700 !text-white",
         });
         methods.reset();
+        navigate(from); // navigate to the page that the user tried to access before login
       }
-    } catch (error) {
-      toast.error("Invalid Email or Password", {
+    } catch (error: any) {
+      toast.error(error.data?.errorMessage || "Invalid Email or Password", {
         id: toastId,
         position: "top-center",
         className: "!bg-pink-800 !text-white",
