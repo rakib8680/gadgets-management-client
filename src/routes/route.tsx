@@ -4,10 +4,15 @@ import Login from "@/pages/Login";
 import MainLayout from "@/layout/MainLayout";
 import ErrorPage from "@/pages/ErrorPage";
 import SignUp from "@/pages/SignUp";
+import ProtectedRoute from "@/components/layout/ProtectedRoute";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute role="admin">
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
     children: [
       {
