@@ -5,6 +5,7 @@ import MainLayout from "@/layout/MainLayout";
 import ErrorPage from "@/pages/ErrorPage";
 import SignUp from "@/pages/SignUp";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
+import Dashboard from "@/pages/Dashboard";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <App />,
       },
+      {
+        path:"/dashboard",
+        element: <Dashboard/>
+      }
     ],
   },
   {
