@@ -9,3 +9,11 @@ export type TSignUpInput = {
   password: string;
   confirmPassword: string;
 };
+
+export type TUser = {
+  _id: string;
+  email: string;
+  role: string;
+  exp: number;
+  iat: number;
+};

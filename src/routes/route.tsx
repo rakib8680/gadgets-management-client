@@ -14,35 +14,39 @@ import SalesHistory from "@/pages/SalesHistory";
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/dashboard",
     element: (
-      <ProtectedRoute role="admin">
+      <ProtectedRoute role={undefined}>
         <MainLayout />
       </ProtectedRoute>
     ),
-    errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
-        element: <App />,
+        path: "analytics",
+        element: (
+          <ProtectedRoute role="admin">
+            <Dashboard />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-      {
-        path: "/gadgets",
+        path: "gadgets",
         element: <AllGadgets />,
       },
       {
-        path: "/gadgets/add",
+        path: "gadgets/add",
         element: <AddGadget />,
       },
       {
-        path: "/my-gadgets",
+        path: "my-gadgets",
         element: <MyGadgets />,
       },
       {
-        path: "/sales-history",
+        path: "sales-history",
         element: <SalesHistory />,
       },
     ],

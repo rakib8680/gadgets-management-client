@@ -15,28 +15,28 @@ import {
 // Menu items.
 const items = [
   {
-    title: "Dashboard",
-    url: "/dashboard",
+    title: "Analytics",
+    url: "analytics",
     icon: Home,
   },
   {
     title: "All Gadgets",
-    url: "/gadgets",
+    url: "gadgets",
     icon: Boxes,
   },
   {
     title: "Add Gadget",
-    url: "/gadgets/add",
+    url: "gadgets/add",
     icon: PlusCircle,
   },
   {
     title: "My Gadgets",
-    url: "/my-gadgets",
+    url: "my-gadgets",
     icon: Package,
   },
   {
     title: "Sales History",
-    url: "/sales-history",
+    url: "sales-history",
     icon: History,
   },
 ];
