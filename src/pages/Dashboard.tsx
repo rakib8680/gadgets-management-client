@@ -11,7 +11,7 @@ import CategoryPieChart from "@/components/dashboard/CategoryPieChart";
 import TopProducts from "@/components/dashboard/TopProducts";
 
 export default function Dashboard() {
-  // Sample data - replace with your actual data
+  //todo- Sample data - replace with actual data
   const analyticsData = {
     totalGadgets: 1247,
     gadgetsSold: 892,

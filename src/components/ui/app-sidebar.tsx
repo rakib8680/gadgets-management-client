@@ -1,4 +1,5 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import { Home, Boxes, PlusCircle, Package, History } from "lucide-react";
+import { useLocation, NavLink } from "react-router-dom";
 
 import {
   Sidebar,
@@ -9,7 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 // Menu items.
 const items = [
@@ -19,28 +20,29 @@ const items = [
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "/inbox",
-    icon: Inbox,
+    title: "All Gadgets",
+    url: "/gadgets",
+    icon: Boxes,
   },
   {
-    title: "Calendar",
-    url: "/calendar",
-    icon: Calendar,
+    title: "Add Gadget",
+    url: "/gadgets/add",
+    icon: PlusCircle,
   },
   {
-    title: "Search",
-    url: "/search",
-    icon: Search,
+    title: "My Gadgets",
+    url: "/my-gadgets",
+    icon: Package,
   },
   {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
+    title: "Sales History",
+    url: "/sales-history",
+    icon: History,
   },
-]
+];
 
 export function AppSidebar() {
+  const location = useLocation();
   return (
     <Sidebar>
       <SidebarContent>
@@ -50,11 +52,14 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={location.pathname === item.url}
+                  >
+                    <NavLink to={item.url} style={{ textDecoration: "none" }}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -63,5 +68,5 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
