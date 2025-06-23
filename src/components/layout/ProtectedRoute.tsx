@@ -1,6 +1,8 @@
-import { selectCurrentToken } from "@/redux/features/auth/authSlice";
+import {
+  selectCurrentToken,
+  selectCurrentUser,
+} from "@/redux/features/auth/authSlice";
 import { TUser } from "@/types/auth";
-import verifyToken from "@/utils/verifyToken";
 import { ReactNode } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
@@ -12,12 +14,8 @@ type TProtectedRoute = {
 
 const ProtectedRoute = ({ children, role }: TProtectedRoute) => {
   const token = useSelector(selectCurrentToken);
+  const user = useSelector(selectCurrentUser);
   const location = useLocation();
-
-  let user;
-  if (token) {
-    user = verifyToken(token);
-  }
 
   if (!token || (role && role !== (user as TUser)?.role)) {
     toast.error("You are not Authorized", {
