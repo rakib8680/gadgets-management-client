@@ -55,7 +55,16 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel className="my-3">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                <Package className="w-5 h-5 text-white" />
+              </div>
+              <h4 className="text-lg font-bold text-gray-900">
+                Gadget Management
+              </h4>
+            </div>
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -63,9 +72,10 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     isActive={location.pathname === `/dashboard/${item.url}`}
+                    className="text-base"
                   >
                     <NavLink to={item.url} style={{ textDecoration: "none" }}>
-                      <item.icon />
+                      <item.icon className="!w-5 !h-5" />
                       <span>{item.title}</span>
                     </NavLink>
                   </SidebarMenuButton>
@@ -80,8 +90,8 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <NavLink to="/">
-                  <Home />
-                  <span>Home</span>
+                  <Home className="!w-5 !h-5" />
+                  <span className="text-base">Home</span>
                 </NavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
