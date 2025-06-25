@@ -7,6 +7,8 @@ import {
   History,
 } from "lucide-react";
 import { useLocation, NavLink } from "react-router-dom";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 import {
   Sidebar,
@@ -18,6 +20,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { TUser } from "@/types/auth";
 
 // Menu items.
 const items = [
@@ -50,6 +53,14 @@ const items = [
 
 export function AppSidebar() {
   const location = useLocation();
+  const user = useAppSelector(selectCurrentUser) as TUser;
+  const role = user?.role;
+
+  // Filter menu items based on role
+  const filteredItems =
+    role === "seller"
+      ? items.filter((item) => item.title !== "Analytics")
+      : items;
 
   return (
     <Sidebar>
@@ -67,7 +78,7 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {filteredItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
