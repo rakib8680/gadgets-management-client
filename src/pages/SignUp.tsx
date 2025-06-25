@@ -24,10 +24,16 @@ export default function SignUp() {
     methods: UseFormReturn<any>
   ) => {
     if (signUpInfo.password !== signUpInfo.confirmPassword) {
-      return toast.error("Passwords do not match", { position: "top-center" });
+      return toast.error("Passwords do not match", {
+        position: "top-center",
+        duration: 2000,
+      });
     }
     setIsLoading(true);
-    const toastId = toast.loading("Signing up...", { position: "top-center" });
+    const toastId = toast.loading("Signing up...", {
+      position: "top-center",
+      duration: 2000,
+    });
 
     try {
       const res = await registerUser({
@@ -49,6 +55,7 @@ export default function SignUp() {
         id: toastId,
         position: "top-center",
         className: "!bg-pink-800 !text-white",
+        duration: 2000,
       });
     } finally {
       setIsLoading(false);

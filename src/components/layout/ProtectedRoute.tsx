@@ -21,6 +21,7 @@ const ProtectedRoute = ({ children, role }: TProtectedRoute) => {
     toast.error("You are not Authorized to access this route", {
       position: "top-center",
       className: "!bg-pink-800 !text-white",
+      duration: 2000,
     });
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
