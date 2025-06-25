@@ -2,9 +2,9 @@ import {
   selectCurrentToken,
   selectCurrentUser,
 } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { TUser } from "@/types/auth";
 import { ReactNode } from "react";
-import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 type TProtectedRoute = {
@@ -13,8 +13,8 @@ type TProtectedRoute = {
 };
 
 const ProtectedRoute = ({ children, role }: TProtectedRoute) => {
-  const token = useSelector(selectCurrentToken);
-  const user = useSelector(selectCurrentUser);
+  const token = useAppSelector(selectCurrentToken);
+  const user = useAppSelector(selectCurrentUser);
   const location = useLocation();
 
   if (!token || (role && role !== (user as TUser)?.role)) {

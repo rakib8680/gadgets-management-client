@@ -1,9 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LayoutDashboard, LogOut, Package, Settings, User } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import {
+  LayoutDashboard,
+  LogOut,
+  LogIn,
+  Package,
+  Settings,
+  User,
+} from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { logOut, selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 const Home = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const user = useAppSelector(selectCurrentUser);
+
+  // LogOut Handler
+  const handleLogout = () => {
+    dispatch(logOut());
+    navigate("/login", { replace: true }); // Redirect to login page after logout
+  };
+
   return (
     <div className="min-h-screen ">
       {/* Header */}
@@ -18,22 +37,35 @@ const Home = () => {
                 Gadget Management System
               </h1>
             </div>
-
-            <div className="flex items-center space-x-4">
-              <Avatar className="w-8 h-8">
-                <AvatarImage src="/placeholder.svg?height=32&width=32" />
-                <AvatarFallback className="bg-gray-200 text-gray-700">
-                  JD
-                </AvatarFallback>
-              </Avatar>
-              <Button
-                variant="outline"
-                className="text-gray-700 border-gray-300 cursor-pointer"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </Button>
-            </div>
+            {/*User Profile and Logout Button */}
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <Avatar className="w-8 h-8">
+                  <AvatarImage src="/placeholder.svg?height=32&width=32" />
+                  <AvatarFallback className="bg-gray-200 text-gray-700">
+                    JD
+                  </AvatarFallback>
+                </Avatar>
+                <Button
+                  variant="outline"
+                  className="text-gray-700 border-gray-300 cursor-pointer"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <NavLink to="/login">
+                <Button
+                  variant="outline"
+                  className="text-gray-700 border-gray-300 cursor-pointer"
+                >
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Login
+                </Button>
+              </NavLink>
+            )}
           </div>
         </div>
       </header>

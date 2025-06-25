@@ -13,6 +13,7 @@ import GM_Form from "@/components/form/GM_Form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginValidationSchema } from "@/utils/formValidation";
 import GM_Input from "@/components/form/GM_Input";
+import { TUser } from "@/types/auth";
 
 export default function Login() {
   // states & hooks
@@ -34,7 +35,7 @@ export default function Login() {
 
     try {
       const res = await login(loginInfo).unwrap();
-      const user = verifyToken(res.data.token);
+      const user = verifyToken(res.data.token) as TUser;
       dispatch(setUser({ user, token: res.data.token }));
 
       if (res.success) {
@@ -44,7 +45,15 @@ export default function Login() {
           className: "!bg-green-700 !text-white",
         });
         methods.reset();
-        navigate(from); // navigate to the page that the user tried to access before login
+
+        // Navigate based on user role
+        if (user?.role === "admin") {
+          navigate("/dashboard/analytics", { replace: true });
+        } else if (user?.role === "seller") {
+          navigate("/dashboard/my-gadgets", { replace: true });
+        } else {
+          navigate(from, { replace: true });
+        }
       }
     } catch (error: any) {
       toast.error(error.data?.errorMessage || "Invalid Email or Password", {

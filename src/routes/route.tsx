@@ -10,6 +10,7 @@ import AllGadgets from "@/pages/AllGadgets";
 import AddGadget from "@/pages/AddGadget";
 import MyGadgets from "@/pages/MyGadgets";
 import SalesHistory from "@/pages/SalesHistory";
+import PublicRoute from "@/components/layout/PublicRoute";
 
 const router = createBrowserRouter([
   {
@@ -53,11 +54,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <PublicRoute>
+        <Login />
+      </PublicRoute>
+    ),
   },
   {
     path: "/signup",
-    element: <SignUp />,
+    element: (
+      <PublicRoute>
+        <SignUp />
+      </PublicRoute>
+    ),
   },
 ]);
 
