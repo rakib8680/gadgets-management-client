@@ -1,5 +1,3 @@
-// components/UserGrowthChart.tsx
-"use client";
 
 import {
   Card,

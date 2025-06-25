@@ -1,27 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  LayoutDashboard,
-  LogOut,
-  LogIn,
-  Package,
-  Settings,
-  User,
-} from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { logOut, selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { LayoutDashboard, LogIn, Package, Settings, User } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import LogoutButton from "@/components/auth/LogOutButton";
 
 const Home = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const user = useAppSelector(selectCurrentUser);
-
-  // LogOut Handler
-  const handleLogout = () => {
-    dispatch(logOut());
-    navigate("/login", { replace: true }); // Redirect to login page after logout
-  };
 
   return (
     <div className="min-h-screen ">
@@ -46,14 +32,7 @@ const Home = () => {
                     JD
                   </AvatarFallback>
                 </Avatar>
-                <Button
-                  variant="outline"
-                  className="text-gray-700 border-gray-300 cursor-pointer"
-                  onClick={handleLogout}
-                >
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Logout
-                </Button>
+                <LogoutButton /> {/* Logout Button Component */}
               </div>
             ) : (
               <NavLink to="/login">

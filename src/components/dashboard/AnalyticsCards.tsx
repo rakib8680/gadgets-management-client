@@ -1,5 +1,3 @@
-// components/AnalyticsCards.tsx
-"use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Package, ShoppingCart, DollarSign, Users } from "lucide-react";

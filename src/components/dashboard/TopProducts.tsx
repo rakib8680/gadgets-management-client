@@ -1,5 +1,4 @@
-// components/TopProducts.tsx
-"use client";
+
 
 import {
   Card,

@@ -5,12 +5,12 @@ import MainLayout from "@/layout/MainLayout";
 import ErrorPage from "@/pages/ErrorPage";
 import SignUp from "@/pages/SignUp";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
-import Dashboard from "@/pages/Dashboard";
 import AllGadgets from "@/pages/AllGadgets";
 import AddGadget from "@/pages/AddGadget";
 import MyGadgets from "@/pages/MyGadgets";
 import SalesHistory from "@/pages/SalesHistory";
 import PublicRoute from "@/components/layout/PublicRoute";
+import Analytics from "@/pages/Analytics";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
         path: "analytics",
         element: (
           <ProtectedRoute role="admin">
-            <Dashboard />
+            <Analytics />
           </ProtectedRoute>
         ),
       },

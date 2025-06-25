@@ -1,5 +1,4 @@
-// components/RevenueChart.tsx
-"use client";
+
 
 import {
   Card,

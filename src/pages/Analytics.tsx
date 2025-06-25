@@ -1,6 +1,3 @@
-// pages/dashboard.tsx or components/Dashboard.tsx
-"use client";
-
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import AnalyticsOverview from "@/components/dashboard/AnalyticsOverview";
 import AnalyticsCards from "@/components/dashboard/AnalyticsCards";
@@ -10,7 +7,7 @@ import UserGrowthChart from "@/components/dashboard/UserGrowthChart";
 import CategoryPieChart from "@/components/dashboard/CategoryPieChart";
 import TopProducts from "@/components/dashboard/TopProducts";
 
-export default function Dashboard() {
+export default function Analytics() {
   //todo- Sample data - replace with actual data
   const analyticsData = {
     totalGadgets: 1247,

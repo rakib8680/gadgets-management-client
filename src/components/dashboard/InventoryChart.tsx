@@ -1,5 +1,4 @@
-// components/InventoryChart.tsx
-"use client";
+
 
 import {
   Card,

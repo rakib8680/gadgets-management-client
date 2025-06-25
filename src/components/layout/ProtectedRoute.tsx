@@ -18,14 +18,12 @@ const ProtectedRoute = ({ children, role }: TProtectedRoute) => {
   const location = useLocation();
 
   if (!token || (role && role !== (user as TUser)?.role)) {
-    toast.error("You are not Authorized", {
+    toast.error("You are not Authorized to access this route", {
       position: "top-center",
       className: "!bg-pink-800 !text-white",
     });
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
-
-  // if(token){}
 
   return children;
 };
