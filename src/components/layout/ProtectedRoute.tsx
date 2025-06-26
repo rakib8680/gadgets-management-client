@@ -3,7 +3,6 @@ import {
   selectCurrentUser,
 } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
-import { TUser } from "@/types/auth";
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
@@ -17,7 +16,7 @@ const ProtectedRoute = ({ children, role }: TProtectedRoute) => {
   const user = useAppSelector(selectCurrentUser);
   const location = useLocation();
 
-  if (!token || (role && role !== (user as TUser)?.role)) {
+  if (!token || (role && role !== user?.role)) {
     toast.error("You are not Authorized to access this route", {
       position: "top-center",
       className: "!bg-pink-800 !text-white",

@@ -13,7 +13,6 @@ import GM_Form from "@/components/form/GM_Form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginValidationSchema } from "@/utils/formValidation";
 import GM_Input from "@/components/form/GM_Input";
-import { TUser } from "@/types/auth";
 
 export default function Login() {
   // states & hooks
@@ -35,7 +34,7 @@ export default function Login() {
 
     try {
       const res = await login(loginInfo).unwrap();
-      const user = verifyToken(res.data.token) as TUser;
+      const user = verifyToken(res.data.token);
       dispatch(setUser({ user, token: res.data.token }));
 
       if (res.success) {

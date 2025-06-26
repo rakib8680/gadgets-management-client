@@ -20,7 +20,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { TUser } from "@/types/auth";
 
 // Menu items.
 const items = [
@@ -53,7 +52,7 @@ const items = [
 
 export function AppSidebar() {
   const location = useLocation();
-  const user = useAppSelector(selectCurrentUser) as TUser;
+  const user = useAppSelector(selectCurrentUser) 
   const role = user?.role;
 
   // Filter menu items based on role
