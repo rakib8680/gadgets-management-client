@@ -2,7 +2,7 @@ import "./loading-hamster.css";
 
 const LoadingHamster = () => {
   return (
-    <div className="flex items-center justify-center min-h-10/12">
+    <div className="flex flex-col items-center justify-center min-h-10/12">
       <div
         className="wheel-and-hamster"
         role="img"
@@ -25,6 +25,7 @@ const LoadingHamster = () => {
         </div>
         <div className="spoke"></div>
       </div>
+      <div className="mt-2 text-lg font-semibold text-gray-600">Loading...</div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-type TCategory =
+export type TCategory =
   | "smartphone"
   | "tablet"
   | "laptop"
@@ -6,8 +6,8 @@ type TCategory =
   | "headphone"
   | "speaker"
   | "accessory";
-type TOperatingSystem = "iOS" | "Android" | "Windows" | "macOS" | "Linux";
-type TConnectivity =
+export type TOperatingSystem = "iOS" | "Android" | "Windows" | "macOS" | "Linux";
+export type TConnectivity =
   | "WiFi"
   | "Bluetooth"
   | "NFC"
@@ -18,7 +18,7 @@ type TConnectivity =
   | "HDMI"
   | "Thunderbolt";
 
-type TPowerSource = "Battery" | "Plug-in" | "Battery & Plug-in";
+export type TPowerSource = "Battery" | "Plug-in" | "Battery & Plug-in";
 
 export type TFeature = {
   // cameraResolution?: string;

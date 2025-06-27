@@ -25,6 +25,8 @@ export default tseslint.config(
       ],
       "react/prop-types": "off",
       "no-unused-vars": "warn",
+      noUnusedLocals: false,
+      noUnusedParameters: false,
     },
   }
 );
