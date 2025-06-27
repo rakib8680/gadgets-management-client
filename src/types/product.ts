@@ -6,7 +6,12 @@ export type TCategory =
   | "headphone"
   | "speaker"
   | "accessory";
-export type TOperatingSystem = "iOS" | "Android" | "Windows" | "macOS" | "Linux";
+export type TOperatingSystem =
+  | "iOS"
+  | "Android"
+  | "Windows"
+  | "macOS"
+  | "Linux";
 export type TConnectivity =
   | "WiFi"
   | "Bluetooth"
@@ -34,6 +39,7 @@ export type TDimensions = {
 };
 
 export type TProduct = {
+  _id: string;
   name: string;
   price: number;
   imageURL: string;

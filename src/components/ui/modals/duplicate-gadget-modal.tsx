@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Copy, Plus } from "lucide-react";
 import type {
