@@ -1,5 +1,4 @@
-import React from "react";
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,7 +15,7 @@ import type {
   TPowerSource,
 } from "@/types/product"; // Ensure these types are correctly imported
 
-type GadgetFiltersProps = {
+type TGadgetFiltersProps = {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   filterCategory: TCategory | "all";
@@ -35,7 +34,7 @@ type GadgetFiltersProps = {
   onClearFilters: () => void;
 };
 
-const GadgetFilters: React.FC<GadgetFiltersProps> = ({
+const GadgetFilters = ({
   searchTerm,
   setSearchTerm,
   filterCategory,
@@ -52,11 +51,11 @@ const GadgetFilters: React.FC<GadgetFiltersProps> = ({
   setPageSize,
   uniqueBrands,
   onClearFilters,
-}) => {
+}: TGadgetFiltersProps) => {
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <div className="space-y-4">
+    <Card className=" max-w-xs md:max-w-full">
+      <CardContent>
+        <div className="space-y-4 ">
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -68,16 +67,16 @@ const GadgetFilters: React.FC<GadgetFiltersProps> = ({
             />
           </div>
 
-          {/* Filters Row 1 */}
+          {/*all filters*/}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Category Filter */}
+            {/* Category  */}
             <Select
               value={filterCategory}
               onValueChange={(value) =>
                 setFilterCategory(value as TCategory | "all")
               }
             >
-              <SelectTrigger>
+              <SelectTrigger className="cursor-pointer min-w-[160px]">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
@@ -92,9 +91,9 @@ const GadgetFilters: React.FC<GadgetFiltersProps> = ({
               </SelectContent>
             </Select>
 
-            {/* Brand Filter */}
+            {/* Brand  */}
             <Select value={filterBrand} onValueChange={setFilterBrand}>
-              <SelectTrigger>
+              <SelectTrigger className="cursor-pointer min-w-[160px]">
                 <SelectValue placeholder="Brand" />
               </SelectTrigger>
               <SelectContent>
@@ -107,14 +106,74 @@ const GadgetFilters: React.FC<GadgetFiltersProps> = ({
               </SelectContent>
             </Select>
 
-            {/* Operating System Filter */}
+            {/* Price Min */}
+            <div className="max-w-[160px]">
+              <Input
+                type="number"
+                placeholder="Min Price"
+                value={priceRange.min}
+                onChange={(e) =>
+                  setPriceRange({ ...priceRange, min: e.target.value })
+                }
+              />
+            </div>
+
+            {/* Price Max */}
+            <div className="max-w-[160px]">
+              <Input
+                type="number"
+                placeholder="Max Price"
+                value={priceRange.max}
+                onChange={(e) =>
+                  setPriceRange({ ...priceRange, max: e.target.value })
+                }
+              />
+            </div>
+
+            {/* Power Source  */}
+            <Select
+              value={filterPowerSource}
+              onValueChange={(value) =>
+                setFilterPowerSource(value as TPowerSource | "all")
+              }
+            >
+              <SelectTrigger className="cursor-pointer min-w-[160px]">
+                <SelectValue placeholder="Power Source" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Power Sources</SelectItem>
+                <SelectItem value="Battery">Battery</SelectItem>
+                <SelectItem value="Plug-in">Plug-in</SelectItem>
+                <SelectItem value="Battery & Plug-in">
+                  Battery & Plug-in
+                </SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Page Size */}
+            <Select
+              value={pageSize.toString()}
+              onValueChange={(value) => setPageSize(Number(value))}
+            >
+              <SelectTrigger className="cursor-pointer min-w-[160px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">5 per page</SelectItem>
+                <SelectItem value="10">10 per page</SelectItem>
+                <SelectItem value="20">20 per page</SelectItem>
+                <SelectItem value="50">50 per page</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Operating System  */}
             <Select
               value={filterOS}
               onValueChange={(value) =>
                 setFilterOS(value as TOperatingSystem | "all")
               }
             >
-              <SelectTrigger>
+              <SelectTrigger className="cursor-pointer min-w-[160px]">
                 <SelectValue placeholder="OS" />
               </SelectTrigger>
               <SelectContent>
@@ -127,67 +186,12 @@ const GadgetFilters: React.FC<GadgetFiltersProps> = ({
               </SelectContent>
             </Select>
 
-            {/* Power Source Filter */}
-            <Select
-              value={filterPowerSource}
-              onValueChange={(value) =>
-                setFilterPowerSource(value as TPowerSource | "all")
-              }
+            {/* Clear  */}
+            <Button
+              className="cursor-pointer  max-w-[160px]"
+              variant="outline"
+              onClick={onClearFilters}
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Power Source" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Power Sources</SelectItem>
-                <SelectItem value="Battery">Battery</SelectItem>
-                <SelectItem value="Plug-in">Plug-in</SelectItem>
-                <SelectItem value="Battery & Plug-in">
-                  Battery & Plug-in
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Filters Row 2 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {/* Price Range */}
-            <div className="flex gap-2">
-              <Input
-                type="number"
-                placeholder="Min Price"
-                value={priceRange.min}
-                onChange={(e) =>
-                  setPriceRange({ ...priceRange, min: e.target.value })
-                }
-              />
-              <Input
-                type="number"
-                placeholder="Max Price"
-                value={priceRange.max}
-                onChange={(e) =>
-                  setPriceRange({ ...priceRange, max: e.target.value })
-                }
-              />
-            </div>
-
-            {/* Page Size */}
-            <Select
-              value={pageSize.toString()}
-              onValueChange={(value) => setPageSize(Number(value))}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="5">5 per page</SelectItem>
-                <SelectItem value="10">10 per page</SelectItem>
-                <SelectItem value="20">20 per page</SelectItem>
-                <SelectItem value="50">50 per page</SelectItem>
-              </SelectContent>
-            </Select>
-
-            {/* Clear Filters */}
-            <Button variant="outline" onClick={onClearFilters}>
               Clear Filters
             </Button>
           </div>
