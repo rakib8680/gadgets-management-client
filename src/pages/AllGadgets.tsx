@@ -69,6 +69,7 @@ const AllGadgets = () => {
     gadget: null,
   });
 
+  //data fetching using RTK Query
   const { data, error, isFetching } = useGetAllGadgetsQuery({
     search: searchTerm,
     sortBy,
@@ -83,6 +84,7 @@ const AllGadgets = () => {
     limit: pageSize,
   });
 
+  //All gadgets data and meta information
   const allGadgets: TProduct[] = data?.data || [];
   const meta: TMeta = data?.meta || {
     limit: 10,
@@ -91,7 +93,7 @@ const AllGadgets = () => {
     totalPage: 1,
   };
 
-  // Get unique brands from data for filter
+  // Get unique brands from data for dropdown filter
   const uniqueBrands = Array.from(
     new Set(allGadgets.map((gadget) => gadget.brand))
   ).sort();
@@ -100,6 +102,7 @@ const AllGadgets = () => {
     return <LoadingHamster />;
   }
 
+  // Handle error state
   if (error) {
     return (
       <Card className="w-full max-w-md mx-auto mt-8">
@@ -113,6 +116,7 @@ const AllGadgets = () => {
     );
   }
 
+  // Handler functions for sorting, deleting, duplicating, and updating gadgets
   const handleSort = (column: string) => {
     if (sortBy === column) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -144,6 +148,7 @@ const AllGadgets = () => {
     setCurrentPage(1);
   };
 
+  //main component
   return (
     <TooltipProvider>
       <div className="container mx-auto py-6 space-y-6">
@@ -193,13 +198,9 @@ const AllGadgets = () => {
                   onSort={handleSort}
                 />
                 <TableBody>
-                  {allGadgets.length === 0 ? (
+                  {allGadgets?.length === 0 ? ( //for empty state
                     <TableRow>
-                      {" "}
-                      {/* Changed from <Table.Row> to <TableRow> */}
                       <TableCell colSpan={9} className="text-center py-8">
-                        {" "}
-                        {/* Changed from <Table.Cell> to <TableCell> */}
                         <div className="flex flex-col items-center gap-2">
                           <Filter className="h-8 w-8 text-muted-foreground" />
                           <p className="text-muted-foreground">
@@ -212,15 +213,20 @@ const AllGadgets = () => {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    allGadgets.map((gadget, index) => (
-                      <GadgetTableRow
-                        key={`${gadget?._id || index}`} // Use gadget._id for a more stable key if available
-                        gadget={gadget}
-                        onUpdate={handleUpdate}
-                        onDuplicate={handleDuplicate}
-                        onDelete={handleDelete}
-                      />
-                    ))
+                    allGadgets.map(
+                      (
+                        gadget,
+                        index //for displaying gadgets
+                      ) => (
+                        <GadgetTableRow
+                          key={`${gadget?._id || index}`}
+                          gadget={gadget}
+                          onUpdate={handleUpdate}
+                          onDuplicate={handleDuplicate}
+                          onDelete={handleDelete}
+                        />
+                      )
+                    )
                   )}
                 </TableBody>
               </Table>
