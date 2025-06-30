@@ -44,7 +44,7 @@ const AllGadgets = () => {
   >("all");
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
 
   // Modal states
   const [deleteModal, setDeleteModal] = useState<{
@@ -237,10 +237,10 @@ const AllGadgets = () => {
         {/* Pagination */}
         {meta.total > 0 && (
           <PaginationComponent
-            currentPage={currentPage}
+            currentPage={meta.page}
             totalPages={meta.totalPage}
             totalItems={meta.total}
-            pageSize={pageSize}
+            pageSize={meta.limit}
             onPageChange={setCurrentPage}
           />
         )}

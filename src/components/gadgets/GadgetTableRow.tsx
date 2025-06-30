@@ -54,8 +54,8 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
 
   const formatConnectivity = (connectivity: TConnectivity[]) => {
     return (
-      connectivity.slice(0, 3).join(", ") +
-      (connectivity.length > 3 ? "..." : "")
+      connectivity.slice(0, 4).join(", ") +
+      (connectivity.length > 4 ? "..." : "")
     );
   };
 
@@ -94,8 +94,9 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
           {gadget.quantity} units
         </span>
       </TableCell>
-      <TableCell>
-        <div className="flex flex-col gap-1">
+      {/* details column */}
+      <TableCell className="max-w-[150px]">
+        <div className="flex flex-col gap-1 items-start">
           {gadget.operatingSystem && (
             <Tooltip>
               <TooltipTrigger>
@@ -119,7 +120,7 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
           {gadget.connectivity.length > 0 && (
             <Tooltip>
               <TooltipTrigger>
-                <p className="text-xs text-muted-foreground truncate max-w-[120px]">
+                <p className="text-xs text-muted-foreground">
                   {formatConnectivity(gadget.connectivity)}
                 </p>
               </TooltipTrigger>
