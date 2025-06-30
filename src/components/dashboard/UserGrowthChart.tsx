@@ -1,4 +1,3 @@
-
 import {
   Card,
   CardContent,
@@ -24,35 +23,37 @@ interface UserGrowthChartProps {
 
 export default function UserGrowthChart({ data }: UserGrowthChartProps) {
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>User Growth</CardTitle>
         <CardDescription>New users over time</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer
-          config={{
-            users: {
-              label: "New Users",
-              color: "hsl(var(--chart-4))",
-            },
-          }}
-          className="h-[250px]"
-        >
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="week" />
-            <YAxis />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Line
-              type="monotone"
-              dataKey="users"
-              stroke="#a3a3a3"
-              strokeWidth={3}
-              dot={{ fill: "#000", strokeWidth: 2, r: 4 }}
-            />
-          </LineChart>
-        </ChartContainer>
+      <CardContent className="p-0 sm:p-4">
+        <div className="w-full overflow-x-auto">
+          <ChartContainer
+            config={{
+              users: {
+                label: "New Users",
+                color: "hsl(var(--chart-4))",
+              },
+            }}
+            className="h-[200px] min-w-[320px] sm:h-[250px] sm:min-w-[400px] md:min-w-[480px] lg:min-w-[560px]"
+          >
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="week" />
+              <YAxis />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Line
+                type="monotone"
+                dataKey="users"
+                stroke="#a3a3a3"
+                strokeWidth={3}
+                dot={{ fill: "#000", strokeWidth: 2, r: 4 }}
+              />
+            </LineChart>
+          </ChartContainer>
+        </div>
       </CardContent>
     </Card>
   );
