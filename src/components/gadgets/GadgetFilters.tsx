@@ -53,7 +53,7 @@ const GadgetFilters = ({
   onClearFilters,
 }: TGadgetFiltersProps) => {
   return (
-    <Card className=" max-w-xs md:max-w-full">
+    <Card className=" max-w-xs md:max-w-full shadow-none">
       <CardContent>
         <div className="space-y-4 ">
           {/* Search */}
@@ -63,7 +63,7 @@ const GadgetFilters = ({
               placeholder="Search by name, brand, model..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              className="pl-10 shadow-inner"
             />
           </div>
 

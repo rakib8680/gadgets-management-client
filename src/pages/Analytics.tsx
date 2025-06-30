@@ -62,7 +62,7 @@ export default function Analytics() {
       <DashboardHeader />
 
       {/* Main Content */}
-      <main className="p-6">
+      <main className="p-2 sm:p-4 md:p-6">
         {/* Analytics Overview Section */}
         <AnalyticsOverview />
 
@@ -70,13 +70,13 @@ export default function Analytics() {
         <AnalyticsCards data={analyticsData} />
 
         {/* Main Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 mb-8">
           <RevenueChart data={revenueData} />
           <InventoryChart data={inventoryData} />
         </div>
 
         {/* Additional Charts Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-6 mb-8">
           <UserGrowthChart data={userGrowthData} />
           <CategoryPieChart data={categoryData} />
           <TopProducts products={topProducts} />
