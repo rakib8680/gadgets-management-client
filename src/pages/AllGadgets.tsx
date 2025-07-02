@@ -71,8 +71,8 @@ const AllGadgets = () => {
 
   //data fetching using RTK Query
   const { data, error, isFetching } = useGetAllGadgetsQuery({
-    search: searchTerm,
-    sortBy,
+    // search: searchTerm,
+    sort: sortBy,
     sortOrder,
     category: filterCategory !== "all" ? filterCategory : undefined,
     brand: filterBrand !== "all" ? filterBrand : undefined,
@@ -138,6 +138,7 @@ const AllGadgets = () => {
     setUpdateModal({ open: true, gadget });
   };
 
+  //clear filters
   const handleClearFilters = () => {
     setSearchTerm("");
     setFilterCategory("all");

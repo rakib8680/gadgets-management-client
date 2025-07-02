@@ -6,6 +6,7 @@ const productApi = baseApi.injectEndpoints({
       query: (params) => ({
         url: "/products/all-gadgets?limit=20",
         method: "GET",
+        params,
       }),
       providesTags: ["Gadget"],
     }),
