@@ -4,7 +4,7 @@ import { Calendar } from "lucide-react";
 
 export default function AnalyticsOverview() {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8 text-center sm:text-left">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between my-4 text-center sm:text-left">
       <div>
         <h2 className="text-lg font-semibold text-gray-900">
           Analytics Overview
