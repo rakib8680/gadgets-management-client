@@ -57,7 +57,7 @@ export default function Analytics() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50/50">
+    <div className="min-h-screen bg-gray-50/50 mb-10">
       {/* Header */}
       <DashboardHeader />
 

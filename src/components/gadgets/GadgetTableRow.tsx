@@ -52,6 +52,7 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
     return colors[category] || "bg-gray-100 text-gray-800";
   };
 
+  
   const formatConnectivity = (connectivity: TConnectivity[]) => {
     return (
       connectivity.slice(0, 4).join(", ") +
@@ -61,6 +62,7 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
 
   return (
     <TableRow>
+      {/* image */}
       <TableCell>
         <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted">
           <img
@@ -70,6 +72,7 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
           />
         </div>
       </TableCell>
+      {/* name */}
       <TableCell>
         <div className="max-w-[200px]">
           <p className="font-medium truncate">{gadget.name}</p>
@@ -78,15 +81,19 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
           </p>
         </div>
       </TableCell>
+      {/* category */}
       <TableCell>
         <Badge className={getCategoryColor(gadget.category)}>
           {gadget.category}
         </Badge>
       </TableCell>
+      {/* brand */}
       <TableCell className="font-medium">{gadget.brand}</TableCell>
+      {/* price */}
       <TableCell className="font-medium">
         ${gadget.price.toLocaleString()}
       </TableCell>
+      {/* quantity */}
       <TableCell>
         <span
           className={gadget.quantity > 0 ? "text-green-600" : "text-red-600"}
@@ -94,7 +101,7 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
           {gadget.quantity} units
         </span>
       </TableCell>
-      {/* details column */}
+      {/* details */}
       <TableCell className="max-w-[150px]">
         <div className="flex flex-col gap-1 items-start">
           {gadget.operatingSystem && (
@@ -134,16 +141,18 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
           )}
         </div>
       </TableCell>
+      {/* release date */}
       <TableCell className="text-sm text-muted-foreground">
         <div className="flex items-center gap-1">
           <Calendar className="w-3 h-3" />
           {new Date(gadget.releaseDate).toLocaleDateString()}
         </div>
       </TableCell>
+      {/* actions */}
       <TableCell className="text-right">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
