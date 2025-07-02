@@ -160,7 +160,7 @@ const AllGadgets = () => {
               Manage your gadgets inventory ({meta.total || 0} total)
             </p>
           </div>
-          <Button className="flex items-center gap-2">
+          <Button className="flex items-center gap-2 cursor-pointer">
             <Plus className="h-4 w-4" />
             Add New Gadget
           </Button>
@@ -251,13 +251,11 @@ const AllGadgets = () => {
           onOpenChange={(open) => setDeleteModal({ open, gadget: null })}
           gadget={deleteModal.gadget}
         />
-
         <DuplicateGadgetModal
           open={duplicateModal.open}
           onOpenChange={(open) => setDuplicateModal({ open, gadget: null })}
           gadget={duplicateModal.gadget}
         />
-
         <UpdateGadgetModal
           open={updateModal.open}
           onOpenChange={(open) => setUpdateModal({ open, gadget: null })}

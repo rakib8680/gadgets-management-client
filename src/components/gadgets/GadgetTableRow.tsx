@@ -52,7 +52,6 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
     return colors[category] || "bg-gray-100 text-gray-800";
   };
 
-  
   const formatConnectivity = (connectivity: TConnectivity[]) => {
     return (
       connectivity.slice(0, 4).join(", ") +

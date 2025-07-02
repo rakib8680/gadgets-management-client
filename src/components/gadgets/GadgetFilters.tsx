@@ -76,7 +76,7 @@ const GadgetFilters = ({
                 setFilterCategory(value as TCategory | "all")
               }
             >
-              <SelectTrigger className="cursor-pointer min-w-[160px]">
+              <SelectTrigger className="cursor-pointer w-full md:max-w-[160px]">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
@@ -93,7 +93,7 @@ const GadgetFilters = ({
 
             {/* Brand  */}
             <Select value={filterBrand} onValueChange={setFilterBrand}>
-              <SelectTrigger className="cursor-pointer min-w-[160px]">
+              <SelectTrigger className="cursor-pointer w-full md:max-w-[160px]">
                 <SelectValue placeholder="Brand" />
               </SelectTrigger>
               <SelectContent>
@@ -107,7 +107,7 @@ const GadgetFilters = ({
             </Select>
 
             {/* Price Min */}
-            <div className="max-w-[160px]">
+            <div className="w-full md:max-w-[160px] ">
               <Input
                 type="number"
                 placeholder="Min Price"
@@ -119,7 +119,7 @@ const GadgetFilters = ({
             </div>
 
             {/* Price Max */}
-            <div className="max-w-[160px]">
+            <div className="w-full md:max-w-[160px]">
               <Input
                 type="number"
                 placeholder="Max Price"
@@ -137,7 +137,7 @@ const GadgetFilters = ({
                 setFilterPowerSource(value as TPowerSource | "all")
               }
             >
-              <SelectTrigger className="cursor-pointer min-w-[160px]">
+              <SelectTrigger className="cursor-pointer w-full md:max-w-[160px]">
                 <SelectValue placeholder="Power Source" />
               </SelectTrigger>
               <SelectContent>
@@ -155,7 +155,7 @@ const GadgetFilters = ({
               value={pageSize.toString()}
               onValueChange={(value) => setPageSize(Number(value))}
             >
-              <SelectTrigger className="cursor-pointer min-w-[160px]">
+              <SelectTrigger className="cursor-pointer w-full md:max-w-[160px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -173,7 +173,7 @@ const GadgetFilters = ({
                 setFilterOS(value as TOperatingSystem | "all")
               }
             >
-              <SelectTrigger className="cursor-pointer min-w-[160px]">
+              <SelectTrigger className="cursor-pointer w-full md:max-w-[160px]">
                 <SelectValue placeholder="OS" />
               </SelectTrigger>
               <SelectContent>
@@ -188,7 +188,7 @@ const GadgetFilters = ({
 
             {/* Clear  */}
             <Button
-              className="cursor-pointer  max-w-[160px]"
+              className="cursor-pointer w-full md:max-w-[160px]"
               variant="outline"
               onClick={onClearFilters}
             >

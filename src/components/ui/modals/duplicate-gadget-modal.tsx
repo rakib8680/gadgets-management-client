@@ -89,11 +89,14 @@ const DuplicateGadgetModal = ({
 
       toast.success("Gadget duplicated", {
         description: `${formData.name} has been successfully created.`,
+        duration: 2000,
       });
 
       onOpenChange(false);
     } catch (error) {
-      toast.error("Failed to duplicate gadget. Please try again.");
+      toast.error("Failed to duplicate gadget. Please try again.", {
+        duration: 2000,
+      });
     } finally {
       setIsDuplicating(false);
     }

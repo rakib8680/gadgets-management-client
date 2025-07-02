@@ -114,11 +114,14 @@ const UpdateGadgetModal = ({
 
       toast.success("Gadget updated", {
         description: `${formData.name} has been successfully updated.`,
+        duration: 2000,
       });
 
       onOpenChange(false);
     } catch (error) {
-      toast.error("Failed to update gadget. Please try again.");
+      toast.error("Failed to update gadget. Please try again.", {
+        duration: 2000,
+      });
     } finally {
       setIsUpdating(false);
     }
