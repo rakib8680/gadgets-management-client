@@ -84,6 +84,11 @@ const AllGadgets = () => {
     limit: pageSize,
   });
 
+  // Fetch all gadgets (unfiltered, just for brands)
+  const { data: allBrandsData } = useGetAllGadgetsQuery({
+    limit: 1000, // or a number larger than your total gadgets count
+  });
+  
   //All gadgets data and meta information
   const allGadgets: TProduct[] = data?.data || [];
   const meta: TMeta = data?.meta || {
@@ -94,10 +99,10 @@ const AllGadgets = () => {
   };
 
   // Get unique brands from the unfiltered data for dropdown filter
-  const uniqueBrands = allGadgets
+  const uniqueBrands = allBrandsData
     ? Array.from(
         new Set(
-          (allGadgets).map((gadget) => gadget.brand)
+          (allBrandsData.data as TProduct[]).map((gadget) => gadget.brand)
         )
       ).sort()
     : [];
