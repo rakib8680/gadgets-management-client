@@ -28,6 +28,7 @@ import UpdateGadgetModal from "@/components/ui/modals/update-gadget-modal";
 import GadgetFilters from "@/components/gadgets/GadgetFilters";
 import GadgetTableHeader from "@/components/gadgets/GadgetTableHeader";
 import GadgetTableRow from "@/components/gadgets/GadgetTableRow";
+import { useDebounced } from "@/redux/hooks";
 
 const AllGadgets = () => {
   // State management for filters and pagination
@@ -69,9 +70,20 @@ const AllGadgets = () => {
     gadget: null,
   });
 
+  // Debounced search term for better performance
+  const query: Record<string, any> = {};
+  const debouncedTerm = useDebounced({
+    searchQuery: searchTerm,
+    delay: 600,
+  });
+  if (!!debouncedTerm) {
+    query["searchTerm"] = debouncedTerm;
+  }
+
   //data fetching using RTK Query
   const { data, error, isFetching } = useGetAllGadgetsQuery({
     // search: searchTerm,
+    ...query,
     sort: sortBy,
     sortOrder,
     category: filterCategory !== "all" ? filterCategory : undefined,
@@ -84,11 +96,6 @@ const AllGadgets = () => {
     limit: pageSize,
   });
 
-  // Fetch all gadgets (unfiltered, just for brands)
-  const { data: allBrandsData } = useGetAllGadgetsQuery({
-    limit: 1000, // or a number larger than your total gadgets count
-  });
-
   //All gadgets data and meta information
   const allGadgets: TProduct[] = data?.data || [];
   const meta: TMeta = data?.meta || {
@@ -97,6 +104,11 @@ const AllGadgets = () => {
     total: 0,
     totalPage: 1,
   };
+
+  // Fetch all gadgets (unfiltered, just for brands)
+  const { data: allBrandsData } = useGetAllGadgetsQuery({
+    limit: 1000, // or a number larger than your total gadgets count
+  });
 
   // Get unique brands from the unfiltered data for dropdown filter
   const uniqueBrands = allBrandsData
@@ -130,15 +142,12 @@ const AllGadgets = () => {
       setSortOrder("asc");
     }
   };
-
   const handleDelete = (gadget: TProduct) => {
     setDeleteModal({ open: true, gadget });
   };
-
   const handleDuplicate = (gadget: TProduct) => {
     setDuplicateModal({ open: true, gadget });
   };
-
   const handleUpdate = (gadget: TProduct) => {
     setUpdateModal({ open: true, gadget });
   };
