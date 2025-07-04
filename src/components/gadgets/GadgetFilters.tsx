@@ -112,6 +112,7 @@ const GadgetFilters = ({
                 type="number"
                 placeholder="Min Price"
                 value={priceRange.min}
+                className="shadow-inner"
                 onChange={(e) =>
                   setPriceRange({ ...priceRange, min: e.target.value })
                 }
@@ -124,6 +125,7 @@ const GadgetFilters = ({
                 type="number"
                 placeholder="Max Price"
                 value={priceRange.max}
+                className="shadow-inner"
                 onChange={(e) =>
                   setPriceRange({ ...priceRange, max: e.target.value })
                 }

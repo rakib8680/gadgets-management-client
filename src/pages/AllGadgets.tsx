@@ -93,14 +93,14 @@ const AllGadgets = () => {
     totalPage: 1,
   };
 
-  // Get unique brands from data for dropdown filter
-  const uniqueBrands = Array.from(
-    new Set(allGadgets.map((gadget) => gadget.brand))
-  ).sort();
-
-  if (isFetching) {
-    return <LoadingHamster />;
-  }
+  // Get unique brands from the unfiltered data for dropdown filter
+  const uniqueBrands = allGadgets
+    ? Array.from(
+        new Set(
+          (allGadgets).map((gadget) => gadget.brand)
+        )
+      ).sort()
+    : [];
 
   // Handle error state
   if (error) {
@@ -188,52 +188,56 @@ const AllGadgets = () => {
         />
 
         {/* Table */}
-        <Card>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <Table>
-                {/* Table Header Component */}
-                <GadgetTableHeader
-                  sortBy={sortBy}
-                  sortOrder={sortOrder}
-                  onSort={handleSort}
-                />
-                <TableBody>
-                  {allGadgets?.length === 0 ? ( //for empty state
-                    <TableRow>
-                      <TableCell colSpan={9} className="text-center py-8">
-                        <div className="flex flex-col items-center gap-2">
-                          <Filter className="h-8 w-8 text-muted-foreground" />
-                          <p className="text-muted-foreground">
-                            No gadgets found
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            Try adjusting your search or filters
-                          </p>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    allGadgets.map(
-                      (
-                        gadget,
-                        index //for displaying gadgets
-                      ) => (
-                        <GadgetTableRow
-                          key={`${gadget?._id || index}`}
-                          gadget={gadget}
-                          onUpdate={handleUpdate}
-                          onDuplicate={handleDuplicate}
-                          onDelete={handleDelete}
-                        />
+        {isFetching ? (
+          <LoadingHamster />
+        ) : (
+          <Card>
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <Table>
+                  {/* Table Header Component */}
+                  <GadgetTableHeader
+                    sortBy={sortBy}
+                    sortOrder={sortOrder}
+                    onSort={handleSort}
+                  />
+                  <TableBody>
+                    {allGadgets?.length === 0 ? ( //for empty state
+                      <TableRow>
+                        <TableCell colSpan={9} className="text-center py-8">
+                          <div className="flex flex-col items-center gap-2">
+                            <Filter className="h-8 w-8 text-muted-foreground" />
+                            <p className="text-muted-foreground">
+                              No gadgets found
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              Try adjusting your search or filters
+                            </p>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      allGadgets.map(
+                        (
+                          gadget,
+                          index //for displaying gadgets
+                        ) => (
+                          <GadgetTableRow
+                            key={`${gadget?._id || index}`}
+                            gadget={gadget}
+                            onUpdate={handleUpdate}
+                            onDuplicate={handleDuplicate}
+                            onDelete={handleDelete}
+                          />
+                        )
                       )
-                    )
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Pagination */}
         {meta.total > 0 && (

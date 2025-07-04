@@ -2,7 +2,7 @@ import "./loading-hamster.css";
 
 const LoadingHamster = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-10/12">
+    <div className="flex flex-col items-center justify-center min-h-[50vh]">
       <div
         className="wheel-and-hamster"
         role="img"
