@@ -63,6 +63,7 @@ const PaginationComponent = ({
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
+          className="cursor-pointer"
           size="sm"
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
@@ -73,6 +74,7 @@ const PaginationComponent = ({
         <Button
           variant="outline"
           size="sm"
+          className="cursor-pointer"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
@@ -87,7 +89,7 @@ const PaginationComponent = ({
               size="sm"
               onClick={() => typeof page === "number" && onPageChange(page)}
               disabled={page === "..."}
-              className="min-w-[40px]"
+              className="min-w-[40px] cursor-pointer"
             >
               {page}
             </Button>
@@ -98,6 +100,7 @@ const PaginationComponent = ({
           variant="outline"
           size="sm"
           onClick={() => onPageChange(currentPage + 1)}
+          className="cursor-pointer"
           disabled={currentPage === totalPages}
         >
           <ChevronRight className="h-4 w-4" />
@@ -107,6 +110,7 @@ const PaginationComponent = ({
           variant="outline"
           size="sm"
           onClick={() => onPageChange(totalPages)}
+          className="cursor-pointer"
           disabled={currentPage === totalPages}
         >
           <ChevronsRight className="h-4 w-4" />

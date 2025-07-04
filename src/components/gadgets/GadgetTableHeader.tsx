@@ -19,7 +19,7 @@ const GadgetTableHeader: React.FC<GadgetTableHeaderProps> = ({
       <Button
         variant="ghost"
         onClick={() => onSort(column)}
-        className="h-auto p-0 font-semibold hover:bg-transparent"
+        className="h-auto p-0 font-semibold hover:bg-gray-200 hover:px-2 cursor-pointer"
       >
         {label}
         {sortBy === column &&

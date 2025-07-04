@@ -32,7 +32,7 @@ import GadgetTableRow from "@/components/gadgets/GadgetTableRow";
 const AllGadgets = () => {
   // State management for filters and pagination
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("name");
+  const [sortBy, setSortBy] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filterCategory, setFilterCategory] = useState<TCategory | "all">(
     "all"
@@ -88,7 +88,7 @@ const AllGadgets = () => {
   const { data: allBrandsData } = useGetAllGadgetsQuery({
     limit: 1000, // or a number larger than your total gadgets count
   });
-  
+
   //All gadgets data and meta information
   const allGadgets: TProduct[] = data?.data || [];
   const meta: TMeta = data?.meta || {
