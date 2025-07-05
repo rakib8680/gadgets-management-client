@@ -74,10 +74,12 @@ const AllGadgets = () => {
   const query: Record<string, any> = {};
   const debouncedTerm = useDebounced({
     searchQuery: searchTerm,
+
     delay: 600,
   });
   if (!!debouncedTerm) {
     query["searchTerm"] = debouncedTerm;
+    //todo- minPrice , maxPrice
   }
 
   //data fetching using RTK Query
