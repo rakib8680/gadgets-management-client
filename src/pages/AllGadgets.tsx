@@ -70,16 +70,28 @@ const AllGadgets = () => {
     gadget: null,
   });
 
-  // Debounced search term for better performance
+  // Debounced search term and price for better performance
   const query: Record<string, any> = {};
   const debouncedTerm = useDebounced({
     searchQuery: searchTerm,
-
+    delay: 600,
+  });
+  const debouncedMinPrice = useDebounced({
+    searchQuery: priceRange.min,
+    delay: 600,
+  });
+  const debouncedMaxPrice = useDebounced({
+    searchQuery: priceRange.max,
     delay: 600,
   });
   if (!!debouncedTerm) {
     query["searchTerm"] = debouncedTerm;
-    //todo- minPrice , maxPrice
+  }
+  if (!!debouncedMinPrice) {
+    query["minPrice"] = Number(debouncedMinPrice);
+  }
+  if (!!debouncedMaxPrice) {
+    query["maxPrice"] = Number(debouncedMaxPrice);
   }
 
   //data fetching using RTK Query
@@ -92,8 +104,6 @@ const AllGadgets = () => {
     brand: filterBrand !== "all" ? filterBrand : undefined,
     operatingSystem: filterOS !== "all" ? filterOS : undefined,
     powerSource: filterPowerSource !== "all" ? filterPowerSource : undefined,
-    minPrice: priceRange.min ? Number(priceRange.min) : undefined,
-    maxPrice: priceRange.max ? Number(priceRange.max) : undefined,
     page: currentPage,
     limit: pageSize,
   });
