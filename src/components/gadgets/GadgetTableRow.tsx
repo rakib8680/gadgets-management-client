@@ -156,7 +156,7 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
         </div>
       </TableCell>
       {/* actions */}
-      <TableCell className="text-right flex gap-2 justify-end items-center">
+      <TableCell className=" flex items-center gap-2 justify-end h-20">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button

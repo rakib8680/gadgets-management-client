@@ -177,7 +177,7 @@ const AllGadgets = () => {
   //main component
   return (
     <TooltipProvider>
-      <div className="container mx-auto py-6 space-y-6">
+      <div className="container mx-auto py-6 space-y-6 mb-24">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>

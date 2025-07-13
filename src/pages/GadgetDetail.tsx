@@ -23,6 +23,7 @@ import type { TProduct } from "@/types/product";
 import DeleteGadgetModal from "@/components/ui/modals/delete-gadget-modal";
 import DuplicateGadgetModal from "@/components/ui/modals/duplicate-gadget-modal";
 import UpdateGadgetModal from "@/components/ui/modals/update-gadget-modal";
+import LoadingHamster from "@/components/ui/loading-hamster/LoadingHamster";
 
 const getCategoryColor = (category: string) => {
   const colors: Record<string, string> = {
@@ -55,7 +56,7 @@ const GadgetDetail = () => {
   if (isLoading)
     return (
       <div className="flex justify-center items-center min-h-[300px]">
-        <span>Loading...</span>
+        <LoadingHamster />
       </div>
     );
   if (error)
@@ -173,35 +174,21 @@ const GadgetDetail = () => {
             <div className="text-lg text-gray-700 mb-2">
               <span className="font-semibold">Features:</span>
               <ul className="list-disc ml-6 mt-1">
-                {Object.entries(gadget.features).map(([key, value]) => (
-                  <li key={key} className="capitalize">
-                    <span className="font-semibold">{key}:</span>{" "}
-                    {String(value)}
-                  </li>
-                ))}
+                {Object.entries(gadget.features)
+                  .filter(([key]) => key !== "_id")
+                  .map(([key, value]) => (
+                    <li key={key} className="capitalize">
+                      <span className="font-semibold">{key}:</span>{" "}
+                      {String(value)}
+                    </li>
+                  ))}
               </ul>
             </div>
           )}
         </div>
       </CardContent>
       <CardContent>
-        <div className="flex flex-wrap gap-6 mt-8 justify-center">
-          <Button
-            onClick={() => setUpdateModalOpen(true)}
-            variant="default"
-            size="lg"
-            className="text-lg px-8 py-4 cursor-pointer"
-          >
-            <Edit className="mr-3 h-5 w-5" /> Edit
-          </Button>
-          <Button
-            onClick={() => setDuplicateModalOpen(true)}
-            variant="secondary"
-            size="lg"
-            className="text-lg px-8 py-4 cursor-pointer"
-          >
-            <Copy className="mr-3 h-5 w-5" /> Duplicate
-          </Button>
+        <div className="flex flex-wrap gap-6 mt-8 justify-between">
           <Button
             onClick={() => setDeleteModalOpen(true)}
             variant="destructive"
@@ -210,6 +197,24 @@ const GadgetDetail = () => {
           >
             <Trash2 className="mr-3 h-5 w-5" /> Delete
           </Button>
+          <div className="flex gap-4">
+            <Button
+              onClick={() => setDuplicateModalOpen(true)}
+              variant="secondary"
+              size="lg"
+              className="text-lg px-8 py-4 cursor-pointer"
+            >
+              <Copy className="mr-3 h-5 w-5" /> Duplicate
+            </Button>
+            <Button
+              onClick={() => setUpdateModalOpen(true)}
+              variant="default"
+              size="lg"
+              className="text-lg px-8 py-4 cursor-pointer"
+            >
+              <Edit className="mr-3 h-5 w-5" /> Edit
+            </Button>
+          </div>
         </div>
         {/* Modals */}
         <UpdateGadgetModal
