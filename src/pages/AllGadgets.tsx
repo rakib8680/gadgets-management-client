@@ -45,7 +45,7 @@ const AllGadgets = () => {
   >("all");
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(10);
 
   // Modal states
   const [deleteModal, setDeleteModal] = useState<{
@@ -96,7 +96,6 @@ const AllGadgets = () => {
 
   //data fetching using RTK Query
   const { data, error, isFetching } = useGetAllGadgetsQuery({
-    // search: searchTerm,
     ...query,
     sort: sortBy,
     sortOrder,

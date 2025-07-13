@@ -5,7 +5,12 @@ export type TCategory =
   | "smartwatch"
   | "headphone"
   | "speaker"
+  | "console"
+  | "camera"
+  | "television"
+  | "drone"
   | "accessory";
+
 export type TOperatingSystem =
   | "iOS"
   | "Android"

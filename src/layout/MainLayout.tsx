@@ -7,7 +7,7 @@ const MainLayout = () => {
   return (
     <SidebarProvider>
       {/*LogOut Button Component  */}
-      <div className="absolute right-10 top-8">
+      <div className="absolute right-14 top-8">
         <LogoutButton />
       </div>
 

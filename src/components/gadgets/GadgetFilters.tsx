@@ -87,6 +87,10 @@ const GadgetFilters = ({
                 <SelectItem value="smartwatch">Smartwatch</SelectItem>
                 <SelectItem value="headphone">Headphone</SelectItem>
                 <SelectItem value="speaker">Speaker</SelectItem>
+                <SelectItem value="camera">Camera</SelectItem>
+                <SelectItem value="console">Console</SelectItem>
+                <SelectItem value="drone">Drone</SelectItem>
+                <SelectItem value="television">Television</SelectItem>
                 <SelectItem value="accessory">Accessory</SelectItem>
               </SelectContent>
             </Select>
@@ -191,7 +195,7 @@ const GadgetFilters = ({
             {/* Clear  */}
             <Button
               className="cursor-pointer w-full md:max-w-[160px]"
-              variant="outline"
+              variant="default"
               onClick={onClearFilters}
             >
               Clear Filters

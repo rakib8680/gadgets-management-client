@@ -25,7 +25,7 @@ const PaginationComponent = ({
   const endItem = Math.min(currentPage * pageSize, totalItems);
 
   const getVisiblePages = () => {
-    const delta = 2;
+    const delta = 1;
     const range = [];
     const rangeWithDots = [];
 
