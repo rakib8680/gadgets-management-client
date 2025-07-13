@@ -1,0 +1,217 @@
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import {
+  Calendar,
+  Cpu,
+  Zap,
+  Edit,
+  Copy,
+  Trash2,
+  ArrowLeft,
+} from "lucide-react";
+import { useGetSingleGadgetQuery } from "@/redux/features/productsApi";
+import type { TProduct } from "@/types/product";
+
+const getCategoryColor = (category: string) => {
+  const colors: Record<string, string> = {
+    smartphone: "bg-blue-100 text-blue-800 hover:bg-blue-200",
+    tablet: "bg-purple-100 text-purple-800 hover:bg-purple-200",
+    laptop: "bg-green-100 text-green-800 hover:bg-green-200",
+    smartwatch: "bg-orange-100 text-orange-800 hover:bg-orange-200",
+    headphone: "bg-pink-100 text-pink-800 hover:bg-pink-200",
+    speaker: "bg-indigo-100 text-indigo-800 hover:bg-indigo-200",
+    camera: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
+    console: "bg-red-100 text-red-800 hover:bg-red-200",
+    drone: "bg-teal-100 text-teal-800 hover:bg-teal-200",
+    television: "bg-lime-100 text-lime-800 hover:bg-lime-200",
+    accessory: "bg-gray-100 text-gray-800 hover:bg-gray-200",
+  };
+  return colors[category] || "bg-gray-100 text-gray-800";
+};
+
+const GadgetDetail = () => {
+  const { id } = useParams<{ id: string }>();
+  console.log(id);
+  const navigate = useNavigate();
+  const { data, isLoading, error } = useGetSingleGadgetQuery(id);
+  const gadget = data?.data as TProduct | undefined;
+
+  // Placeholder handlers
+  const handleUpdate = () => {};
+  const handleDuplicate = () => {};
+  const handleDelete = () => {};
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center min-h-[300px]">
+        <span>Loading...</span>
+      </div>
+    );
+  if (error)
+    return (
+      <Card className="w-full max-w-md mx-auto mt-8">
+        <CardHeader>
+          <CardTitle className="text-destructive">Error</CardTitle>
+          <CardDescription>
+            Failed to load gadget. Please try again.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  if (!gadget)
+    return (
+      <Card className="w-full max-w-md mx-auto mt-8">
+        <CardHeader>
+          <CardTitle>Gadget Not Found</CardTitle>
+          <CardDescription>
+            The requested gadget does not exist.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+
+  return (
+    <Card className="w-full max-w-6xl mx-auto mt-10 p-6 lg:p-12 shadow-2xl border-2 border-gray-200">
+      <CardHeader>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
+          <div>
+            <CardTitle className="text-4xl font-extrabold mb-2 tracking-tight">
+              {gadget.name}
+            </CardTitle>
+            <CardDescription className="text-lg text-gray-600">
+              <span className="font-semibold">Model:</span> {gadget.modelNo}{" "}
+              &nbsp; | &nbsp;
+              <span className="font-semibold">Brand:</span> {gadget.brand}
+            </CardDescription>
+          </div>
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={() => navigate(-1)}
+            className="text-lg px-6 py-3 cursor-pointer"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" /> Back
+          </Button>
+        </div>
+        <div className="flex flex-wrap items-center gap-4 mb-6">
+          <Badge className={getCategoryColor(gadget.category)}>
+            {gadget.category}
+          </Badge>
+          <span className="text-2xl font-bold text-gray-800">
+            ${gadget.price.toLocaleString()}
+          </span>
+          <span
+            className={
+              gadget.quantity > 0
+                ? "text-green-600 font-semibold"
+                : "text-red-600 font-semibold"
+            }
+          >
+            {gadget.quantity} units
+          </span>
+        </div>
+      </CardHeader>
+      <CardContent className="flex flex-col lg:flex-row gap-16 items-center lg:items-start">
+        <div className="flex-shrink-0">
+          <img
+            src={gadget.imageURL || "/placeholder.svg?height=320&width=320"}
+            alt={gadget.name}
+            className="w-80 h-80 object-cover rounded-2xl bg-muted border-2 border-gray-300 shadow-xl"
+          />
+        </div>
+        <div className="flex-1 space-y-6 bg-gray-50 rounded-xl p-8 border border-gray-200">
+          <div className="flex gap-3 flex-wrap mb-4">
+            {gadget.operatingSystem && (
+              <Badge variant="outline" className="text-base w-fit">
+                <Cpu className="w-4 h-4 mr-1" />
+                {gadget.operatingSystem}
+              </Badge>
+            )}
+            <Badge variant="outline" className="text-base w-fit">
+              <Zap className="w-4 h-4 mr-1" />
+              {gadget.powerSource}
+            </Badge>
+            <Badge variant="outline" className="text-base w-fit">
+              <Calendar className="w-4 h-4 mr-1" />
+              {new Date(gadget.releaseDate).toLocaleDateString()}
+            </Badge>
+          </div>
+          <div className="text-lg text-gray-700 mb-2">
+            <span className="font-semibold">Connectivity:</span>{" "}
+            {gadget.connectivity.join(", ")}
+          </div>
+          {gadget.compatibility && gadget.compatibility.length > 0 && (
+            <div className="text-lg text-gray-700 mb-2">
+              <span className="font-semibold">Compatibility:</span>{" "}
+              {gadget.compatibility.join(", ")}
+            </div>
+          )}
+          {gadget.weight && (
+            <div className="text-lg text-gray-700 mb-2">
+              <span className="font-semibold">Weight:</span> {gadget.weight}g
+            </div>
+          )}
+          {gadget.dimensions && (
+            <div className="text-lg text-gray-700 mb-2">
+              <span className="font-semibold">Dimensions:</span>{" "}
+              {gadget.dimensions.width} x {gadget.dimensions.height} x{" "}
+              {gadget.dimensions.depth} mm
+            </div>
+          )}
+          {gadget.features && Object.keys(gadget.features).length > 0 && (
+            <div className="text-lg text-gray-700 mb-2">
+              <span className="font-semibold">Features:</span>
+              <ul className="list-disc ml-6 mt-1">
+                {Object.entries(gadget.features).map(([key, value]) => (
+                  <li key={key} className="capitalize">
+                    <span className="font-semibold">{key}:</span>{" "}
+                    {String(value)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </CardContent>
+      <CardContent>
+        <div className="flex flex-wrap gap-6 mt-8 justify-center">
+          <Button
+            onClick={handleUpdate}
+            variant="default"
+            size="lg"
+            className="text-lg px-8 py-4 cursor-pointer"
+          >
+            <Edit className="mr-3 h-5 w-5" /> Edit
+          </Button>
+          <Button
+            onClick={handleDuplicate}
+            variant="secondary"
+            size="lg"
+            className="text-lg px-8 py-4 cursor-pointer"
+          >
+            <Copy className="mr-3 h-5 w-5" /> Duplicate
+          </Button>
+          <Button
+            onClick={handleDelete}
+            variant="destructive"
+            size="lg"
+            className="text-lg px-8 py-4 cursor-pointer"
+          >
+            <Trash2 className="mr-3 h-5 w-5" /> Delete
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default GadgetDetail;

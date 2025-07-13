@@ -23,8 +23,10 @@ import {
   Calendar,
   Cpu,
   Zap,
+  Eye,
 } from "lucide-react";
 import type { TCategory, TConnectivity, TProduct } from "@/types/product"; // Ensure these types are correctly imported
+import { useNavigate } from "react-router-dom";
 
 type GadgetTableRowProps = {
   gadget: TProduct;
@@ -39,6 +41,8 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
   onDuplicate,
   onDelete,
 }) => {
+  const navigate = useNavigate();
+
   const getCategoryColor = (category: TCategory) => {
     const colors = {
       smartphone: "bg-blue-100 text-blue-800 hover:bg-blue-200",
@@ -152,7 +156,23 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
         </div>
       </TableCell>
       {/* actions */}
-      <TableCell className="text-right">
+      <TableCell className="text-right flex gap-2 justify-end items-center">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 p-0 cursor-pointer"
+              onClick={() => {
+                navigate(`/dashboard/gadgets/${gadget._id}`);
+              }}
+            >
+              <span className="sr-only">View gadget</span>
+              <Eye className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>View details</TooltipContent>
+        </Tooltip>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">

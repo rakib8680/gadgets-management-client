@@ -11,6 +11,7 @@ import MyGadgets from "@/pages/MyGadgets";
 import SalesHistory from "@/pages/SalesHistory";
 import PublicRoute from "@/components/layout/PublicRoute";
 import Analytics from "@/pages/Analytics";
+import GadgetDetail from "@/pages/GadgetDetail";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,11 @@ const router = createBrowserRouter([
       {
         path: "gadgets/add",
         element: <AddGadget />,
+      },
+      // Add the detail route
+      {
+        path: "gadgets/:id",
+        element: <GadgetDetail />,
       },
       {
         path: "my-gadgets",
