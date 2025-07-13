@@ -20,6 +20,9 @@ import {
 } from "lucide-react";
 import { useGetSingleGadgetQuery } from "@/redux/features/productsApi";
 import type { TProduct } from "@/types/product";
+import DeleteGadgetModal from "@/components/ui/modals/delete-gadget-modal";
+import DuplicateGadgetModal from "@/components/ui/modals/duplicate-gadget-modal";
+import UpdateGadgetModal from "@/components/ui/modals/update-gadget-modal";
 
 const getCategoryColor = (category: string) => {
   const colors: Record<string, string> = {
@@ -45,10 +48,9 @@ const GadgetDetail = () => {
   const { data, isLoading, error } = useGetSingleGadgetQuery(id);
   const gadget = data?.data as TProduct | undefined;
 
-  // Placeholder handlers
-  const handleUpdate = () => {};
-  const handleDuplicate = () => {};
-  const handleDelete = () => {};
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
+  const [duplicateModalOpen, setDuplicateModalOpen] = React.useState(false);
+  const [updateModalOpen, setUpdateModalOpen] = React.useState(false);
 
   if (isLoading)
     return (
@@ -80,7 +82,7 @@ const GadgetDetail = () => {
     );
 
   return (
-    <Card className="w-full max-w-6xl mx-auto mt-10 p-6 lg:p-12 shadow-2xl border-2 border-gray-200">
+    <Card className="w-full max-w-6xl mx-auto mt-10 mb-20 p-6 lg:p-12 border border-gray-200 ">
       <CardHeader>
         <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
           <div>
@@ -185,7 +187,7 @@ const GadgetDetail = () => {
       <CardContent>
         <div className="flex flex-wrap gap-6 mt-8 justify-center">
           <Button
-            onClick={handleUpdate}
+            onClick={() => setUpdateModalOpen(true)}
             variant="default"
             size="lg"
             className="text-lg px-8 py-4 cursor-pointer"
@@ -193,7 +195,7 @@ const GadgetDetail = () => {
             <Edit className="mr-3 h-5 w-5" /> Edit
           </Button>
           <Button
-            onClick={handleDuplicate}
+            onClick={() => setDuplicateModalOpen(true)}
             variant="secondary"
             size="lg"
             className="text-lg px-8 py-4 cursor-pointer"
@@ -201,7 +203,7 @@ const GadgetDetail = () => {
             <Copy className="mr-3 h-5 w-5" /> Duplicate
           </Button>
           <Button
-            onClick={handleDelete}
+            onClick={() => setDeleteModalOpen(true)}
             variant="destructive"
             size="lg"
             className="text-lg px-8 py-4 cursor-pointer"
@@ -209,6 +211,22 @@ const GadgetDetail = () => {
             <Trash2 className="mr-3 h-5 w-5" /> Delete
           </Button>
         </div>
+        {/* Modals */}
+        <UpdateGadgetModal
+          open={updateModalOpen}
+          onOpenChange={setUpdateModalOpen}
+          gadget={gadget}
+        />
+        <DuplicateGadgetModal
+          open={duplicateModalOpen}
+          onOpenChange={setDuplicateModalOpen}
+          gadget={gadget}
+        />
+        <DeleteGadgetModal
+          open={deleteModalOpen}
+          onOpenChange={setDeleteModalOpen}
+          gadget={gadget}
+        />
       </CardContent>
     </Card>
   );
