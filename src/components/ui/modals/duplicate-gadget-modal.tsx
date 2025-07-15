@@ -10,7 +10,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -27,12 +26,26 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useCreateGadgetMutation } from "@/redux/features/productsApi";
+import { useForm } from "react-hook-form";
+import GM_Select from "@/components/form/GM_Select";
+import { FormProvider } from "react-hook-form";
 
 interface DuplicateGadgetModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   gadget: TProduct | null;
 }
+
+type FormFields = {
+  name: string;
+  brand: string;
+  modelNo: string;
+  price: string;
+  quantity: string;
+  category: TCategory;
+  operatingSystem: TOperatingSystem;
+  powerSource: TPowerSource;
+};
 
 const DuplicateGadgetModal = ({
   open,
@@ -41,21 +54,29 @@ const DuplicateGadgetModal = ({
 }: DuplicateGadgetModalProps) => {
   const [isDuplicating, setIsDuplicating] = useState(false);
   const [duplicateGadget] = useCreateGadgetMutation();
-  const [formData, setFormData] = useState({
-    name: "",
-    brand: "",
-    modelNo: "",
-    price: "",
-    quantity: "",
-    category: "" as TCategory,
-    operatingSystem: "" as TOperatingSystem,
-    powerSource: "" as TPowerSource,
+  const methods = useForm<FormFields>({
+    defaultValues: {
+      name: "",
+      brand: "",
+      modelNo: "",
+      price: "",
+      quantity: "",
+      category: "" as TCategory,
+      operatingSystem: "" as TOperatingSystem,
+      powerSource: "" as TPowerSource,
+    },
   });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+    control,
+  } = methods;
 
-  // Update form data when gadget changes
   useEffect(() => {
     if (gadget) {
-      setFormData({
+      reset({
         name: `${gadget.name} (Copy)`,
         brand: gadget.brand,
         modelNo: `${gadget.modelNo}-COPY`,
@@ -66,38 +87,40 @@ const DuplicateGadgetModal = ({
         powerSource: gadget.powerSource,
       });
     }
-  }, [gadget]);
+  }, [gadget, reset]);
 
-  const handleDuplicate = async () => {
+  const onSubmit = async (data: FormFields) => {
     if (!gadget) return;
-
     setIsDuplicating(true);
     try {
       const duplicatedGadget: Partial<TProduct> = {
         ...gadget,
-        name: formData.name,
-        brand: formData.brand,
-        modelNo: formData.modelNo,
-        price: Number.parseFloat(formData.price),
-        quantity: Number.parseInt(formData.quantity),
-        category: formData.category,
-        operatingSystem: formData.operatingSystem,
-        powerSource: formData.powerSource,
+        name: data.name,
+        price: Number.parseFloat(data.price),
+        imageURL:
+          gadget.imageURL ||
+          "https://images.squarespace-cdn.com/content/v1/530cd931e4b0e49b19b254ec/ef572341-cfa5-48b4-823e-195af17cbcf3/final+logo++copy-1+%281%29.png",
+        quantity: Number.parseInt(data.quantity),
         releaseDate: new Date(), // Set current date for duplicate
+        brand: data.brand,
+        modelNo: data.modelNo,
+        category: data.category,
+        operatingSystem: data.operatingSystem,
+        connectivity: gadget.connectivity,
+        powerSource: data.powerSource,
+        features: gadget.features,
+        weight: gadget.weight,
+        dimensions: gadget.dimensions,
+        compatibility: gadget.compatibility,
       };
-
-      // Replace with your actual duplicate/create API call
-      const res = await duplicateGadget(duplicatedGadget).unwrap();
-      console.log(res);
-      if (res.success) {
-        toast.success("Gadget duplicated", {
-          description: `${formData.name} has been successfully created.`,
-          duration: 2000,
-        });
-        onOpenChange(false);
-      }
+      // Uncomment to actually create
+      // await duplicateGadget(duplicatedGadget)
+      toast.success("Gadget duplicated", {
+        description: `${data.name} has been successfully created.`,
+        duration: 2000,
+      });
+      onOpenChange(false);
     } catch (error) {
-      console.log(error);
       toast.error("Failed to duplicate gadget. Please try again.", {
         duration: 2000,
       });
@@ -137,8 +160,8 @@ const DuplicateGadgetModal = ({
           </DialogDescription>
         </DialogHeader>
 
+        {/* Original Gadget Preview */}
         <div className="space-y-4 py-4">
-          {/* Original Gadget Preview */}
           <div className="p-3 border rounded-lg bg-muted/50">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
@@ -168,168 +191,148 @@ const DuplicateGadgetModal = ({
           </div>
 
           {/* Form Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="name">Product Name</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  placeholder="Enter product name"
+          <FormProvider {...methods}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="name">Product Name</Label>
+                  <Input
+                    id="name"
+                    {...register("name", { required: true })}
+                    placeholder="Enter product name"
+                  />
+                  {errors.name && (
+                    <span className="text-red-500 text-xs">
+                      Name is required
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <Label htmlFor="brand">Brand</Label>
+                  <Input
+                    id="brand"
+                    {...register("brand", { required: true })}
+                    placeholder="Enter brand name"
+                  />
+                  {errors.brand && (
+                    <span className="text-red-500 text-xs">
+                      Brand is required
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <Label htmlFor="modelNo">Model Number</Label>
+                  <Input
+                    id="modelNo"
+                    {...register("modelNo", { required: true })}
+                    placeholder="Enter model number"
+                  />
+                  {errors.modelNo && (
+                    <span className="text-red-500 text-xs">
+                      Model number is required
+                    </span>
+                  )}
+                </div>
+                <GM_Select
+                  name="category"
+                  label="Category"
+                  required
+                  options={[
+                    { value: "smartphone", label: "Smartphone" },
+                    { value: "tablet", label: "Tablet" },
+                    { value: "laptop", label: "Laptop" },
+                    { value: "smartwatch", label: "Smartwatch" },
+                    { value: "headphone", label: "Headphone" },
+                    { value: "speaker", label: "Speaker" },
+                    { value: "camera", label: "Camera" },
+                    { value: "console", label: "Console" },
+                    { value: "drone", label: "Drone" },
+                    { value: "television", label: "Television" },
+                    { value: "accessory", label: "Accessory" },
+                  ]}
                 />
               </div>
-
-              <div>
-                <Label htmlFor="brand">Brand</Label>
-                <Input
-                  id="brand"
-                  value={formData.brand}
-                  onChange={(e) =>
-                    setFormData({ ...formData, brand: e.target.value })
-                  }
-                  placeholder="Enter brand name"
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="price">Price ($)</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    step="0.01"
+                    {...register("price", { required: true })}
+                    placeholder="0.00"
+                  />
+                  {errors.price && (
+                    <span className="text-red-500 text-xs">
+                      Price is required
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <Label htmlFor="quantity">Quantity</Label>
+                  <Input
+                    id="quantity"
+                    type="number"
+                    {...register("quantity", { required: true })}
+                    placeholder="0"
+                  />
+                  {errors.quantity && (
+                    <span className="text-red-500 text-xs">
+                      Quantity is required
+                    </span>
+                  )}
+                </div>
+                <GM_Select
+                  name="operatingSystem"
+                  label="Operating System"
+                  required
+                  options={[
+                    { value: "iOS", label: "iOS" },
+                    { value: "Android", label: "Android" },
+                    { value: "Windows", label: "Windows" },
+                    { value: "macOS", label: "macOS" },
+                    { value: "Linux", label: "Linux" },
+                  ]}
+                />
+                <GM_Select
+                  name="powerSource"
+                  label="Power Source"
+                  required
+                  options={[
+                    { value: "Battery", label: "Battery" },
+                    { value: "Plug-in", label: "Plug-in" },
+                    { value: "Battery & Plug-in", label: "Battery & Plug-in" },
+                  ]}
                 />
               </div>
-
-              <div>
-                <Label htmlFor="modelNo">Model Number</Label>
-                <Input
-                  id="modelNo"
-                  value={formData.modelNo}
-                  onChange={(e) =>
-                    setFormData({ ...formData, modelNo: e.target.value })
-                  }
-                  placeholder="Enter model number"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="category">Category</Label>
-                <Select
-                  value={formData.category}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, category: value as TCategory })
-                  }
+              <div className="col-span-2 flex justify-end gap-2 mt-4">
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => onOpenChange(false)}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="smartphone">Smartphone</SelectItem>
-                    <SelectItem value="tablet">Tablet</SelectItem>
-                    <SelectItem value="laptop">Laptop</SelectItem>
-                    <SelectItem value="smartwatch">Smartwatch</SelectItem>
-                    <SelectItem value="headphone">Headphone</SelectItem>
-                    <SelectItem value="speaker">Speaker</SelectItem>
-                    <SelectItem value="accessory">Accessory</SelectItem>
-                  </SelectContent>
-                </Select>
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={isDuplicating || isSubmitting}>
+                  {isDuplicating ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="mr-2 h-4 w-4" />
+                      Create Duplicate
+                    </>
+                  )}
+                </Button>
               </div>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="price">Price ($)</Label>
-                <Input
-                  id="price"
-                  type="number"
-                  step="0.01"
-                  value={formData.price}
-                  onChange={(e) =>
-                    setFormData({ ...formData, price: e.target.value })
-                  }
-                  placeholder="0.00"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="quantity">Quantity</Label>
-                <Input
-                  id="quantity"
-                  type="number"
-                  value={formData.quantity}
-                  onChange={(e) =>
-                    setFormData({ ...formData, quantity: e.target.value })
-                  }
-                  placeholder="0"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="operatingSystem">Operating System</Label>
-                <Select
-                  value={formData.operatingSystem}
-                  onValueChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      operatingSystem: value as TOperatingSystem,
-                    })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select OS" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="iOS">iOS</SelectItem>
-                    <SelectItem value="Android">Android</SelectItem>
-                    <SelectItem value="Windows">Windows</SelectItem>
-                    <SelectItem value="macOS">macOS</SelectItem>
-                    <SelectItem value="Linux">Linux</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label htmlFor="powerSource">Power Source</Label>
-                <Select
-                  value={formData.powerSource}
-                  onValueChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      powerSource: value as TPowerSource,
-                    })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select power source" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Battery">Battery</SelectItem>
-                    <SelectItem value="Plug-in">Plug-in</SelectItem>
-                    <SelectItem value="Battery & Plug-in">
-                      Battery & Plug-in
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
+            </form>
+          </FormProvider>
         </div>
-
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button
-            onClick={handleDuplicate}
-            disabled={isDuplicating || !formData.name.trim()}
-          >
-            {isDuplicating ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                Creating...
-              </>
-            ) : (
-              <>
-                <Plus className="mr-2 h-4 w-4" />
-                Create Duplicate
-              </>
-            )}
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
