@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useCreateGadgetMutation } from "@/redux/features/productsApi";
 
 interface DuplicateGadgetModalProps {
   open: boolean;
@@ -39,6 +40,7 @@ const DuplicateGadgetModal = ({
   gadget,
 }: DuplicateGadgetModalProps) => {
   const [isDuplicating, setIsDuplicating] = useState(false);
+  const [duplicateGadget] = useCreateGadgetMutation();
   const [formData, setFormData] = useState({
     name: "",
     brand: "",
@@ -85,15 +87,17 @@ const DuplicateGadgetModal = ({
       };
 
       // Replace with your actual duplicate/create API call
-      // await createGadgetMutation(duplicatedGadget)
-
-      toast.success("Gadget duplicated", {
-        description: `${formData.name} has been successfully created.`,
-        duration: 2000,
-      });
-
-      onOpenChange(false);
+      const res = await duplicateGadget(duplicatedGadget).unwrap();
+      console.log(res);
+      if (res.success) {
+        toast.success("Gadget duplicated", {
+          description: `${formData.name} has been successfully created.`,
+          duration: 2000,
+        });
+        onOpenChange(false);
+      }
     } catch (error) {
+      console.log(error);
       toast.error("Failed to duplicate gadget. Please try again.", {
         duration: 2000,
       });
