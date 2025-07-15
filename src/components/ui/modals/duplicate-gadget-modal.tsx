@@ -19,6 +19,8 @@ import { FieldValues, useForm } from "react-hook-form";
 import GM_Select from "@/components/form/GM_Select";
 import { FormProvider } from "react-hook-form";
 import getCategoryColor from "@/utils/getCategoryColor";
+import GM_Input from "@/components/form/GM_Input";
+import GM_Form from "@/components/form/GM_Form";
 
 interface DuplicateGadgetModalProps {
   open: boolean;
@@ -34,13 +36,7 @@ const DuplicateGadgetModal = ({
   const [isDuplicating, setIsDuplicating] = useState(false);
   const [duplicateGadget] = useCreateGadgetMutation();
   const methods = useForm();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-    control,
-  } = methods;
+  const { register, handleSubmit, reset, control } = methods;
 
   // Reset form when gadget changes
   useEffect(() => {
@@ -150,147 +146,123 @@ const DuplicateGadgetModal = ({
           </div>
 
           {/* Form Fields */}
-          <FormProvider {...methods}>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4"
-            >
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="name">Product Name</Label>
-                  <Input
-                    id="name"
-                    {...register("name", { required: true })}
-                    placeholder="Enter product name"
-                  />
-                  {errors.name && (
-                    <span className="text-red-500 text-xs">
-                      Name is required
-                    </span>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor="brand">Brand</Label>
-                  <Input
-                    id="brand"
-                    {...register("brand", { required: true })}
-                    placeholder="Enter brand name"
-                  />
-                  {errors.brand && (
-                    <span className="text-red-500 text-xs">
-                      Brand is required
-                    </span>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor="modelNo">Model Number</Label>
-                  <Input
-                    id="modelNo"
-                    {...register("modelNo", { required: true })}
-                    placeholder="Enter model number"
-                  />
-                  {errors.modelNo && (
-                    <span className="text-red-500 text-xs">
-                      Model number is required
-                    </span>
-                  )}
-                </div>
-                <GM_Select
-                  name="category"
-                  label="Category"
-                  required
-                  options={[
-                    { value: "smartphone", label: "Smartphone" },
-                    { value: "tablet", label: "Tablet" },
-                    { value: "laptop", label: "Laptop" },
-                    { value: "smartwatch", label: "Smartwatch" },
-                    { value: "headphone", label: "Headphone" },
-                    { value: "speaker", label: "Speaker" },
-                    { value: "camera", label: "Camera" },
-                    { value: "console", label: "Console" },
-                    { value: "drone", label: "Drone" },
-                    { value: "television", label: "Television" },
-                    { value: "accessory", label: "Accessory" },
-                  ]}
-                />
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="price">Price ($)</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    step="0.01"
-                    {...register("price", { required: true })}
-                    placeholder="0.00"
-                  />
-                  {errors.price && (
-                    <span className="text-red-500 text-xs">
-                      Price is required
-                    </span>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor="quantity">Quantity</Label>
-                  <Input
-                    id="quantity"
-                    type="number"
-                    {...register("quantity", { required: true })}
-                    placeholder="0"
-                  />
-                  {errors.quantity && (
-                    <span className="text-red-500 text-xs">
-                      Quantity is required
-                    </span>
-                  )}
-                </div>
-                <GM_Select
-                  name="operatingSystem"
-                  label="Operating System"
-                  required
-                  options={[
-                    { value: "iOS", label: "iOS" },
-                    { value: "Android", label: "Android" },
-                    { value: "Windows", label: "Windows" },
-                    { value: "macOS", label: "macOS" },
-                    { value: "Linux", label: "Linux" },
-                  ]}
-                />
-                <GM_Select
-                  name="powerSource"
-                  label="Power Source"
-                  required
-                  options={[
-                    { value: "Battery", label: "Battery" },
-                    { value: "Plug-in", label: "Plug-in" },
-                    { value: "Battery & Plug-in", label: "Battery & Plug-in" },
-                  ]}
-                />
-              </div>
-              <div className="col-span-2 flex justify-end gap-2 mt-4">
-                <Button
-                  variant="outline"
-                  type="button"
-                  onClick={() => onOpenChange(false)}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={isDuplicating || isSubmitting}>
-                  {isDuplicating ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                      Creating...
-                    </>
-                  ) : (
-                    <>
-                      <Plus className="mr-2 h-4 w-4" />
-                      Create Duplicate
-                    </>
-                  )}
-                </Button>
-              </div>
-            </form>
-          </FormProvider>
+          <GM_Form
+            onSubmit={onSubmit}
+            defaultValues={
+              gadget
+                ? {
+                    name: `${gadget.name} (Copy)`,
+                    brand: gadget.brand,
+                    modelNo: `${gadget.modelNo}-COPY`,
+                    price: gadget.price.toString(),
+                    quantity: gadget.quantity.toString(),
+                    category: gadget.category,
+                    operatingSystem: gadget.operatingSystem || "iOS",
+                    powerSource: gadget.powerSource,
+                  }
+                : {}
+            }
+            className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
+            <div className="space-y-4">
+              <GM_Input
+                name="name"
+                label="Product Name"
+                required
+                placeholder="Enter product name"
+              />
+              <GM_Input
+                name="brand"
+                label="Brand"
+                required
+                placeholder="Enter brand name"
+              />
+              <GM_Input
+                name="modelNo"
+                label="Model Number"
+                required
+                placeholder="Enter model number"
+              />
+              <GM_Select
+                name="category"
+                label="Category"
+                required
+                options={[
+                  { value: "smartphone", label: "Smartphone" },
+                  { value: "tablet", label: "Tablet" },
+                  { value: "laptop", label: "Laptop" },
+                  { value: "smartwatch", label: "Smartwatch" },
+                  { value: "headphone", label: "Headphone" },
+                  { value: "speaker", label: "Speaker" },
+                  { value: "camera", label: "Camera" },
+                  { value: "console", label: "Console" },
+                  { value: "drone", label: "Drone" },
+                  { value: "television", label: "Television" },
+                  { value: "accessory", label: "Accessory" },
+                ]}
+              />
+            </div>
+            <div className="space-y-4">
+              <GM_Input
+                name="price"
+                label="Price ($)"
+                type="number"
+                required
+                placeholder="0.00"
+              />
+              <GM_Input
+                name="quantity"
+                label="Quantity"
+                type="number"
+                required
+                placeholder="0"
+              />
+              <GM_Select
+                name="operatingSystem"
+                label="Operating System"
+                required
+                options={[
+                  { value: "iOS", label: "iOS" },
+                  { value: "Android", label: "Android" },
+                  { value: "Windows", label: "Windows" },
+                  { value: "macOS", label: "macOS" },
+                  { value: "Linux", label: "Linux" },
+                ]}
+              />
+              <GM_Select
+                name="powerSource"
+                label="Power Source"
+                required
+                options={[
+                  { value: "Battery", label: "Battery" },
+                  { value: "Plug-in", label: "Plug-in" },
+                  { value: "Battery & Plug-in", label: "Battery & Plug-in" },
+                ]}
+              />
+            </div>
+            <div className="col-span-2 flex justify-end gap-2 mt-4">
+              <Button
+                variant="outline"
+                type="button"
+                onClick={() => onOpenChange(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isDuplicating}>
+                {isDuplicating ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create Duplicate
+                  </>
+                )}
+              </Button>
+            </div>
+          </GM_Form>
         </div>
       </DialogContent>
     </Dialog>
