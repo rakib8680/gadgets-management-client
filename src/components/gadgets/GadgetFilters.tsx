@@ -69,7 +69,7 @@ const GadgetFilters = ({
 
           {/*all filters*/}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Category  */}
+            {/* todo -make it reusable Category  */} 
             <Select
               value={filterCategory}
               onValueChange={(value) =>
@@ -111,7 +111,7 @@ const GadgetFilters = ({
             </Select>
 
             {/* Price Min */}
-            <div className="w-full md:max-w-[160px] ">
+            <div className="w-full md:max-w-[160px]">
               <Input
                 type="number"
                 placeholder="Min Price"

@@ -78,14 +78,15 @@ const DuplicateGadgetModal = ({
         dimensions: gadget.dimensions,
         compatibility: gadget.compatibility,
       };
-      console.log("Duplicated Gadget Data:", duplicatedGadget);
-      // Uncomment to actually create
-      // await duplicateGadget(duplicatedGadget)
-      toast.success("Gadget duplicated", {
-        description: `${data.name} has been successfully created.`,
-        duration: 2000,
-      });
-      onOpenChange(false);
+
+      const res = await duplicateGadget(duplicatedGadget).unwrap();
+      if (res.success) {
+        toast.success("Gadget duplicated", {
+          description: `${data.name} has been successfully created.`,
+          duration: 2000,
+        });
+        onOpenChange(false);
+      }
     } catch (error) {
       toast.error("Failed to duplicate gadget. Please try again.", {
         duration: 2000,
