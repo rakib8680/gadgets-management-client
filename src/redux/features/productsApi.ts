@@ -17,7 +17,19 @@ const productApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Gadget"],
     }),
+    createGadget: builder.mutation({
+      query: (gadget) => ({
+        url: "/products/add-gadgets",
+        method: "POST",
+        body: gadget,
+      }),
+      invalidatesTags: ["Gadget"],
+    }),
   }),
 });
 
-export const { useGetAllGadgetsQuery, useGetSingleGadgetQuery } = productApi;
+export const {
+  useGetAllGadgetsQuery,
+  useGetSingleGadgetQuery,
+  useCreateGadgetMutation,
+} = productApi;

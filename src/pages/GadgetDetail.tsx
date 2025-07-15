@@ -44,7 +44,6 @@ const getCategoryColor = (category: string) => {
 
 const GadgetDetail = () => {
   const { id } = useParams<{ id: string }>();
-  console.log(id);
   const navigate = useNavigate();
   const { data, isLoading, error } = useGetSingleGadgetQuery(id);
   const gadget = data?.data as TProduct | undefined;
