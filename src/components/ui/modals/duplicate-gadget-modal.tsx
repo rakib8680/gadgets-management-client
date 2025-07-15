@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
 import { Copy, Plus } from "lucide-react";
-import type {
-  TProduct,
-  TCategory,
-  TOperatingSystem,
-  TPowerSource,
-} from "@/types/product";
+import type { TProduct } from "@/types/product";
 import {
   Dialog,
   DialogContent,
@@ -16,36 +11,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useCreateGadgetMutation } from "@/redux/features/productsApi";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
+
 import GM_Select from "@/components/form/GM_Select";
 import { FormProvider } from "react-hook-form";
+import getCategoryColor from "@/utils/getCategoryColor";
 
 interface DuplicateGadgetModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   gadget: TProduct | null;
 }
-
-type FormFields = {
-  name: string;
-  brand: string;
-  modelNo: string;
-  price: string;
-  quantity: string;
-  category: TCategory;
-  operatingSystem: TOperatingSystem;
-  powerSource: TPowerSource;
-};
 
 const DuplicateGadgetModal = ({
   open,
@@ -54,18 +33,7 @@ const DuplicateGadgetModal = ({
 }: DuplicateGadgetModalProps) => {
   const [isDuplicating, setIsDuplicating] = useState(false);
   const [duplicateGadget] = useCreateGadgetMutation();
-  const methods = useForm<FormFields>({
-    defaultValues: {
-      name: "",
-      brand: "",
-      modelNo: "",
-      price: "",
-      quantity: "",
-      category: "" as TCategory,
-      operatingSystem: "" as TOperatingSystem,
-      powerSource: "" as TPowerSource,
-    },
-  });
+  const methods = useForm();
   const {
     register,
     handleSubmit,
@@ -74,6 +42,7 @@ const DuplicateGadgetModal = ({
     control,
   } = methods;
 
+  // Reset form when gadget changes
   useEffect(() => {
     if (gadget) {
       reset({
@@ -89,12 +58,12 @@ const DuplicateGadgetModal = ({
     }
   }, [gadget, reset]);
 
-  const onSubmit = async (data: FormFields) => {
+  // Handle form submission to duplicate gadget
+  const onSubmit = async (data: FieldValues) => {
     if (!gadget) return;
     setIsDuplicating(true);
     try {
       const duplicatedGadget: Partial<TProduct> = {
-        ...gadget,
         name: data.name,
         price: Number.parseFloat(data.price),
         imageURL:
@@ -113,6 +82,7 @@ const DuplicateGadgetModal = ({
         dimensions: gadget.dimensions,
         compatibility: gadget.compatibility,
       };
+      console.log("Duplicated Gadget Data:", duplicatedGadget);
       // Uncomment to actually create
       // await duplicateGadget(duplicatedGadget)
       toast.success("Gadget duplicated", {
@@ -131,21 +101,6 @@ const DuplicateGadgetModal = ({
 
   if (!gadget) return null;
 
-  const getCategoryColor = (category: string) => {
-    const colors = {
-      smartphone: "bg-blue-100 text-blue-800 hover:bg-blue-100",
-      tablet: "bg-purple-100 text-purple-800 hover:bg-purple-100",
-      laptop: "bg-green-100 text-green-800 hover:bg-green-100",
-      smartwatch: "bg-orange-100 text-orange-800 hover:bg-orange-100",
-      headphone: "bg-pink-100 text-pink-800 hover:bg-pink-100",
-      speaker: "bg-indigo-100 text-indigo-800 hover:bg-indigo-100",
-      accessory: "bg-gray-100 text-gray-800 hover:bg-gray-100",
-    };
-    return (
-      colors[category as keyof typeof colors] || "bg-gray-100 text-gray-800"
-    );
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
@@ -160,13 +115,17 @@ const DuplicateGadgetModal = ({
           </DialogDescription>
         </DialogHeader>
 
-        {/* Original Gadget Preview */}
+        {/* main content */}
         <div className="space-y-4 py-4">
+          {/* Original Gadget Preview */}
           <div className="p-3 border rounded-lg bg-muted/50">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                 <img
-                  src={gadget.imageURL || "/placeholder.svg?height=48&width=48"}
+                  src={
+                    gadget.imageURL ||
+                    "https://images.squarespace-cdn.com/content/v1/530cd931e4b0e49b19b254ec/ef572341-cfa5-48b4-823e-195af17cbcf3/final+logo++copy-1+%281%29.png"
+                  }
                   alt={gadget.name}
                   className="w-full h-full object-cover"
                 />
