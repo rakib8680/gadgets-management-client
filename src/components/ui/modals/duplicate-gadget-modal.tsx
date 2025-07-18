@@ -21,6 +21,7 @@ import { FormProvider } from "react-hook-form";
 import getCategoryColor from "@/utils/getCategoryColor";
 import GM_Input from "@/components/form/GM_Input";
 import GM_Form from "@/components/form/GM_Form";
+import { useNavigate } from "react-router-dom";
 
 interface DuplicateGadgetModalProps {
   open: boolean;
@@ -36,7 +37,8 @@ const DuplicateGadgetModal = ({
   const [isDuplicating, setIsDuplicating] = useState(false);
   const [duplicateGadget] = useCreateGadgetMutation();
   const methods = useForm();
-  const { register, handleSubmit, reset, control } = methods;
+  const { reset } = methods;
+  const navigate = useNavigate();
 
   // Reset form when gadget changes
   useEffect(() => {
@@ -66,7 +68,7 @@ const DuplicateGadgetModal = ({
           gadget.imageURL ||
           "https://images.squarespace-cdn.com/content/v1/530cd931e4b0e49b19b254ec/ef572341-cfa5-48b4-823e-195af17cbcf3/final+logo++copy-1+%281%29.png",
         quantity: Number.parseInt(data.quantity),
-        releaseDate: new Date(), // Set current date for duplicate
+        releaseDate: new Date(),
         brand: data.brand,
         modelNo: data.modelNo,
         category: data.category,
@@ -86,6 +88,7 @@ const DuplicateGadgetModal = ({
           duration: 2000,
         });
         onOpenChange(false);
+        navigate(`/dashboard/gadgets`);
       }
     } catch (error) {
       toast.error("Failed to duplicate gadget. Please try again.", {
@@ -245,11 +248,16 @@ const DuplicateGadgetModal = ({
               <Button
                 variant="outline"
                 type="button"
+                className="cursor-pointer"
                 onClick={() => onOpenChange(false)}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isDuplicating}>
+              <Button
+                type="submit"
+                disabled={isDuplicating}
+                className="cursor-pointer"
+              >
                 {isDuplicating ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />

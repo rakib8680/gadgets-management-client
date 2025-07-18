@@ -45,7 +45,7 @@ const AllGadgets = () => {
   >("all");
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(50);
 
   // Modal states
   const [deleteModal, setDeleteModal] = useState<{
@@ -95,7 +95,7 @@ const AllGadgets = () => {
   }
 
   //data fetching using RTK Query
-  const { data, error, isFetching } = useGetAllGadgetsQuery({
+  const { data, error, isLoading } = useGetAllGadgetsQuery({
     ...query,
     sort: sortBy,
     sortOrder,
@@ -213,7 +213,7 @@ const AllGadgets = () => {
         />
 
         {/* Table */}
-        {isFetching ? (
+        {isLoading ? (
           <LoadingHamster />
         ) : (
           <Card>
