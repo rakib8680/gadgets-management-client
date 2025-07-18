@@ -25,6 +25,13 @@ const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Gadget"],
     }),
+    deleteGadget: builder.mutation({
+      query: (id) => ({
+        url: `products/delete-gadget/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Gadget"],
+    }),
   }),
 });
 
@@ -32,4 +39,6 @@ export const {
   useGetAllGadgetsQuery,
   useGetSingleGadgetQuery,
   useCreateGadgetMutation,
+  useDeleteGadgetMutation,
+  useLazyGetAllGadgetsQuery,
 } = productApi;
