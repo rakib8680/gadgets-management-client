@@ -85,14 +85,16 @@ const DuplicateGadgetModal = ({
       if (res.success) {
         toast.success("Gadget duplicated", {
           description: `${data.name} has been successfully created.`,
-          duration: 2000,
+          position: "top-center",
+          duration: 3000,
         });
         onOpenChange(false);
         navigate(`/dashboard/gadgets`);
       }
     } catch (error) {
       toast.error("Failed to duplicate gadget. Please try again.", {
-        duration: 2000,
+        position: "top-center",
+        duration: 3000,
       });
     } finally {
       setIsDuplicating(false);
@@ -249,6 +251,7 @@ const DuplicateGadgetModal = ({
                 variant="outline"
                 type="button"
                 className="cursor-pointer"
+                disabled={isDuplicating}
                 onClick={() => onOpenChange(false)}
               >
                 Cancel

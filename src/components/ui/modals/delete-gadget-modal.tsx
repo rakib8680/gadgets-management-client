@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import getCategoryColor from "@/utils/getCategoryColor";
+import { useDeleteGadgetMutation } from "@/redux/features/productsApi";
+import { useNavigate } from "react-router-dom";
 
 interface DeleteGadgetModalProps {
   open: boolean;
@@ -26,22 +28,29 @@ const DeleteGadgetModal = ({
   gadget,
 }: DeleteGadgetModalProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteGadget] = useDeleteGadgetMutation();
+  const navigate = useNavigate();
 
   const handleDelete = async () => {
     if (!gadget) return;
 
     setIsDeleting(true);
     try {
-      // Replace with your actual delete API call
-      // await deleteGadgetMutation(gadget.seller_id + gadget.modelNo)
-
-      toast.success("Gadget deleted", {
-        description: `${gadget.name} has been successfully deleted.`,
-      });
-
-      onOpenChange(false);
+      const res = await deleteGadget(gadget._id).unwrap();
+      if (res.success) {
+        toast.success("Gadget deleted", {
+          description: `${gadget.name} has been successfully deleted.`,
+          position: "top-center",
+          duration: 3000,
+        });
+        onOpenChange(false);
+        navigate("/dashboard/gadgets");
+      }
     } catch (error) {
-      toast.error("Failed to delete gadget. Please try again.");
+      toast.error("Failed to delete gadget. Please try again.", {
+        position: "top-center",
+        duration: 3000,
+      });
     } finally {
       setIsDeleting(false);
     }
@@ -51,7 +60,7 @@ const DeleteGadgetModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-destructive">
             <AlertTriangle className="h-5 w-5" />
@@ -93,13 +102,19 @@ const DeleteGadgetModal = ({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            disabled={isDeleting}
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            className="cursor-pointer"
+          >
             Cancel
           </Button>
           <Button
             variant="destructive"
             onClick={handleDelete}
             disabled={isDeleting}
+            className="cursor-pointer"
           >
             {isDeleting ? (
               <>
