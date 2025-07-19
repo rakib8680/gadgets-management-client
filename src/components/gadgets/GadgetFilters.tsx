@@ -69,7 +69,7 @@ const GadgetFilters = ({
 
           {/*all filters*/}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* todo -make it reusable Category  */} 
+            {/* todo -make it reusable Category  */}
             <Select
               value={filterCategory}
               onValueChange={(value) =>

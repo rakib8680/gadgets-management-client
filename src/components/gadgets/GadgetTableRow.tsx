@@ -25,7 +25,7 @@ import {
   Zap,
   Eye,
 } from "lucide-react";
-import type { TCategory, TConnectivity, TProduct } from "@/types/product"; // Ensure these types are correctly imported
+import type { TConnectivity, TProduct } from "@/types/product"; // Ensure these types are correctly imported
 import { useNavigate } from "react-router-dom";
 import getCategoryColor from "@/utils/getCategoryColor";
 

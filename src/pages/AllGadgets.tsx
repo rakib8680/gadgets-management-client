@@ -276,7 +276,7 @@ const AllGadgets = () => {
         )}
 
         {/* Modals */}
-        <DeleteGadgetModal
+        <DeleteGadgetModal //todo
           open={deleteModal.open}
           onOpenChange={(open) => setDeleteModal({ open, gadget: null })}
           gadget={deleteModal.gadget}

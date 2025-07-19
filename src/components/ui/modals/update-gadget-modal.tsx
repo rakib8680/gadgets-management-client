@@ -29,6 +29,10 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import GM_Form from "@/components/form/GM_Form";
+import GM_Input from "@/components/form/GM_Input";
+import GM_Select from "@/components/form/GM_Select";
+import { Controller, useFormContext } from "react-hook-form";
 
 interface UpdateGadgetModalProps {
   open: boolean;
@@ -54,24 +58,10 @@ const UpdateGadgetModal = ({
   gadget,
 }: UpdateGadgetModalProps) => {
   const [isUpdating, setIsUpdating] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    brand: "",
-    modelNo: "",
-    price: "",
-    quantity: "",
-    category: "" as TCategory,
-    operatingSystem: "" as TOperatingSystem,
-    powerSource: "" as TPowerSource,
-    connectivity: [] as TConnectivity[],
-    weight: "",
-    imageURL: "",
-  });
 
-  // Update form data when gadget changes
-  useEffect(() => {
-    if (gadget) {
-      setFormData({
+  // Compose defaultValues for the form
+  const defaultValues = gadget
+    ? {
         name: gadget.name,
         brand: gadget.brand,
         modelNo: gadget.modelNo,
@@ -80,43 +70,34 @@ const UpdateGadgetModal = ({
         category: gadget.category,
         operatingSystem: gadget.operatingSystem || "iOS",
         powerSource: gadget.powerSource,
-        connectivity: gadget.connectivity,
         weight: gadget.weight?.toString() || "",
         imageURL: gadget.imageURL,
-      });
-    }
-  }, [gadget]);
+      }
+    : {};
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (data: any) => {
     if (!gadget) return;
-
     setIsUpdating(true);
     try {
       const updatedGadget: Partial<TProduct> = {
         ...gadget,
-        name: formData.name,
-        brand: formData.brand,
-        modelNo: formData.modelNo,
-        price: Number.parseFloat(formData.price),
-        quantity: Number.parseInt(formData.quantity),
-        category: formData.category,
-        operatingSystem: formData.operatingSystem,
-        powerSource: formData.powerSource,
-        connectivity: formData.connectivity,
-        weight: formData.weight
-          ? Number.parseFloat(formData.weight)
-          : undefined,
-        imageURL: formData.imageURL,
+        name: data.name,
+        brand: data.brand,
+        modelNo: data.modelNo,
+        price: Number.parseFloat(data.price),
+        quantity: Number.parseInt(data.quantity),
+        category: data.category,
+        operatingSystem: data.operatingSystem,
+        powerSource: data.powerSource,
+        weight: data.weight ? Number.parseFloat(data.weight) : undefined,
+        imageURL: data.imageURL,
       };
-
       // Replace with your actual update API call
       // await updateGadgetMutation({ id: gadget.seller_id + gadget.modelNo, data: updatedGadget })
-
       toast.success("Gadget updated", {
-        description: `${formData.name} has been successfully updated.`,
+        description: `${data.name} has been successfully updated.`,
         duration: 2000,
       });
-
       onOpenChange(false);
     } catch (error) {
       toast.error("Failed to update gadget. Please try again.", {
@@ -124,23 +105,6 @@ const UpdateGadgetModal = ({
       });
     } finally {
       setIsUpdating(false);
-    }
-  };
-
-  const handleConnectivityChange = (
-    connectivity: TConnectivity,
-    checked: boolean
-  ) => {
-    if (checked) {
-      setFormData((prev) => ({
-        ...prev,
-        connectivity: [...prev.connectivity, connectivity],
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        connectivity: prev.connectivity.filter((c) => c !== connectivity),
-      }));
     }
   };
 
@@ -158,7 +122,6 @@ const UpdateGadgetModal = ({
             Make changes to your gadget. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
-
         <div className="space-y-6 py-4">
           {/* Current Image Preview */}
           <div className="flex items-center gap-4 p-3 border rounded-lg">
@@ -174,217 +137,168 @@ const UpdateGadgetModal = ({
               <p className="text-sm text-muted-foreground">{gadget.name}</p>
             </div>
           </div>
-
           {/* Form Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Left Column */}
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="update-name">Product Name</Label>
-                <Input
-                  id="update-name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
+          <GM_Form
+            defaultValues={{
+              ...defaultValues,
+              connectivity: gadget.connectivity || [],
+            }}
+            onSubmit={handleUpdate}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Left Column */}
+              <div className="space-y-4">
+                <GM_Input
+                  name="name"
+                  label="Product Name"
+                  required
                   placeholder="Enter product name"
                 />
-              </div>
-
-              <div>
-                <Label htmlFor="update-brand">Brand</Label>
-                <Input
-                  id="update-brand"
-                  value={formData.brand}
-                  onChange={(e) =>
-                    setFormData({ ...formData, brand: e.target.value })
-                  }
+                <GM_Input
+                  name="brand"
+                  label="Brand"
+                  required
                   placeholder="Enter brand name"
                 />
-              </div>
-
-              <div>
-                <Label htmlFor="update-modelNo">Model Number</Label>
-                <Input
-                  id="update-modelNo"
-                  value={formData.modelNo}
-                  onChange={(e) =>
-                    setFormData({ ...formData, modelNo: e.target.value })
-                  }
+                <GM_Input
+                  name="modelNo"
+                  label="Model Number"
+                  required
                   placeholder="Enter model number"
                 />
-              </div>
-
-              <div>
-                <Label htmlFor="update-imageURL">Image URL</Label>
-                <Input
-                  id="update-imageURL"
-                  value={formData.imageURL}
-                  onChange={(e) =>
-                    setFormData({ ...formData, imageURL: e.target.value })
-                  }
+                <GM_Input
+                  name="imageURL"
+                  label="Image URL"
                   placeholder="Enter image URL"
                 />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="update-price">Price ($)</Label>
-                  <Input
-                    id="update-price"
+                <div className="grid grid-cols-2 gap-4">
+                  <GM_Input
+                    name="price"
+                    label="Price ($)"
                     type="number"
-                    step="0.01"
-                    value={formData.price}
-                    onChange={(e) =>
-                      setFormData({ ...formData, price: e.target.value })
-                    }
+                    required
                     placeholder="0.00"
                   />
-                </div>
-                <div>
-                  <Label htmlFor="update-quantity">Quantity</Label>
-                  <Input
-                    id="update-quantity"
+                  <GM_Input
+                    name="quantity"
+                    label="Quantity"
                     type="number"
-                    value={formData.quantity}
-                    onChange={(e) =>
-                      setFormData({ ...formData, quantity: e.target.value })
-                    }
+                    required
                     placeholder="0"
                   />
                 </div>
-              </div>
-
-              <div>
-                <Label htmlFor="update-weight">Weight (grams)</Label>
-                <Input
-                  id="update-weight"
+                <GM_Input
+                  name="weight"
+                  label="Weight (grams)"
                   type="number"
-                  step="0.1"
-                  value={formData.weight}
-                  onChange={(e) =>
-                    setFormData({ ...formData, weight: e.target.value })
-                  }
                   placeholder="Enter weight"
                 />
               </div>
-            </div>
-
-            {/* Right Column */}
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="update-category">Category</Label>
-                <Select
-                  value={formData.category}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, category: value as TCategory })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="smartphone">Smartphone</SelectItem>
-                    <SelectItem value="tablet">Tablet</SelectItem>
-                    <SelectItem value="laptop">Laptop</SelectItem>
-                    <SelectItem value="smartwatch">Smartwatch</SelectItem>
-                    <SelectItem value="headphone">Headphone</SelectItem>
-                    <SelectItem value="speaker">Speaker</SelectItem>
-                    <SelectItem value="accessory">Accessory</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label htmlFor="update-operatingSystem">Operating System</Label>
-                <Select
-                  value={formData.operatingSystem}
-                  onValueChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      operatingSystem: value as TOperatingSystem,
-                    })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select OS" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="iOS">iOS</SelectItem>
-                    <SelectItem value="Android">Android</SelectItem>
-                    <SelectItem value="Windows">Windows</SelectItem>
-                    <SelectItem value="macOS">macOS</SelectItem>
-                    <SelectItem value="Linux">Linux</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label htmlFor="update-powerSource">Power Source</Label>
-                <Select
-                  value={formData.powerSource}
-                  onValueChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      powerSource: value as TPowerSource,
-                    })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select power source" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Battery">Battery</SelectItem>
-                    <SelectItem value="Plug-in">Plug-in</SelectItem>
-                    <SelectItem value="Battery & Plug-in">
-                      Battery & Plug-in
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label>Connectivity Options</Label>
-                <div className="grid grid-cols-2 gap-2 mt-2 max-h-32 overflow-y-auto border rounded-md p-3">
-                  {connectivityOptions.map((option) => (
-                    <div key={option} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`connectivity-${option}`}
-                        checked={formData.connectivity.includes(option)}
-                        onCheckedChange={(checked) =>
-                          handleConnectivityChange(option, checked as boolean)
-                        }
-                      />
-                      <Label
-                        htmlFor={`connectivity-${option}`}
-                        className="text-sm"
-                      >
-                        {option}
-                      </Label>
+              {/* Right Column */}
+              <div className="space-y-4">
+                <GM_Select
+                  name="category"
+                  label="Category"
+                  required
+                  options={[
+                    { value: "smartphone", label: "Smartphone" },
+                    { value: "tablet", label: "Tablet" },
+                    { value: "laptop", label: "Laptop" },
+                    { value: "smartwatch", label: "Smartwatch" },
+                    { value: "headphone", label: "Headphone" },
+                    { value: "speaker", label: "Speaker" },
+                    { value: "accessory", label: "Accessory" },
+                  ]}
+                  placeholder="Select category"
+                />
+                <GM_Select
+                  name="operatingSystem"
+                  label="Operating System"
+                  required
+                  options={[
+                    { value: "iOS", label: "iOS" },
+                    { value: "Android", label: "Android" },
+                    { value: "Windows", label: "Windows" },
+                    { value: "macOS", label: "macOS" },
+                    { value: "Linux", label: "Linux" },
+                  ]}
+                  placeholder="Select OS"
+                />
+                <GM_Select
+                  name="powerSource"
+                  label="Power Source"
+                  required
+                  options={[
+                    { value: "Battery", label: "Battery" },
+                    { value: "Plug-in", label: "Plug-in" },
+                    { value: "Battery & Plug-in", label: "Battery & Plug-in" },
+                  ]}
+                  placeholder="Select power source"
+                />
+                {/* Connectivity checkboxes integrated with react-hook-form */}
+                <Controller
+                  name="connectivity"
+                  defaultValue={gadget.connectivity || []}
+                  render={({ field }) => (
+                    <div>
+                      <Label>Connectivity Options</Label>
+                      <div className="grid grid-cols-2 gap-2 mt-2 max-h-32 overflow-y-auto border rounded-md p-3">
+                        {connectivityOptions.map((option) => (
+                          <div
+                            key={option}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              id={`connectivity-${option}`}
+                              checked={field.value?.includes(option)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  field.onChange([
+                                    ...(field.value || []),
+                                    option,
+                                  ]);
+                                } else {
+                                  field.onChange(
+                                    (field.value || []).filter(
+                                      (c: string) => c !== option
+                                    )
+                                  );
+                                }
+                              }}
+                            />
+                            <Label
+                              htmlFor={`connectivity-${option}`}
+                              className="text-sm"
+                            >
+                              {option}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
+                  )}
+                />
               </div>
             </div>
-          </div>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                type="button"
+                onClick={() => onOpenChange(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isUpdating}>
+                {isUpdating ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                ) : (
+                  <Save className="mr-2 h-4 w-4" />
+                )}
+                {isUpdating ? "Updating..." : "Save Changes"}
+              </Button>
+            </DialogFooter>
+          </GM_Form>
         </div>
-
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button
-            onClick={handleUpdate}
-            disabled={isUpdating || !formData.name.trim()}
-          >
-            {isUpdating ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-            ) : (
-              <Save className="mr-2 h-4 w-4" />
-            )}
-            {isUpdating ? "Updating..." : "Save Changes"}
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
