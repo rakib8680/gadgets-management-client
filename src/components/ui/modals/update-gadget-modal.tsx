@@ -33,24 +33,19 @@ import GM_Form from "@/components/form/GM_Form";
 import GM_Input from "@/components/form/GM_Input";
 import GM_Select from "@/components/form/GM_Select";
 import { Controller, useFormContext } from "react-hook-form";
+import GM_CheckboxGroup from "@/components/form/GM_CheckboxGroup";
+import {
+  CATEGORY_OPTIONS,
+  OS_OPTIONS,
+  POWER_SOURCE_OPTIONS,
+  CONNECTIVITY_OPTIONS,
+} from "@/constants/options";
 
 interface UpdateGadgetModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   gadget: TProduct | null;
 }
-
-const connectivityOptions: TConnectivity[] = [
-  "WiFi",
-  "Bluetooth",
-  "NFC",
-  "GPS",
-  "4G",
-  "5G",
-  "USB",
-  "HDMI",
-  "Thunderbolt",
-];
 
 const UpdateGadgetModal = ({
   open,
@@ -200,83 +195,27 @@ const UpdateGadgetModal = ({
                   name="category"
                   label="Category"
                   required
-                  options={[
-                    { value: "smartphone", label: "Smartphone" },
-                    { value: "tablet", label: "Tablet" },
-                    { value: "laptop", label: "Laptop" },
-                    { value: "smartwatch", label: "Smartwatch" },
-                    { value: "headphone", label: "Headphone" },
-                    { value: "speaker", label: "Speaker" },
-                    { value: "accessory", label: "Accessory" },
-                  ]}
+                  options={CATEGORY_OPTIONS}
                   placeholder="Select category"
                 />
                 <GM_Select
                   name="operatingSystem"
                   label="Operating System"
                   required
-                  options={[
-                    { value: "iOS", label: "iOS" },
-                    { value: "Android", label: "Android" },
-                    { value: "Windows", label: "Windows" },
-                    { value: "macOS", label: "macOS" },
-                    { value: "Linux", label: "Linux" },
-                  ]}
+                  options={OS_OPTIONS}
                   placeholder="Select OS"
                 />
                 <GM_Select
                   name="powerSource"
                   label="Power Source"
                   required
-                  options={[
-                    { value: "Battery", label: "Battery" },
-                    { value: "Plug-in", label: "Plug-in" },
-                    { value: "Battery & Plug-in", label: "Battery & Plug-in" },
-                  ]}
+                  options={POWER_SOURCE_OPTIONS}
                   placeholder="Select power source"
                 />
-                {/* Connectivity checkboxes integrated with react-hook-form */}
-                <Controller
+                <GM_CheckboxGroup
                   name="connectivity"
-                  defaultValue={gadget.connectivity || []}
-                  render={({ field }) => (
-                    <div>
-                      <Label>Connectivity Options</Label>
-                      <div className="grid grid-cols-2 gap-2 mt-2 max-h-32 overflow-y-auto border rounded-md p-3">
-                        {connectivityOptions.map((option) => (
-                          <div
-                            key={option}
-                            className="flex items-center space-x-2"
-                          >
-                            <Checkbox
-                              id={`connectivity-${option}`}
-                              checked={field.value?.includes(option)}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
-                                  field.onChange([
-                                    ...(field.value || []),
-                                    option,
-                                  ]);
-                                } else {
-                                  field.onChange(
-                                    (field.value || []).filter(
-                                      (c: string) => c !== option
-                                    )
-                                  );
-                                }
-                              }}
-                            />
-                            <Label
-                              htmlFor={`connectivity-${option}`}
-                              className="text-sm"
-                            >
-                              {option}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  label="Connectivity Options"
+                  options={CONNECTIVITY_OPTIONS}
                 />
               </div>
             </div>
