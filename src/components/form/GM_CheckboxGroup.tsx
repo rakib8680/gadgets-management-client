@@ -23,6 +23,7 @@ const GM_CheckboxGroup = ({
       <Label>{label}</Label>
       <Controller
         name={name}
+        control={control}
         render={({ field }) => (
           <div className="grid grid-cols-2 gap-2 mt-2 max-h-32 overflow-y-auto border rounded-md p-3">
             {options.map((option) => (

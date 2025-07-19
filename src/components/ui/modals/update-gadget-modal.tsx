@@ -1,14 +1,6 @@
-"use client";
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Edit, Save } from "lucide-react";
-import type {
-  TProduct,
-  TCategory,
-  TOperatingSystem,
-  TPowerSource,
-  TConnectivity,
-} from "@/types/product";
+import type { TProduct } from "@/types/product";
 import {
   Dialog,
   DialogContent,
@@ -18,21 +10,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import GM_Form from "@/components/form/GM_Form";
 import GM_Input from "@/components/form/GM_Input";
 import GM_Select from "@/components/form/GM_Select";
-import { Controller, useFormContext } from "react-hook-form";
 import GM_CheckboxGroup from "@/components/form/GM_CheckboxGroup";
 import {
   CATEGORY_OPTIONS,
@@ -54,7 +35,7 @@ const UpdateGadgetModal = ({
 }: UpdateGadgetModalProps) => {
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Compose defaultValues for the form
+  //defaultValues for the form
   const defaultValues = gadget
     ? {
         name: gadget.name,
@@ -63,7 +44,7 @@ const UpdateGadgetModal = ({
         price: gadget.price.toString(),
         quantity: gadget.quantity.toString(),
         category: gadget.category,
-        operatingSystem: gadget.operatingSystem || "iOS",
+        operatingSystem: gadget.operatingSystem || "N/A",
         powerSource: gadget.powerSource,
         weight: gadget.weight?.toString() || "",
         imageURL: gadget.imageURL,
@@ -74,7 +55,7 @@ const UpdateGadgetModal = ({
     if (!gadget) return;
     setIsUpdating(true);
     try {
-      const updatedGadget: Partial<TProduct> = {
+      const updatedGadgetData: Partial<TProduct> = {
         ...gadget,
         name: data.name,
         brand: data.brand,

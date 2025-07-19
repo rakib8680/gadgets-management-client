@@ -5,6 +5,12 @@ export const CATEGORY_OPTIONS = [
   { value: "smartwatch", label: "Smartwatch" },
   { value: "headphone", label: "Headphone" },
   { value: "speaker", label: "Speaker" },
+  { value: "camera", label: "Camera" },
+  { value: "console", label: "Console" },
+  { value: "television", label: "Television" },
+  { value: "gaming", label: "Gaming" },
+  { value: "vr", label: "VR" },
+  { value: "drone", label: "Drone" },
   { value: "accessory", label: "Accessory" },
 ];
 

@@ -14,6 +14,11 @@ import type {
   TOperatingSystem,
   TPowerSource,
 } from "@/types/product"; // Ensure these types are correctly imported
+import {
+  CATEGORY_OPTIONS,
+  OS_OPTIONS,
+  POWER_SOURCE_OPTIONS,
+} from "@/constants/options";
 
 type TGadgetFiltersProps = {
   searchTerm: string;
@@ -69,7 +74,7 @@ const GadgetFilters = ({
 
           {/*all filters*/}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* todo -make it reusable Category  */}
+            {/* Category  */}
             <Select
               value={filterCategory}
               onValueChange={(value) =>
@@ -81,17 +86,11 @@ const GadgetFilters = ({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value="smartphone">Smartphone</SelectItem>
-                <SelectItem value="tablet">Tablet</SelectItem>
-                <SelectItem value="laptop">Laptop</SelectItem>
-                <SelectItem value="smartwatch">Smartwatch</SelectItem>
-                <SelectItem value="headphone">Headphone</SelectItem>
-                <SelectItem value="speaker">Speaker</SelectItem>
-                <SelectItem value="camera">Camera</SelectItem>
-                <SelectItem value="console">Console</SelectItem>
-                <SelectItem value="drone">Drone</SelectItem>
-                <SelectItem value="television">Television</SelectItem>
-                <SelectItem value="accessory">Accessory</SelectItem>
+                {CATEGORY_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
 
@@ -148,11 +147,11 @@ const GadgetFilters = ({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Power Sources</SelectItem>
-                <SelectItem value="Battery">Battery</SelectItem>
-                <SelectItem value="Plug-in">Plug-in</SelectItem>
-                <SelectItem value="Battery & Plug-in">
-                  Battery & Plug-in
-                </SelectItem>
+                {POWER_SOURCE_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
 
@@ -184,11 +183,11 @@ const GadgetFilters = ({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All OS</SelectItem>
-                <SelectItem value="iOS">iOS</SelectItem>
-                <SelectItem value="Android">Android</SelectItem>
-                <SelectItem value="Windows">Windows</SelectItem>
-                <SelectItem value="macOS">macOS</SelectItem>
-                <SelectItem value="Linux">Linux</SelectItem>
+                {OS_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
 

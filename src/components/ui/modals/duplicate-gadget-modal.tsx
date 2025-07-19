@@ -9,19 +9,21 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useCreateGadgetMutation } from "@/redux/features/productsApi";
 import { FieldValues, useForm } from "react-hook-form";
 
 import GM_Select from "@/components/form/GM_Select";
-import { FormProvider } from "react-hook-form";
 import getCategoryColor from "@/utils/getCategoryColor";
 import GM_Input from "@/components/form/GM_Input";
 import GM_Form from "@/components/form/GM_Form";
 import { useNavigate } from "react-router-dom";
+import {
+  CATEGORY_OPTIONS,
+  OS_OPTIONS,
+  POWER_SOURCE_OPTIONS,
+} from "@/constants/options";
 
 interface DuplicateGadgetModalProps {
   open: boolean;
@@ -193,19 +195,7 @@ const DuplicateGadgetModal = ({
                 name="category"
                 label="Category"
                 required
-                options={[
-                  { value: "smartphone", label: "Smartphone" },
-                  { value: "tablet", label: "Tablet" },
-                  { value: "laptop", label: "Laptop" },
-                  { value: "smartwatch", label: "Smartwatch" },
-                  { value: "headphone", label: "Headphone" },
-                  { value: "speaker", label: "Speaker" },
-                  { value: "camera", label: "Camera" },
-                  { value: "console", label: "Console" },
-                  { value: "drone", label: "Drone" },
-                  { value: "television", label: "Television" },
-                  { value: "accessory", label: "Accessory" },
-                ]}
+                options={CATEGORY_OPTIONS}
               />
             </div>
             <div className="space-y-4">
@@ -227,23 +217,13 @@ const DuplicateGadgetModal = ({
                 name="operatingSystem"
                 label="Operating System"
                 required
-                options={[
-                  { value: "iOS", label: "iOS" },
-                  { value: "Android", label: "Android" },
-                  { value: "Windows", label: "Windows" },
-                  { value: "macOS", label: "macOS" },
-                  { value: "Linux", label: "Linux" },
-                ]}
+                options={OS_OPTIONS}
               />
               <GM_Select
                 name="powerSource"
                 label="Power Source"
                 required
-                options={[
-                  { value: "Battery", label: "Battery" },
-                  { value: "Plug-in", label: "Plug-in" },
-                  { value: "Battery & Plug-in", label: "Battery & Plug-in" },
-                ]}
+                options={POWER_SOURCE_OPTIONS}
               />
             </div>
             <div className="col-span-2 flex justify-end gap-2 mt-4">
