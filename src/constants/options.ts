@@ -11,6 +11,7 @@ export const CATEGORY_OPTIONS = [
   { value: "gaming", label: "Gaming" },
   { value: "vr", label: "VR" },
   { value: "drone", label: "Drone" },
+  { value: "audio", label: "Audio" },
   { value: "accessory", label: "Accessory" },
 ];
 

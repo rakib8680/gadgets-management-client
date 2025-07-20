@@ -9,6 +9,9 @@ export type TCategory =
   | "camera"
   | "television"
   | "drone"
+  | "gaming"
+  | "vr"
+  | "audio"
   | "accessory";
 
 export type TOperatingSystem =
@@ -16,7 +19,11 @@ export type TOperatingSystem =
   | "Android"
   | "Windows"
   | "macOS"
-  | "Linux";
+  | "Linux"
+  | "ipadOS"
+  | "tvOS"
+  | "watchOS"
+  | "Other";
 export type TConnectivity =
   | "WiFi"
   | "Bluetooth"
