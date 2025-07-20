@@ -21,6 +21,7 @@ import {
   POWER_SOURCE_OPTIONS,
   CONNECTIVITY_OPTIONS,
 } from "@/constants/options";
+import { useUpdateGadgetMutation } from "@/redux/features/productsApi";
 
 interface UpdateGadgetModalProps {
   open: boolean;
@@ -34,6 +35,7 @@ const UpdateGadgetModal = ({
   gadget,
 }: UpdateGadgetModalProps) => {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [updateGadget] = useUpdateGadgetMutation();
 
   //defaultValues for the form
   const defaultValues = gadget
@@ -54,30 +56,31 @@ const UpdateGadgetModal = ({
   const handleUpdate = async (data: any) => {
     if (!gadget) return;
     setIsUpdating(true);
+
+    // Prepare data for update
+    data.price = parseFloat(data.price);
+    data.quantity = Number(data.quantity);
+    data.weight = data.weight ? parseFloat(data.weight) : undefined;
+
+    const payload = {
+      id: gadget._id,
+      data,
+    };
+
     try {
-      const updatedGadgetData: Partial<TProduct> = {
-        ...gadget,
-        name: data.name,
-        brand: data.brand,
-        modelNo: data.modelNo,
-        price: Number.parseFloat(data.price),
-        quantity: Number.parseInt(data.quantity),
-        category: data.category,
-        operatingSystem: data.operatingSystem,
-        powerSource: data.powerSource,
-        weight: data.weight ? Number.parseFloat(data.weight) : undefined,
-        imageURL: data.imageURL,
-      };
-      // Replace with your actual update API call
-      // await updateGadgetMutation({ id: gadget.seller_id + gadget.modelNo, data: updatedGadget })
-      toast.success("Gadget updated", {
-        description: `${data.name} has been successfully updated.`,
-        duration: 2000,
-      });
-      onOpenChange(false);
+      const res = await updateGadget(payload).unwrap();
+      if (res.success) {
+        toast.success("Gadget updated", {
+          description: `${data.name} has been successfully updated.`,
+          position: "top-center",
+          duration: 2500,
+        });
+        onOpenChange(false);
+      }
     } catch (error) {
       toast.error("Failed to update gadget. Please try again.", {
-        duration: 2000,
+        position: "top-center",
+        duration: 2500,
       });
     } finally {
       setIsUpdating(false);
@@ -98,8 +101,8 @@ const UpdateGadgetModal = ({
             Make changes to your gadget. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
+        {/* current info  */}
         <div className="space-y-6 py-4">
-          {/* Current Image Preview */}
           <div className="flex items-center gap-4 p-3 border rounded-lg">
             <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
               <img
@@ -113,7 +116,7 @@ const UpdateGadgetModal = ({
               <p className="text-sm text-muted-foreground">{gadget.name}</p>
             </div>
           </div>
-          {/* Form Fields */}
+          {/* Default values */}
           <GM_Form
             defaultValues={{
               ...defaultValues,
@@ -200,15 +203,22 @@ const UpdateGadgetModal = ({
                 />
               </div>
             </div>
+            {/* actions  */}
             <DialogFooter>
               <Button
                 variant="outline"
                 type="button"
+                disabled={isUpdating}
+                className="cursor-pointer"
                 onClick={() => onOpenChange(false)}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isUpdating}>
+              <Button
+                type="submit"
+                disabled={isUpdating}
+                className="cursor-pointer"
+              >
                 {isUpdating ? (
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
                 ) : (

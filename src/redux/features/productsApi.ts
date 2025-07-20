@@ -32,6 +32,14 @@ const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Gadget"],
     }),
+    updateGadget: builder.mutation({
+      query: (payload) => ({
+        url: `products/update-gadget/${payload.id}`,
+        method: "PATCH",
+        body: payload.data,
+      }),
+      invalidatesTags: ["Gadget"],
+    }),
   }),
 });
 
@@ -41,4 +49,5 @@ export const {
   useCreateGadgetMutation,
   useDeleteGadgetMutation,
   useLazyGetAllGadgetsQuery,
+  useUpdateGadgetMutation,
 } = productApi;

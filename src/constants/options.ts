@@ -21,6 +21,10 @@ export const OS_OPTIONS = [
   { value: "Windows", label: "Windows" },
   { value: "macOS", label: "macOS" },
   { value: "Linux", label: "Linux" },
+  { value: "ipadOS", label: "iPadOS" },
+  { value: "tvOS", label: "tvOS" },
+  { value: "watchOS", label: "watchOS" },
+  { value: "Other", label: "Other" },
 ];
 
 export const POWER_SOURCE_OPTIONS = [
