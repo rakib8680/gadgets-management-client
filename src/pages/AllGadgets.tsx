@@ -120,8 +120,6 @@ const AllGadgets = () => {
   const { data: allBrandsData } = useGetAllGadgetsQuery({
     limit: 1000, // or a number larger than your total gadgets count
   });
-
-  // Get unique brands from the unfiltered data for dropdown filter
   const uniqueBrands = allBrandsData
     ? Array.from(
         new Set(
@@ -290,6 +288,7 @@ const AllGadgets = () => {
           open={updateModal.open}
           onOpenChange={(open) => setUpdateModal({ open, gadget: null })}
           gadget={updateModal.gadget}
+          brands={uniqueBrands}
         />
       </div>
     </TooltipProvider>

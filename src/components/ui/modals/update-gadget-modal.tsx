@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Edit, Save } from "lucide-react";
 import type { TProduct } from "@/types/product";
 import {
@@ -27,12 +27,14 @@ interface UpdateGadgetModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   gadget: TProduct | null;
+  brands: string[];
 }
 
 const UpdateGadgetModal = ({
   open,
   onOpenChange,
   gadget,
+  brands,
 }: UpdateGadgetModalProps) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateGadget] = useUpdateGadgetMutation();
@@ -53,6 +55,19 @@ const UpdateGadgetModal = ({
       }
     : {};
 
+  //todo - add form for non-primitive types like features, dimensions, etc.
+  //todo- add brand select options with new brand add functionality
+  //todo - addGadget api integration
+
+  //transform brands
+  const brandOptions = useMemo(() => {
+    if (!brands || !Array.isArray(brands)) {
+      return [];
+    }
+    return brands.map((brand) => ({ value: brand, label: brand }));
+  }, [brands]);
+
+  //update gadget function
   const handleUpdate = async (data: any) => {
     if (!gadget) return;
     setIsUpdating(true);
@@ -133,11 +148,12 @@ const UpdateGadgetModal = ({
                   required
                   placeholder="Enter product name"
                 />
-                <GM_Input
+                <GM_Select
                   name="brand"
-                  label="Brand"
+                  label="brand"
                   required
-                  placeholder="Enter brand name"
+                  options={brandOptions}
+                  placeholder="Select Brand"
                 />
                 <GM_Input
                   name="modelNo"

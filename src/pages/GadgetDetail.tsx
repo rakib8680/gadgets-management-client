@@ -18,7 +18,10 @@ import {
   Trash2,
   ArrowLeft,
 } from "lucide-react";
-import { useGetSingleGadgetQuery } from "@/redux/features/productsApi";
+import {
+  useGetAllGadgetsQuery,
+  useGetSingleGadgetQuery,
+} from "@/redux/features/productsApi";
 import type { TProduct } from "@/types/product";
 import DeleteGadgetModal from "@/components/ui/modals/delete-gadget-modal";
 import DuplicateGadgetModal from "@/components/ui/modals/duplicate-gadget-modal";
@@ -35,6 +38,18 @@ const GadgetDetail = () => {
   const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
   const [duplicateModalOpen, setDuplicateModalOpen] = React.useState(false);
   const [updateModalOpen, setUpdateModalOpen] = React.useState(false);
+
+  // Fetch all gadgets (unfiltered, just for brands)
+  const { data: allBrandsData } = useGetAllGadgetsQuery({
+    limit: 1000, // or a number larger than your total gadgets count
+  });
+  const uniqueBrands = allBrandsData
+    ? Array.from(
+        new Set(
+          (allBrandsData.data as TProduct[]).map((gadget) => gadget.brand)
+        )
+      ).sort()
+    : [];
 
   if (isLoading)
     return (
@@ -203,6 +218,7 @@ const GadgetDetail = () => {
         <UpdateGadgetModal
           open={updateModalOpen}
           onOpenChange={setUpdateModalOpen}
+          brands={uniqueBrands}
           gadget={gadget}
         />
         <DuplicateGadgetModal
