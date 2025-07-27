@@ -20,6 +20,7 @@ import {
   POWER_SOURCE_OPTIONS,
   CONNECTIVITY_OPTIONS,
 } from "@/constants/options";
+import GM_DatePicker from "@/components/form/GM_DatePicker";
 
 interface AddGadgetModalProps {
   open: boolean;
@@ -295,11 +296,12 @@ const AddGadgetModal = ({
                     Additional Information
                   </h3>
 
-                  <GM_Input
+                  <GM_DatePicker
                     name="releaseDate"
                     label="Release Date"
-                    type="date"
+                    required
                     placeholder="Select release date"
+                    dateFormat="dd-MM-yyyy"
                   />
 
                   <div className="space-y-2">

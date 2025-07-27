@@ -1,6 +1,9 @@
-import { Label } from "@/components/ui/label";
+"use client";
+import * as React from "react";
+import { ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
@@ -9,7 +12,6 @@ import {
 import { Controller, useFormContext } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
 
 type GM_DatePickerProps = {
   name: string;
@@ -18,19 +20,24 @@ type GM_DatePickerProps = {
   required?: boolean;
   disabled?: boolean;
   className?: string;
+  captionLayout?: "dropdown" | "label" | "dropdown-months" | "dropdown-years";
+  buttonWidth?: string;
   dateFormat?: string;
 };
 
 const GM_DatePicker = ({
   name,
   label,
-  placeholder = "Pick a date",
+  placeholder = "Select date",
   required = false,
   disabled = false,
   className,
-  dateFormat = "PPP", // Default format: "January 1, 2024"
+  captionLayout = "dropdown",
+  buttonWidth = "w-full",
+  dateFormat = "PPP", // Default: "January 1, 2024"
 }: GM_DatePickerProps) => {
   const { control } = useFormContext();
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Controller
@@ -38,42 +45,46 @@ const GM_DatePicker = ({
       name={name}
       rules={{ required: required ? `${label} is required` : false }}
       render={({ field, fieldState: { error } }) => (
-        <div className={cn("space-y-2", className)}>
+        <div className={cn("flex flex-col gap-2", className)}>
           <Label
             htmlFor={name}
             className={cn(
+              "px-1",
               required && "after:content-['*'] after:ml-0.5 after:text-red-500"
             )}
           >
             {label}
           </Label>
-          <Popover>
+          <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
-                id={name}
                 variant="outline"
+                id={name}
                 disabled={disabled}
                 className={cn(
-                  "w-full justify-start text-left font-normal",
+                  buttonWidth,
+                  "justify-between font-normal",
                   !field.value && "text-muted-foreground",
                   error && "border-red-500 focus-visible:ring-red-500"
                 )}
               >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {field.value ? (
-                  format(field.value, dateFormat)
-                ) : (
-                  <span>{placeholder}</span>
-                )}
+                {field.value ? format(field.value, dateFormat) : placeholder}
+                <ChevronDownIcon className="h-4 w-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent
+              className="w-auto overflow-hidden p-0"
+              align="start"
+            >
               <Calendar
                 mode="single"
                 selected={field.value}
-                onSelect={field.onChange}
+                captionLayout={captionLayout}
+                onSelect={(date) => {
+                  field.onChange(date);
+                  setOpen(false);
+                }}
                 disabled={disabled}
-                initialFocus
               />
             </PopoverContent>
           </Popover>
