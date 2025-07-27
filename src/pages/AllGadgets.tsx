@@ -29,6 +29,7 @@ import GadgetFilters from "@/components/gadgets/GadgetFilters";
 import GadgetTableHeader from "@/components/gadgets/GadgetTableHeader";
 import GadgetTableRow from "@/components/gadgets/GadgetTableRow";
 import { useDebounced } from "@/redux/hooks";
+import AddGadgetModal from "@/components/ui/modals/add-gadget-modal";
 
 const AllGadgets = () => {
   // State management for filters and pagination
@@ -48,6 +49,7 @@ const AllGadgets = () => {
   const [pageSize, setPageSize] = useState(50);
 
   // Modal states
+  const [addModal, setAddModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{
     open: boolean;
     gadget: TProduct | null;
@@ -143,6 +145,9 @@ const AllGadgets = () => {
   }
 
   // Handler functions for sorting, deleting, duplicating, and updating gadgets
+  const handleAdd = () => {
+    setAddModal(true);
+  };
   const handleSort = (column: string) => {
     if (sortBy === column) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -184,7 +189,10 @@ const AllGadgets = () => {
               Manage your gadgets inventory ({meta.total || 0} total)
             </p>
           </div>
-          <Button className="flex items-center gap-2 cursor-pointer">
+          <Button
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={handleAdd}
+          >
             <Plus className="h-4 w-4" />
             Add New Gadget
           </Button>
@@ -274,7 +282,12 @@ const AllGadgets = () => {
         )}
 
         {/* Modals */}
-        <DeleteGadgetModal //todo
+        <AddGadgetModal
+          open={addModal}
+          onOpenChange={setAddModal}
+          brands={uniqueBrands}
+        />
+        <DeleteGadgetModal
           open={deleteModal.open}
           onOpenChange={(open) => setDeleteModal({ open, gadget: null })}
           gadget={deleteModal.gadget}

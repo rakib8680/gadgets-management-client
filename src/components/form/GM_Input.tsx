@@ -29,6 +29,7 @@ const GM_Input = ({
     <Controller
       control={control}
       name={name}
+      rules={{ required: required ? `${label} is required` : false }}
       render={({ field, fieldState: { error } }) => (
         <div className="space-y-2">
           <Label
