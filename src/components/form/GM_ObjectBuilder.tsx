@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFormContext } from "react-hook-form";
+import { toCamelCase } from "@/utils/camelCase";
 
 // Type for a single key-value pair
 interface KeyValuePair {
@@ -56,19 +57,22 @@ const GM_ObjectBuilder = ({ name, label }: GM_ObjectBuilderProps) => {
     const object = pairs.reduce((acc, pair) => {
       if (pair.key.trim()) {
         let val: any = pair.value;
-
+  
         // Convert value based on its selected type
         if (pair.type === "number") val = Number(val);
         else if (pair.type === "boolean") val = val === "true" || val === true;
-
-        acc[pair.key.trim()] = val;
+  
+        // Convert key to camelCase before assigning
+        const camelKey = toCamelCase(pair.key.trim());
+  
+        acc[camelKey] = val;
       }
       return acc;
     }, {} as Record<string, any>);
-
-    // Update the form's state
+  
     setValue(name, object);
   }, [pairs, setValue, name]);
+  
 
   // Update a specific field (key, value, or type) of a pair
   const updatePair = (id: string, field: keyof KeyValuePair, value: any) => {
@@ -157,6 +161,7 @@ const GM_ObjectBuilder = ({ name, label }: GM_ObjectBuilderProps) => {
           {/* Key input */}
           <Input
             placeholder="Key"
+            className="w-64"
             value={pair.key}
             onChange={(e) => updatePair(pair.id, "key", e.target.value)}
           />
@@ -177,7 +182,7 @@ const GM_ObjectBuilder = ({ name, label }: GM_ObjectBuilderProps) => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="string">String</SelectItem>
+                <SelectItem value="string">Text</SelectItem>
                 <SelectItem value="number">Number</SelectItem>
                 <SelectItem value="boolean">Boolean</SelectItem>
               </SelectContent>
