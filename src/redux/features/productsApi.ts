@@ -3,14 +3,6 @@ import { baseApi } from "../api/baseApi";
 
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    addGadget: builder.mutation({
-      query: (gadget: TProduct) => ({
-        url: "/products/add-gadgets",
-        method: "POST",
-        body: gadget,
-      }),
-      invalidatesTags: ["Gadget"],
-    }),
     getAllGadgets: builder.query({
       query: (params) => ({
         url: "/products/all-gadgets",
@@ -35,7 +27,7 @@ const productApi = baseApi.injectEndpoints({
       invalidatesTags: ["Gadget"],
     }),
     deleteGadget: builder.mutation({
-      query: (id) => ({
+      query: (id: string) => ({
         url: `products/delete-gadget/${id}`,
         method: "DELETE",
       }),
@@ -53,7 +45,6 @@ const productApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useAddGadgetMutation,
   useGetAllGadgetsQuery,
   useGetSingleGadgetQuery,
   useCreateGadgetMutation,

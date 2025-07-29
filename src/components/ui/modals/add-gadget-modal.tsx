@@ -22,6 +22,9 @@ import {
 } from "@/constants/options";
 import GM_DatePicker from "@/components/form/GM_DatePicker";
 import GM_ObjectBuilder from "@/components/form/GM_ObjectBuilder";
+import { useCreateGadgetMutation } from "@/redux/features/productsApi";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 interface AddGadgetModalProps {
   open: boolean;
@@ -35,7 +38,8 @@ const AddGadgetModal = ({
   brands,
 }: AddGadgetModalProps) => {
   const [isAdding, setIsAdding] = useState(false);
-  //   const [addGadget] = useAddGadgetMutation();
+  const [createGadget] = useCreateGadgetMutation();
+  const navigate = useNavigate();
 
   // Default values for the form
   const defaultValues = {
@@ -71,7 +75,6 @@ const AddGadgetModal = ({
   // Add gadget function
   const handleAdd = async (data: any) => {
     setIsAdding(true);
-
     try {
       // Prepare data for creation
       const processedData = {
@@ -105,8 +108,6 @@ const AddGadgetModal = ({
           : [],
       };
 
-      console.log(processedData);
-
       // Remove undefined values from dimensions
       if (processedData.dimensions) {
         Object.keys(processedData.dimensions).forEach((key) => {
@@ -121,15 +122,16 @@ const AddGadgetModal = ({
         }
       }
 
-      //   const res = await addGadget(processedData).unwrap();
-      //   if (res.success) {
-      //     toast.success("Gadget added successfully", {
-      //       description: `${data.name} has been added to the inventory.`,
-      //       position: "top-center",
-      //       duration: 2500,
-      //     });
-      //     onOpenChange(false);
-      //   }
+      const res = await createGadget(processedData).unwrap();
+      if (res.success) {
+        toast.success("Gadget added successfully", {
+          description: `${data.name} has been added to the inventory.`,
+          position: "top-center",
+          duration: 3000,
+        });
+        onOpenChange(false);
+        navigate(`/dashboard/gadgets`);
+      }
     } catch (error) {
       toast.error("Failed to add gadget. Please try again.", {
         position: "top-center",
@@ -316,7 +318,7 @@ const AddGadgetModal = ({
                 </div>
               </div>
             </div>
-            {/* Features Section - New */}
+            {/* Features Section*/}
             <div className="space-y-4 p-4 border rounded-lg">
               <h3 className="font-medium text-sm text-muted-foreground">
                 Product Features
@@ -330,18 +332,28 @@ const AddGadgetModal = ({
               <Button
                 variant="outline"
                 type="button"
+                className="cursor-pointer"
                 disabled={isAdding}
                 onClick={() => onOpenChange(false)}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isAdding}>
+              <Button
+                type="submit"
+                disabled={isAdding}
+                className="cursor-pointer"
+              >
                 {isAdding ? (
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                    Adding...
+                  </>
                 ) : (
-                  <Save className="mr-2 h-4 w-4" />
+                  <>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Gadget
+                  </>
                 )}
-                {isAdding ? "Adding..." : "Add Gadget"}
               </Button>
             </DialogFooter>
           </GM_Form>
