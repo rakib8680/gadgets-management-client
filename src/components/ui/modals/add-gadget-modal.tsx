@@ -314,20 +314,19 @@ const AddGadgetModal = ({
                     />
                   </div>
                 </div>
-
               </div>
             </div>
-                {/* Features Section - New */}
-                <div className="space-y-4 p-4 border rounded-lg">
-                  <h3 className="font-medium text-sm text-muted-foreground">
-                    Product Features
-                  </h3>
+            {/* Features Section - New */}
+            <div className="space-y-4 p-4 border rounded-lg">
+              <h3 className="font-medium text-sm text-muted-foreground">
+                Product Features
+              </h3>
 
-                  <GM_ObjectBuilder name="features" label="Custom Features" />
-                </div>
+              <GM_ObjectBuilder name="features" label="Custom Features" />
+            </div>
 
             {/* Actions */}
-            <DialogFooter className="gap-2">
+            <DialogFooter className="gap-2 mt-10">
               <Button
                 variant="outline"
                 type="button"
