@@ -64,7 +64,7 @@ const GadgetFilters = ({
   return (
     <Card className=" max-w-xs md:max-w-full shadow-none">
       <CardContent>
-        <div className="space-y-4 ">
+        <div className="space-y-4 relative">
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -205,21 +205,21 @@ const GadgetFilters = ({
             </Button>
           </div>
           {/* refetch button  */}
-          <div className="flex justify-end cursor-pointer">
-            {isFetching ? (
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600 mr-3 mb-1" />
-            ) : (
-              <Button
-                className="cursor-pointer"
-                variant="outline"
-                onClick={() => {
-                  onReload();
-                  onClearFilters();
-                }}
-              >
-                Reload
-              </Button>
+          <div className="flex justify-end cursor-pointer absolute right-0 top-1">
+            {isFetching && (
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2  border-b-gray-600 absolute top-24 right-16" />
             )}
+            <Button
+              className="cursor-pointer shadow-none"
+              variant="outline"
+              disabled={isFetching}
+              onClick={() => {
+                onReload();
+                onClearFilters();
+              }}
+            >
+              Reload
+            </Button>
           </div>
         </div>
       </CardContent>
