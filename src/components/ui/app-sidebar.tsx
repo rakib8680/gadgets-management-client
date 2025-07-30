@@ -20,6 +20,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Menu items.
 const items = [
@@ -52,8 +57,9 @@ const items = [
 
 export function AppSidebar() {
   const location = useLocation();
-  const user = useAppSelector(selectCurrentUser) 
+  const user = useAppSelector(selectCurrentUser);
   const role = user?.role;
+  const email = user?.email;
 
   // Filter menu items based on role
   const filteredItems =
@@ -65,14 +71,40 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="my-3">
-            <div className="flex items-center space-x-3">
+          <SidebarGroupLabel className="my-5 mb-7">
+            <div className="flex items-center space-x-3 my-3">
               <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
                 <Package className="w-5 h-5 text-white" />
               </div>
-              <h4 className="text-lg font-bold text-gray-900">
-                Gadget Management
-              </h4>
+
+              <div>
+                <h4 className="text-lg font-bold text-gray-900">
+                  Gadget Management
+                </h4>
+                {/* Display role and email */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <h5
+                      className={
+                        role === "admin"
+                          ? "border border-red-200 hover:bg-red-400 hover:text-white transition-all  duration-300 w-fit px-3 rounded-full text-red-600"
+                          : " border border-blue-200 hover:bg-blue-200 hover:text-black transition-all  duration-300 w-fit px-3 rounded-full text-blue-600"
+                      }
+                    >
+                      {role === "admin" ? "Admin" : "Seller"}
+                    </h5>
+                  </TooltipTrigger>
+                  <TooltipContent className="ms-2">
+                    <div className="text-sm ">
+                      {role === "admin"
+                        ? "You have full access to manage inventory."
+                        : "You can add and manage your own gadgets."}
+                      <br />
+                      <span className="font-semibold">Email:</span> {email}
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
             </div>
           </SidebarGroupLabel>
           <SidebarGroupContent>
