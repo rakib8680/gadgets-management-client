@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Plus, Save } from "lucide-react";
+import { Plus } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -23,7 +23,6 @@ import {
 import GM_DatePicker from "@/components/form/GM_DatePicker";
 import GM_ObjectBuilder from "@/components/form/GM_ObjectBuilder";
 import { useCreateGadgetMutation } from "@/redux/features/productsApi";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 interface AddGadgetModalProps {

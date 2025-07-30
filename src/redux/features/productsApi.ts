@@ -1,4 +1,3 @@
-import { TProduct } from "@/types/product";
 import { baseApi } from "../api/baseApi";
 
 const productApi = baseApi.injectEndpoints({
@@ -49,6 +48,5 @@ export const {
   useGetSingleGadgetQuery,
   useCreateGadgetMutation,
   useDeleteGadgetMutation,
-  useLazyGetAllGadgetsQuery,
   useUpdateGadgetMutation,
 } = productApi;

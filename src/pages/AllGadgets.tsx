@@ -97,7 +97,7 @@ const AllGadgets = () => {
   }
 
   //data fetching using RTK Query
-  const { data, error, isLoading } = useGetAllGadgetsQuery({
+  const { data, error, isLoading , isFetching, refetch} = useGetAllGadgetsQuery({
     ...query,
     sort: sortBy,
     sortOrder,
@@ -216,6 +216,8 @@ const AllGadgets = () => {
           setPageSize={setPageSize}
           uniqueBrands={uniqueBrands}
           onClearFilters={handleClearFilters}
+          isFetching={isFetching}
+          onReload={refetch}
         />
 
         {/* Table */}

@@ -57,7 +57,6 @@ const UpdateGadgetModal = ({
 
   //todo - add form for non-primitive types like features, dimensions, etc.
   //todo- add brand select options with new brand add functionality
-  //todo - addGadget api integration
 
   //transform brands
   const brandOptions = useMemo(() => {

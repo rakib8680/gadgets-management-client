@@ -12,23 +12,18 @@ import {
 } from "@/components/ui/select";
 import { useFormContext } from "react-hook-form";
 import { toCamelCase } from "@/utils/camelCase";
-
-// Type for a single key-value pair
 interface KeyValuePair {
   id: string;
   key: string;
   value: string | number | boolean;
   type: "string" | "number" | "boolean";
 }
-
-// Component props
 interface GM_ObjectBuilderProps {
-  name: string; // the form field name in react-hook-form
-  label: string; // label to display above the field
+  name: string;
+  label: string;
 }
 
 const GM_ObjectBuilder = ({ name, label }: GM_ObjectBuilderProps) => {
-  // Access form context methods
   const { setValue, getValues } = useFormContext();
 
   // Initialize pairs from default value once
@@ -152,7 +147,6 @@ const GM_ObjectBuilder = ({ name, label }: GM_ObjectBuilderProps) => {
 
   return (
     <div className="space-y-2">
-      {/* Label for the entire key-value input section */}
       <Label className="text-sm font-medium">{label}</Label>
 
       {/* Render each key-value pair row */}

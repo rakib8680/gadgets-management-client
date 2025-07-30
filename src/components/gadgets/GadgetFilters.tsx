@@ -37,6 +37,8 @@ type TGadgetFiltersProps = {
   setPageSize: (size: number) => void;
   uniqueBrands: string[];
   onClearFilters: () => void;
+  isFetching?: boolean; // Optional prop for loading state
+  onReload: () => void; // Optional refetch function
 };
 
 const GadgetFilters = ({
@@ -56,6 +58,8 @@ const GadgetFilters = ({
   setPageSize,
   uniqueBrands,
   onClearFilters,
+  isFetching,
+  onReload,
 }: TGadgetFiltersProps) => {
   return (
     <Card className=" max-w-xs md:max-w-full shadow-none">
@@ -199,6 +203,23 @@ const GadgetFilters = ({
             >
               Clear Filters
             </Button>
+          </div>
+          {/* todo  */}
+          <div className="flex justify-end cursor-pointer">
+            {isFetching ? (
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600 mr-3 mb-1" />
+            ) : (
+              <Button
+                className="cursor-pointer"
+                variant="outline"
+                onClick={() => {
+                  onReload();
+                  onClearFilters();
+                }}
+              >
+                Reload
+              </Button>
+            )}
           </div>
         </div>
       </CardContent>
