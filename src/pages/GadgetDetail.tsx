@@ -28,6 +28,11 @@ import DuplicateGadgetModal from "@/components/ui/modals/duplicate-gadget-modal"
 import UpdateGadgetModal from "@/components/ui/modals/update-gadget-modal";
 import LoadingHamster from "@/components/ui/loading-hamster/LoadingHamster";
 import getCategoryColor from "@/utils/getCategoryColor";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const GadgetDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -132,19 +137,42 @@ const GadgetDetail = () => {
         <div className="flex-1 space-y-6 bg-gray-50 rounded-xl p-8 border border-gray-200">
           <div className="flex gap-3 flex-wrap mb-4">
             {gadget.operatingSystem && (
-              <Badge variant="outline" className="text-base w-fit">
-                <Cpu className="w-4 h-4 mr-1" />
-                {gadget.operatingSystem}
-              </Badge>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  {
+                    <Badge variant="outline" className="text-base w-fit">
+                      <Cpu className="w-4 h-4 mr-1" />
+                      {gadget.operatingSystem}
+                    </Badge>
+                  }
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Operating System</p>
+                </TooltipContent>
+              </Tooltip>
             )}
-            <Badge variant="outline" className="text-base w-fit">
-              <Zap className="w-4 h-4 mr-1" />
-              {gadget.powerSource}
-            </Badge>
-            <Badge variant="outline" className="text-base w-fit">
-              <Calendar className="w-4 h-4 mr-1" />
-              {new Date(gadget.releaseDate).toLocaleDateString()}
-            </Badge>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Badge variant="outline" className="text-base w-fit">
+                  <Zap className="w-4 h-4 mr-1" />
+                  {gadget.powerSource}
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Power Source</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Badge variant="outline" className="text-base w-fit">
+                  <Calendar className="w-4 h-4 mr-1" />
+                  {new Date(gadget.releaseDate).toLocaleDateString()}
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Release Date</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
           <div className="text-lg text-gray-700 mb-2">
             <span className="font-semibold">Connectivity:</span>{" "}

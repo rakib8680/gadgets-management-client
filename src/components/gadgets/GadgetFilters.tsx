@@ -13,7 +13,7 @@ import type {
   TCategory,
   TOperatingSystem,
   TPowerSource,
-} from "@/types/product"; // Ensure these types are correctly imported
+} from "@/types/product";
 import {
   CATEGORY_OPTIONS,
   OS_OPTIONS,
@@ -205,14 +205,16 @@ const GadgetFilters = ({
             </Button>
           </div>
           {/* refetch button  */}
-          <div className="flex justify-end cursor-pointer absolute right-0 top-1">
+          <div className="flex justify-end absolute right-0 top-1">
             {isFetching && (
               <div className="animate-spin rounded-full h-10 w-10 border-b-2  border-b-gray-600 absolute top-24 right-16" />
             )}
             <Button
-              className="cursor-pointer shadow-none"
+              className={`shadow-none ${
+                isFetching ? "cursor-not-allowed" : "cursor-pointer "
+              }`}
               variant="outline"
-              disabled={isFetching}
+              // disabled={isFetching}
               onClick={() => {
                 onReload();
                 onClearFilters();
