@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Copy, Plus } from "lucide-react";
 import type { TProduct } from "@/types/product";
 import {
@@ -21,26 +21,40 @@ import GM_Form from "@/components/form/GM_Form";
 import { useNavigate } from "react-router-dom";
 import {
   CATEGORY_OPTIONS,
+  CONNECTIVITY_OPTIONS,
   OS_OPTIONS,
   POWER_SOURCE_OPTIONS,
 } from "@/constants/options";
+import GM_DatePicker from "@/components/form/GM_DatePicker";
+import GM_CheckboxGroup from "@/components/form/GM_CheckboxGroup";
+import GM_ObjectBuilder from "@/components/form/GM_ObjectBuilder";
 
 interface DuplicateGadgetModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   gadget: TProduct | null;
+  brands: string[];
 }
 
 const DuplicateGadgetModal = ({
   open,
   onOpenChange,
   gadget,
+  brands,
 }: DuplicateGadgetModalProps) => {
   const [isDuplicating, setIsDuplicating] = useState(false);
   const [duplicateGadget] = useCreateGadgetMutation();
   const methods = useForm();
   const { reset } = methods;
   const navigate = useNavigate();
+
+  //transform brands
+  const brandOptions = useMemo(() => {
+    if (!brands || !Array.isArray(brands)) {
+      return [];
+    }
+    return brands.map((brand) => ({ value: brand, label: brand }));
+  }, [brands]);
 
   // Reset form when gadget changes
   useEffect(() => {
@@ -105,9 +119,30 @@ const DuplicateGadgetModal = ({
 
   if (!gadget) return null;
 
+  //defaultValues for the form
+  const defaultValues = gadget
+    ? {
+        name: `${gadget.name} (Copy)`,
+        brand: gadget.brand,
+        modelNo: `${gadget.modelNo}-COPY`,
+        price: gadget.price.toString(),
+        quantity: gadget.quantity.toString(),
+        category: gadget.category,
+        connectivity: gadget.connectivity || [],
+        operatingSystem: gadget.operatingSystem || "N/A",
+        powerSource: gadget.powerSource,
+        weight: gadget.weight?.toString() || "",
+        dimensions: gadget.dimensions,
+        features: gadget.features,
+        compatibility: gadget.compatibility,
+        releaseDate: gadget.releaseDate,
+        imageURL: gadget.imageURL,
+      }
+    : {};
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Copy className="h-5 w-5" />
@@ -153,79 +188,180 @@ const DuplicateGadgetModal = ({
             </div>
           </div>
 
-          {/* Form Fields */}
-          <GM_Form
-            onSubmit={onSubmit}
-            defaultValues={
-              gadget
-                ? {
-                    name: `${gadget.name} (Copy)`,
-                    brand: gadget.brand,
-                    modelNo: `${gadget.modelNo}-COPY`,
-                    price: gadget.price.toString(),
-                    quantity: gadget.quantity.toString(),
-                    category: gadget.category,
-                    operatingSystem: gadget.operatingSystem || "iOS",
-                    powerSource: gadget.powerSource,
-                  }
-                : {}
-            }
-            className="grid grid-cols-1 md:grid-cols-2 gap-4"
-          >
-            <div className="space-y-4">
-              <GM_Input
-                name="name"
-                label="Product Name"
-                required
-                placeholder="Enter product name"
-              />
-              <GM_Input
-                name="brand"
-                label="Brand"
-                required
-                placeholder="Enter brand name"
-              />
-              <GM_Input
-                name="modelNo"
-                label="Model Number"
-                required
-                placeholder="Enter model number"
-              />
-              <GM_Select
-                name="category"
-                label="Category"
-                required
-                options={CATEGORY_OPTIONS}
-              />
+          {/* Default values */}
+          <GM_Form defaultValues={defaultValues} onSubmit={onSubmit}>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Left Column */}
+              <div className="space-y-4">
+                <div className="space-y-4 p-4 border rounded-lg">
+                  <h3 className="font-medium text-sm text-muted-foreground">
+                    Basic Information
+                  </h3>
+
+                  <GM_Input
+                    name="name"
+                    label="Product Name"
+                    required
+                    placeholder="Enter product name"
+                  />
+
+                  <GM_Select
+                    name="brand"
+                    label="Brand"
+                    required
+                    options={brandOptions}
+                    placeholder="Select brand"
+                  />
+
+                  <GM_Input
+                    name="modelNo"
+                    label="Model Number"
+                    required
+                    placeholder="Enter model number"
+                  />
+
+                  <GM_Input
+                    name="imageURL"
+                    label="Image URL"
+                    required
+                    placeholder="Enter image URL"
+                  />
+                </div>
+
+                <div className="space-y-4 p-4 border rounded-lg">
+                  <h3 className="font-medium text-sm text-muted-foreground">
+                    Pricing & Inventory
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <GM_Input
+                      name="price"
+                      label="Price ($)"
+                      type="number"
+                      required
+                      placeholder="0.00"
+                    />
+                    <GM_Input
+                      name="quantity"
+                      label="Quantity"
+                      type="number"
+                      required
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4 p-4 border rounded-lg">
+                  <h3 className="font-medium text-sm text-muted-foreground">
+                    Physical Properties
+                  </h3>
+
+                  <GM_Input
+                    name="weight"
+                    label="Weight (grams)"
+                    type="number"
+                    placeholder="Enter weight"
+                  />
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">
+                      Dimensions (cm)
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      <GM_Input
+                        name="dimensions.width"
+                        label="Width"
+                        type="number"
+                        placeholder="W"
+                      />
+                      <GM_Input
+                        name="dimensions.height"
+                        label="Height"
+                        type="number"
+                        placeholder="H"
+                      />
+                      <GM_Input
+                        name="dimensions.depth"
+                        label="Depth"
+                        type="number"
+                        placeholder="D"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column */}
+              <div className="space-y-4">
+                <div className="space-y-4 p-4 border rounded-lg">
+                  <h3 className="font-medium text-sm text-muted-foreground">
+                    Technical Specifications
+                  </h3>
+
+                  <GM_Select
+                    name="category"
+                    label="Category"
+                    required
+                    options={CATEGORY_OPTIONS}
+                    placeholder="Select category"
+                  />
+
+                  <GM_Select
+                    name="operatingSystem"
+                    label="Operating System"
+                    options={OS_OPTIONS}
+                    placeholder="Select OS"
+                  />
+
+                  <GM_Select
+                    name="powerSource"
+                    label="Power Source"
+                    options={POWER_SOURCE_OPTIONS}
+                    placeholder="Select power source"
+                  />
+
+                  <GM_CheckboxGroup
+                    name="connectivity"
+                    label="Connectivity Options"
+                    options={CONNECTIVITY_OPTIONS}
+                  />
+                </div>
+
+                <div className="space-y-4 p-4 border rounded-lg">
+                  <h3 className="font-medium text-sm text-muted-foreground">
+                    Additional Information
+                  </h3>
+
+                  <GM_DatePicker
+                    name="releaseDate"
+                    label="Release Date"
+                    required
+                    placeholder="Select release date"
+                    dateFormat="dd-MM-yyyy"
+                  />
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Compatibility</label>
+                    <GM_Input
+                      name="compatibility"
+                      label="Compatible Devices/Systems"
+                      placeholder="e.g., iPhone, Android, Windows (comma separated)"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="space-y-4">
-              <GM_Input
-                name="price"
-                label="Price ($)"
-                type="number"
-                required
-                placeholder="0.00"
-              />
-              <GM_Input
-                name="quantity"
-                label="Quantity"
-                type="number"
-                required
-                placeholder="0"
-              />
-              <GM_Select
-                name="operatingSystem"
-                label="Operating System"
-                required
-                options={OS_OPTIONS}
-              />
-              <GM_Select
-                name="powerSource"
-                label="Power Source"
-                required
-                options={POWER_SOURCE_OPTIONS}
-              />
+
+            {/* Features Section*/}
+            <div className="space-y-4 p-4 border rounded-lg">
+              <h3 className="font-medium text-sm text-muted-foreground">
+                Product Features
+              </h3>
+
+              <GM_ObjectBuilder name="features" label="Custom Features" />
             </div>
+
+            {/* actions  */}
             <div className="col-span-2 flex justify-end gap-2 mt-4">
               <Button
                 variant="outline"

@@ -20,9 +20,9 @@ type TLogoutButtonProps = {
 };
 
 const LogoutButton = ({
-  variant = "default",
+  variant = "outline",
   size = "default",
-  className = "text-white border-gray-300 cursor-pointer",
+  className = " border-gray-300 hover:bg-red-100 hover:text-red-700 transition-all duration-300 cursor-pointer",
   showIcon = true,
   children = "Logout",
 }: TLogoutButtonProps) => {

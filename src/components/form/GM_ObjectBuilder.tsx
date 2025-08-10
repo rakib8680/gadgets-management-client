@@ -52,22 +52,21 @@ const GM_ObjectBuilder = ({ name, label }: GM_ObjectBuilderProps) => {
     const object = pairs.reduce((acc, pair) => {
       if (pair.key.trim()) {
         let val: any = pair.value;
-  
+
         // Convert value based on its selected type
         if (pair.type === "number") val = Number(val);
         else if (pair.type === "boolean") val = val === "true" || val === true;
-  
+
         // Convert key to camelCase before assigning
         const camelKey = toCamelCase(pair.key.trim());
-  
+
         acc[camelKey] = val;
       }
       return acc;
     }, {} as Record<string, any>);
-  
+
     setValue(name, object);
   }, [pairs, setValue, name]);
-  
 
   // Update a specific field (key, value, or type) of a pair
   const updatePair = (id: string, field: keyof KeyValuePair, value: any) => {
@@ -129,6 +128,7 @@ const GM_ObjectBuilder = ({ name, label }: GM_ObjectBuilderProps) => {
         return (
           <Input
             type="number"
+            placeholder="Value"
             value={pair.value.toString()}
             onChange={(e) => updatePair(pair.id, "value", e.target.value)}
           />
@@ -136,6 +136,7 @@ const GM_ObjectBuilder = ({ name, label }: GM_ObjectBuilderProps) => {
       default: // "string"
         return (
           <Input
+            placeholder="Value"
             type="text"
             // className="w-2/3"
             value={pair.value.toString()}

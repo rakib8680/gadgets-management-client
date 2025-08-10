@@ -303,6 +303,7 @@ const AllGadgets = () => {
           gadget={deleteModal.gadget}
         />
         <DuplicateGadgetModal
+          brands={uniqueBrands}
           open={duplicateModal.open}
           onOpenChange={(open) => setDuplicateModal({ open, gadget: null })}
           gadget={duplicateModal.gadget}
