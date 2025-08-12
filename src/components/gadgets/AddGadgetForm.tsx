@@ -22,7 +22,7 @@ import { DialogFooter } from "../ui/dialog";
 interface AddGadgetFormProps {
   brands: string[];
   showHeading?: boolean;
-  onClose?: () => void; // new prop for closing modal
+  onClose?: () => void;
 }
 
 export default function AddGadgetForm({
