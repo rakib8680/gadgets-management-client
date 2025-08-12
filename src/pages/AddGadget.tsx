@@ -1,10 +1,24 @@
+// pages/AddGadgetPage.tsx
+import AddGadgetForm from "@/components/gadgets/AddGadgetForm";
+import { useGetAllGadgetsQuery } from "@/redux/features/productsApi";
+import { TProduct } from "@/types/product";
 
-const AddGadget = () => {
+export default function AddGadgetPage() {
+  // Fetch all gadgets (unfiltered, just for brands)
+  const { data: allBrandsData } = useGetAllGadgetsQuery({
+    limit: 1000, // or a number larger than your total gadgets count
+  });
+  const uniqueBrands = allBrandsData
+    ? Array.from(
+        new Set(
+          (allBrandsData.data as TProduct[]).map((gadget) => gadget.brand)
+        )
+      ).sort()
+    : [];
+
   return (
-     <div>
-         <h1>This is AddGadget component</h1>
-     </div>
-  )
-};
-
-export default AddGadget;
+    <div className="p-6">
+      <AddGadgetForm brands={uniqueBrands} />
+    </div>
+  );
+}

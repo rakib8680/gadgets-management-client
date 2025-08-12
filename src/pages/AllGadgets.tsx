@@ -190,7 +190,7 @@ const AllGadgets = () => {
             <p className="text-muted-foreground">
               Manage your gadgets inventory (
               {isFetching ? (
-                <div className="animate-spin rounded-full h-4 w-4 border-b-1 mx-2  border-gray-700 inline-block relative top-1" />
+                <span className="animate-spin rounded-full h-4 w-4 border-b-1 mx-2  border-gray-700 inline-block relative top-1" />
               ) : (
                 meta.total || 0
               )}{" "}
