@@ -1,4 +1,3 @@
-// pages/AddGadgetPage.tsx
 import AddGadgetForm from "@/components/gadgets/AddGadgetForm";
 import { useGetAllGadgetsQuery } from "@/redux/features/productsApi";
 import { TProduct } from "@/types/product";
@@ -23,16 +22,16 @@ export default function AddGadgetPage() {
 
   return (
     <div className=" min-h-screen bg-gradient-to-t from-accent  rounded-lg ">
-      <header>
-        <div className="flex items-center gap-2 text-2xl font-semibold text-gray-900">
-          <Plus className="h-6 w-6" />
-          <span>Add New Gadget</span>
-        </div>
-        <p className="mt-2 text-gray-600 max-w-xl">
-          Fill in the details below to add a new gadget to your inventory.
-        </p>
-      </header>
-      <div className="max-w-7xl mx-auto pb-6">
+      <div className="max-w-7xl mx-auto py-6">
+        <header className="ps-12">
+          <div className="flex items-center gap-2 text-2xl font-semibold text-gray-900">
+            <Plus className="h-6 w-6" />
+            <span>Add New Gadget</span>
+          </div>
+          <p className="my-2 text-gray-500">
+            Fill in the details below to add a new gadget to your inventory.
+          </p>
+        </header>
         {isLoading && (
           <p className="text-gray-500 text-center py-4">Loading...</p>
         )}
@@ -44,7 +43,7 @@ export default function AddGadgetPage() {
         )}
 
         {!isLoading && !isError && (
-          <div className="bg-white p-8 rounded-lg mb-20 ">
+          <div className="bg-white p-8 px-12 pt-2 rounded-lg mb-20 ">
             <AddGadgetForm brands={uniqueBrands} showHeading={false} />
           </div>
         )}
