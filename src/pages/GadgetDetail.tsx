@@ -251,6 +251,7 @@ const GadgetDetail = () => {
         />
         <DuplicateGadgetModal
           open={duplicateModalOpen}
+          brands={uniqueBrands}
           onOpenChange={setDuplicateModalOpen}
           gadget={gadget}
         />

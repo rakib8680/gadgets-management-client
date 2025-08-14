@@ -44,7 +44,7 @@ export default function AddGadgetPage() {
 
         {!isLoading && !isError && (
           <div className="bg-white p-8 px-12 pt-2 rounded-lg mb-20 ">
-            <AddGadgetForm brands={uniqueBrands} showHeading={false} />
+            <AddGadgetForm brands={uniqueBrands} showHeading={false} />  {}
           </div>
         )}
       </div>
