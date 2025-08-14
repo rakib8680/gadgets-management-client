@@ -10,6 +10,14 @@ const productApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Gadget"],
     }),
+    getMyGadgets: builder.query({
+      query: (params) => ({
+        url: "/products/my-gadgets",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["Gadget"],
+    }),
     getSingleGadget: builder.query({
       query: (id) => ({
         url: `/products/${id}`,
@@ -45,6 +53,7 @@ const productApi = baseApi.injectEndpoints({
 
 export const {
   useGetAllGadgetsQuery,
+  useGetMyGadgetsQuery,
   useGetSingleGadgetQuery,
   useCreateGadgetMutation,
   useDeleteGadgetMutation,
