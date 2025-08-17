@@ -50,7 +50,11 @@ const router = createBrowserRouter([
       },
       {
         path: "my-gadgets",
-        element: <MyGadgets />,
+        element: (
+          <ProtectedRoute role="seller">
+            <MyGadgets />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "sales-history",
