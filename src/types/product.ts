@@ -38,9 +38,6 @@ export type TConnectivity =
 export type TPowerSource = "Battery" | "Plug-in" | "Battery & Plug-in";
 
 export type TFeature = {
-  // cameraResolution?: string;
-  // storageCapacity?: string;
-  // screenSize?: string;
   [key: string]: string | number | boolean;
 };
 
@@ -50,12 +47,18 @@ export type TDimensions = {
   depth: number;
 };
 
+export type TSeller_id = {
+  _id: string;
+  name: string;
+  email: string;
+};
+
 export type TProduct = {
   _id: string;
   name: string;
   price: number;
   imageURL: string;
-  seller_id: string;
+  seller_id: string | TSeller_id;
   quantity: number;
   releaseDate: Date;
   brand: string;

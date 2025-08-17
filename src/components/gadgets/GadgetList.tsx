@@ -52,6 +52,7 @@ export default function GadgetList({
   emptyStateMessage,
   emptyStateSubMessage,
 }: GadgetListProps) {
+  // State management
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -93,7 +94,6 @@ export default function GadgetList({
     searchQuery: priceRange.max,
     delay: 600,
   });
-
   if (debouncedTerm) query.searchTerm = debouncedTerm;
   if (debouncedMinPrice) query.minPrice = Number(debouncedMinPrice);
   if (debouncedMaxPrice) query.maxPrice = Number(debouncedMaxPrice);
@@ -117,7 +117,6 @@ export default function GadgetList({
     total: 0,
     totalPage: 1,
   };
-
   // For brands
   const { data: allBrandsData } = fetchHook({ limit: 1000 });
   const uniqueBrands = allBrandsData

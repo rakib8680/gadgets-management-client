@@ -33,16 +33,24 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { canPerformGadgetActions } from "@/utils/permissions";
 
 const GadgetDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, isLoading, error } = useGetSingleGadgetQuery(id);
   const gadget = data?.data as TProduct | undefined;
-
+  const user = useAppSelector(selectCurrentUser);
   const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
   const [duplicateModalOpen, setDuplicateModalOpen] = React.useState(false);
   const [updateModalOpen, setUpdateModalOpen] = React.useState(false);
+
+  // Check if user can perform actions on this gadget
+  const canPerformActions = React.useMemo(() => {
+    return canPerformGadgetActions(user, gadget);
+  }, [user, gadget]);
 
   // Fetch all gadgets (unfiltered, just for brands)
   const { data: allBrandsData } = useGetAllGadgetsQuery({
@@ -55,7 +63,6 @@ const GadgetDetail = () => {
         )
       ).sort()
     : [];
-
   if (isLoading)
     return (
       <div className="flex justify-center items-center min-h-[300px]">
@@ -98,6 +105,12 @@ const GadgetDetail = () => {
               &nbsp; | &nbsp;
               <span className="font-semibold">Brand:</span> {gadget.brand}
             </CardDescription>
+            {gadget.seller_id && (
+              <CardDescription className="text-base text-gray-500 mt-1">
+                <span className="font-semibold">Owner:</span>{" "}
+                {(gadget.seller_id as any).email || gadget.seller_id}
+              </CardDescription>
+            )}
           </div>
           <Button
             variant="ghost"
@@ -214,34 +227,36 @@ const GadgetDetail = () => {
         </div>
       </CardContent>
       <CardContent>
-        <div className="flex flex-wrap gap-6 mt-8 justify-between">
-          <Button
-            onClick={() => setDeleteModalOpen(true)}
-            variant="destructive"
-            size="lg"
-            className="text-lg px-8 py-4 cursor-pointer"
-          >
-            <Trash2 className="mr-3 h-5 w-5" /> Delete
-          </Button>
-          <div className="flex gap-4">
+        {canPerformActions && (
+          <div className="flex flex-wrap gap-6 mt-8 justify-between">
             <Button
-              onClick={() => setDuplicateModalOpen(true)}
-              variant="secondary"
+              onClick={() => setDeleteModalOpen(true)}
+              variant="destructive"
               size="lg"
               className="text-lg px-8 py-4 cursor-pointer"
             >
-              <Copy className="mr-3 h-5 w-5" /> Duplicate
+              <Trash2 className="mr-3 h-5 w-5" /> Delete
             </Button>
-            <Button
-              onClick={() => setUpdateModalOpen(true)}
-              variant="default"
-              size="lg"
-              className="text-lg px-8 py-4 cursor-pointer"
-            >
-              <Edit className="mr-3 h-5 w-5" /> Edit
-            </Button>
+            <div className="flex gap-4">
+              <Button
+                onClick={() => setDuplicateModalOpen(true)}
+                variant="secondary"
+                size="lg"
+                className="text-lg px-8 py-4 cursor-pointer"
+              >
+                <Copy className="mr-3 h-5 w-5" /> Duplicate
+              </Button>
+              <Button
+                onClick={() => setUpdateModalOpen(true)}
+                variant="default"
+                size="lg"
+                className="text-lg px-8 py-4 cursor-pointer"
+              >
+                <Edit className="mr-3 h-5 w-5" /> Edit
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
         {/* Modals */}
         <UpdateGadgetModal
           open={updateModalOpen}
