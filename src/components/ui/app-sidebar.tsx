@@ -65,7 +65,7 @@ export function AppSidebar() {
   const filteredItems =
     role === "seller"
       ? items.filter((item) => item.title !== "Analytics")
-      : items;
+      : items.filter((item) => item.title !== "My Gadgets"); //for admin, removed My Gadgets
 
   return (
     <Sidebar>

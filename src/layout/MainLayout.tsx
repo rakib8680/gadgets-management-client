@@ -17,7 +17,6 @@ const MainLayout = () => {
         <div className="flex-1 flex flex-col">
           <SidebarTrigger className="m-2" />
           <main className="flex-1 p-4">
-            {/* children here  */}
             <Outlet />
           </main>
         </div>
