@@ -43,7 +43,7 @@ const GadgetTableHeader: React.FC<GadgetTableHeaderProps> = ({
         {renderSortButton("quantity", "Stock")}
         <TableHead>Details</TableHead>
         {renderSortButton("releaseDate", "Release Date")}
-        <TableHead className="text-right">Actions</TableHead>
+        <TableHead className="text-right w-[120px]">Actions</TableHead>
       </TableRow>
     </TableHeader>
   );

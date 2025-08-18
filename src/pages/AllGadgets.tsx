@@ -14,3 +14,4 @@ export default function AllGadgets() {
 }
 
 //todo - when crud operation from mygadgets is done, the funciton redirects to all gadgets page. Make the redirect to my gadget page
+//add permission based crud access to all gadgets table   

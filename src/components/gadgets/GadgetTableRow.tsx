@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -28,6 +28,9 @@ import {
 import type { TConnectivity, TProduct } from "@/types/product"; // Ensure these types are correctly imported
 import { useNavigate } from "react-router-dom";
 import getCategoryColor from "@/utils/getCategoryColor";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { canPerformGadgetActions } from "@/utils/permissions";
 
 type GadgetTableRowProps = {
   gadget: TProduct;
@@ -43,6 +46,12 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
   onDelete,
 }) => {
   const navigate = useNavigate();
+  const user = useAppSelector(selectCurrentUser);
+
+  //check if user can perform actions on the gadget
+  const canPerformActions = useMemo(() => {
+    return canPerformGadgetActions(user, gadget);
+  }, [user, gadget]);
 
   const formatConnectivity = (connectivity: TConnectivity[]) => {
     return (
@@ -140,50 +149,56 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
         </div>
       </TableCell>
       {/* actions */}
-      <TableCell className=" flex items-center gap-2 justify-end h-20">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-8 w-8 p-0 cursor-pointer"
-              onClick={() => {
-                navigate(`/dashboard/gadgets/${gadget._id}`);
-              }}
-            >
-              <span className="sr-only">View gadget</span>
-              <Eye className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>View details</TooltipContent>
-        </Tooltip>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => onUpdate(gadget)}>
-              <Edit className="mr-2 h-4 w-4" />
-              Update
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onDuplicate(gadget)}>
-              <Copy className="mr-2 h-4 w-4" />
-              Duplicate
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => onDelete(gadget)}
-              className="text-destructive"
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <TableCell className="h-20 w-[120px]">
+        <div className="w-full flex items-center gap-2 justify-end">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 p-0 cursor-pointer"
+                onClick={() => {
+                  navigate(`/dashboard/gadgets/${gadget._id}`);
+                }}
+              >
+                <span className="sr-only">View gadget</span>
+                <Eye className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>View details</TooltipContent>
+          </Tooltip>
+          {canPerformActions ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => onUpdate(gadget)}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  Update
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onDuplicate(gadget)}>
+                  <Copy className="mr-2 h-4 w-4" />
+                  Duplicate
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => onDelete(gadget)}
+                  className="text-destructive"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <span className="inline-block h-8 w-8" />
+          )}
+        </div>
       </TableCell>
     </TableRow>
   );
