@@ -28,10 +28,11 @@ import type {
   TOperatingSystem,
   TPowerSource,
 } from "@/types/product";
+import { useGetAllGadgetsQuery } from "@/redux/features/productsApi";
 
 interface GadgetListProps {
   title: string;
-  subtitlePrefix: string; // "Manage your gadgets inventory" or "Manage your personal gadgets collection"
+  subtitlePrefix: string;
   fetchHook: (params: any) => {
     data?: any;
     error?: any;
@@ -39,7 +40,7 @@ interface GadgetListProps {
     isFetching: boolean;
     refetch: () => void;
   };
-  showFiltersCondition?: (total: number) => boolean; // optional condition for showing filters
+  showFiltersCondition?: (total: number) => boolean;
   emptyStateMessage: string;
   emptyStateSubMessage: (shouldShowFilters: boolean) => string;
   navigateLocation?: string;
@@ -120,7 +121,7 @@ export default function GadgetList({
     totalPage: 1,
   };
   // For brands
-  const { data: allBrandsData } = fetchHook({ limit: 1000 });
+  const { data: allBrandsData } = useGetAllGadgetsQuery({ limit: 1000 });
   const uniqueBrands = allBrandsData
     ? Array.from(
         new Set((allBrandsData.data as TProduct[]).map((g) => g.brand))

@@ -51,7 +51,7 @@ export default function AddGadgetForm({
     features: {},
     dimensions: { width: "", height: "", depth: "" },
     releaseDate: "",
-    compatibility: [],
+    compatibility: "",
   };
 
   const brandOptions = useMemo(
