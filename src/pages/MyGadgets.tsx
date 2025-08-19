@@ -14,6 +14,7 @@ export default function MyGadgets() {
           ? "Try adjusting your search or filters"
           : "Add your first gadget to get started"
       }
+      navigateLocation="/dashboard/my-gadgets"
     />
   );
 }

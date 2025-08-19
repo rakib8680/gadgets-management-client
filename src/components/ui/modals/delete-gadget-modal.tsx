@@ -20,17 +20,20 @@ interface DeleteGadgetModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   gadget: TProduct | null;
+  navigateLocation?: string;
 }
 
 const DeleteGadgetModal = ({
   open,
   onOpenChange,
   gadget,
+  navigateLocation,
 }: DeleteGadgetModalProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteGadget] = useDeleteGadgetMutation();
   const navigate = useNavigate();
 
+  // Handle delete function
   const handleDelete = async () => {
     if (!gadget) return;
 
@@ -44,7 +47,7 @@ const DeleteGadgetModal = ({
           duration: 3000,
         });
         onOpenChange(false);
-        navigate("/dashboard/gadgets");
+        navigate(navigateLocation || "/dashboard/gadgets");
       }
     } catch (error) {
       toast.error("Failed to delete gadget. Please try again.", {

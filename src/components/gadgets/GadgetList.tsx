@@ -42,6 +42,7 @@ interface GadgetListProps {
   showFiltersCondition?: (total: number) => boolean; // optional condition for showing filters
   emptyStateMessage: string;
   emptyStateSubMessage: (shouldShowFilters: boolean) => string;
+  navigateLocation?: string;
 }
 
 export default function GadgetList({
@@ -51,6 +52,7 @@ export default function GadgetList({
   showFiltersCondition = () => true,
   emptyStateMessage,
   emptyStateSubMessage,
+  navigateLocation,
 }: GadgetListProps) {
   // State management
   const [searchTerm, setSearchTerm] = useState("");
@@ -281,12 +283,14 @@ export default function GadgetList({
           open={deleteModal.open}
           onOpenChange={(open) => setDeleteModal({ open, gadget: null })}
           gadget={deleteModal.gadget}
+          navigateLocation={navigateLocation}
         />
         <DuplicateGadgetModal
           brands={uniqueBrands}
           open={duplicateModal.open}
           onOpenChange={(open) => setDuplicateModal({ open, gadget: null })}
           gadget={duplicateModal.gadget}
+          navigateLocation={navigateLocation}
         />
         <UpdateGadgetModal
           open={updateModal.open}

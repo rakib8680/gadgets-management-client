@@ -34,6 +34,7 @@ interface DuplicateGadgetModalProps {
   onOpenChange: (open: boolean) => void;
   gadget: TProduct | null;
   brands: string[];
+  navigateLocation?: string;
 }
 
 const DuplicateGadgetModal = ({
@@ -41,6 +42,7 @@ const DuplicateGadgetModal = ({
   onOpenChange,
   gadget,
   brands,
+  navigateLocation,
 }: DuplicateGadgetModalProps) => {
   const [isDuplicating, setIsDuplicating] = useState(false);
   const [duplicateGadget] = useCreateGadgetMutation();
@@ -105,7 +107,7 @@ const DuplicateGadgetModal = ({
           duration: 3000,
         });
         onOpenChange(false);
-        navigate(`/dashboard/gadgets`);
+        navigate(navigateLocation || `/dashboard/gadgets`);
       }
     } catch (error) {
       toast.error("Failed to duplicate gadget. Please try again.", {
