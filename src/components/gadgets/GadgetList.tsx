@@ -278,6 +278,7 @@ export default function GadgetList({
           open={addModal}
           onOpenChange={setAddModal}
           brands={uniqueBrands}
+          navigateLocation={navigateLocation}
         />
         <DeleteGadgetModal
           open={deleteModal.open}

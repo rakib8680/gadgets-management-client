@@ -23,12 +23,14 @@ interface AddGadgetFormProps {
   brands: string[];
   showHeading?: boolean;
   onClose?: () => void;
+  navigateLocation?: string;
 }
 
 export default function AddGadgetForm({
   brands,
   showHeading = true,
   onClose,
+  navigateLocation,
 }: AddGadgetFormProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [createGadget] = useCreateGadgetMutation();
@@ -110,7 +112,7 @@ export default function AddGadgetForm({
           duration: 3000,
         });
         if (onClose) onClose();
-        navigate(`/dashboard/gadgets`);
+        navigate(navigateLocation || `/dashboard/gadgets`);
       }
     } catch (error) {
       toast.error("Failed to add gadget. Please try again.", {

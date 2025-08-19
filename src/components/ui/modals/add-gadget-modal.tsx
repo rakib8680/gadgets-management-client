@@ -13,12 +13,14 @@ interface AddGadgetModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   brands: string[];
+  navigateLocation?: string;
 }
 
 const AddGadgetModal = ({
   open,
   onOpenChange,
   brands,
+  navigateLocation,
 }: AddGadgetModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -37,6 +39,7 @@ const AddGadgetModal = ({
           brands={brands}
           onClose={() => onOpenChange(false)}
           showHeading={false}
+          navigateLocation={navigateLocation}
         />
       </DialogContent>
     </Dialog>
