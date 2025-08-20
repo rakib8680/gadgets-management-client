@@ -40,6 +40,14 @@ const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Gadget"],
     }),
+    bulkDeleteGadgets: builder.mutation({
+      query: (gadgetIds) => ({
+        url: "products/delete-gadgets",
+        method: "DELETE",
+        body: gadgetIds,
+      }),
+      invalidatesTags: ["Gadget"],
+    }),
     updateGadget: builder.mutation({
       query: (payload) => ({
         url: `products/update-gadget/${payload.id}`,
@@ -57,5 +65,6 @@ export const {
   useGetSingleGadgetQuery,
   useCreateGadgetMutation,
   useDeleteGadgetMutation,
+  useBulkDeleteGadgetsMutation,
   useUpdateGadgetMutation,
 } = productApi;

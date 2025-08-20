@@ -13,6 +13,4 @@ export default function AllGadgets() {
   );
 }
 
-//todo - when crud operation from mygadgets is done, the funciton redirects to all gadgets page. Make the redirect to my gadget page
 //todo- add new brand add functionality
-//todo - add.gadget not working
