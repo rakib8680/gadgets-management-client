@@ -1,5 +1,5 @@
 // components/gadgets/GadgetList.tsx
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Plus, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +29,7 @@ import type {
   TPowerSource,
 } from "@/types/product";
 import { useGetAllGadgetsQuery } from "@/redux/features/productsApi";
+import { useSelection } from "@/hooks/useSelection";
 
 interface GadgetListProps {
   title: string;
@@ -55,6 +56,8 @@ export default function GadgetList({
   emptyStateSubMessage,
   navigateLocation,
 }: GadgetListProps) {
+
+  
   // State management
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
@@ -71,6 +74,8 @@ export default function GadgetList({
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(50);
 
+
+
   // Modal states
   const [addModal, setAddModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{
@@ -85,6 +90,8 @@ export default function GadgetList({
     open: boolean;
     gadget: TProduct | null;
   }>({ open: false, gadget: null });
+
+
 
   // Debounced query
   const query: Record<string, any> = {};
@@ -101,7 +108,10 @@ export default function GadgetList({
   if (debouncedMinPrice) query.minPrice = Number(debouncedMinPrice);
   if (debouncedMaxPrice) query.maxPrice = Number(debouncedMaxPrice);
 
-  // Fetch data
+
+
+
+  //Api calling
   const { data, error, isLoading, isFetching, refetch } = fetchHook({
     ...query,
     sort: sortBy,
@@ -120,7 +130,6 @@ export default function GadgetList({
     total: 0,
     totalPage: 1,
   };
-  // For brands
   const { data: allBrandsData } = useGetAllGadgetsQuery({ limit: 1000 });
   const uniqueBrands = allBrandsData
     ? Array.from(
@@ -128,7 +137,11 @@ export default function GadgetList({
       ).sort()
     : [];
 
+
+
+  // Determine if filters should be shown based on total count
   const shouldShowFilters = showFiltersCondition(meta.total);
+
 
   // Handlers
   const handleSort = (column: string) => {
@@ -148,6 +161,14 @@ export default function GadgetList({
     setPriceRange({ min: "", max: "" });
     setCurrentPage(1);
   };
+
+
+  // Get the ID of the gadget for selection
+  const getId = useCallback((g: TProduct) => g._id, []);
+  const { selectedIds, allSelected, someSelected, toggleSelectAll, toggleRow } =
+    useSelection<TProduct>(gadgets, getId);
+
+
 
   if (error) {
     return (
@@ -179,12 +200,14 @@ export default function GadgetList({
               total)
             </p>
           </div>
-          <Button
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => setAddModal(true)}
-          >
-            <Plus className="h-4 w-4" /> Add New Gadget
-          </Button>
+          <div className="flex items-center gap-2 ml-auto">
+            <Button
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={() => setAddModal(true)}
+            >
+              <Plus className="h-4 w-4" /> Add New Gadget
+            </Button>
+          </div>
         </div>
 
         {/* Filters */}
@@ -215,52 +238,75 @@ export default function GadgetList({
         {isLoading ? (
           <LoadingHamster />
         ) : (
-          <Card>
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <Table>
-                  <GadgetTableHeader
-                    sortBy={sortBy}
-                    sortOrder={sortOrder}
-                    onSort={handleSort}
-                  />
-                  <TableBody>
-                    {gadgets.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={9} className="text-center py-8">
-                          <div className="flex flex-col items-center gap-2">
-                            <Filter className="h-8 w-8 text-muted-foreground" />
-                            <p className="text-muted-foreground">
-                              {emptyStateMessage}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              {emptyStateSubMessage(shouldShowFilters)}
-                            </p>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      gadgets.map((gadget, index) => (
-                        <GadgetTableRow
-                          key={gadget?._id || index}
-                          gadget={gadget}
-                          onUpdate={(g) =>
-                            setUpdateModal({ open: true, gadget: g })
-                          }
-                          onDuplicate={(g) =>
-                            setDuplicateModal({ open: true, gadget: g })
-                          }
-                          onDelete={(g) =>
-                            setDeleteModal({ open: true, gadget: g })
-                          }
-                        />
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
+          <>
+            {selectedIds.length > 0 && (
+              <div className="mb-3 flex justify-end">
+                <Button
+                  variant="destructive"
+                  className="cursor-pointer"
+                  onClick={() => {
+                    // You can replace this with your API call
+                    console.log("Delete All IDs:", selectedIds);
+                  }}
+                >
+                  Delete All ({selectedIds.length})
+                </Button>
               </div>
-            </CardContent>
-          </Card>
+            )}
+            <Card>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <Table>
+                    <GadgetTableHeader
+                      sortBy={sortBy}
+                      sortOrder={sortOrder}
+                      onSort={handleSort}
+                      allSelected={allSelected}
+                      someSelected={someSelected}
+                      onToggleAll={toggleSelectAll}
+                    />
+                    <TableBody>
+                      {gadgets.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={9} className="text-center py-8">
+                            <div className="flex flex-col items-center gap-2">
+                              <Filter className="h-8 w-8 text-muted-foreground" />
+                              <p className="text-muted-foreground">
+                                {emptyStateMessage}
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                {emptyStateSubMessage(shouldShowFilters)}
+                              </p>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        gadgets.map((gadget, index) => (
+                          <GadgetTableRow
+                            key={gadget?._id || index}
+                            gadget={gadget}
+                            onUpdate={(g) =>
+                              setUpdateModal({ open: true, gadget: g })
+                            }
+                            onDuplicate={(g) =>
+                              setDuplicateModal({ open: true, gadget: g })
+                            }
+                            onDelete={(g) =>
+                              setDeleteModal({ open: true, gadget: g })
+                            }
+                            selected={selectedIds.includes(gadget._id)}
+                            onToggleSelected={(checked) =>
+                              toggleRow(gadget._id, checked)
+                            }
+                          />
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </>
         )}
 
         {/* Pagination */}

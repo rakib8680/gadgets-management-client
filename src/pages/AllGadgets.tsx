@@ -14,3 +14,4 @@ export default function AllGadgets() {
 }
 
 //todo- add new brand add functionality
+//todo- add bulk delete functionality

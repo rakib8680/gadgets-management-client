@@ -2,17 +2,25 @@ import React from "react";
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { SortAsc, SortDesc } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type GadgetTableHeaderProps = {
   sortBy: string;
   sortOrder: "asc" | "desc";
   onSort: (column: string) => void;
+  // bulk selection controls
+  allSelected?: boolean;
+  someSelected?: boolean;
+  onToggleAll?: (checked: boolean) => void;
 };
 
 const GadgetTableHeader: React.FC<GadgetTableHeaderProps> = ({
   sortBy,
   sortOrder,
   onSort,
+  allSelected = false,
+  someSelected = false,
+  onToggleAll,
 }) => {
   const renderSortButton = (column: string, label: string) => (
     <TableHead>
@@ -35,6 +43,15 @@ const GadgetTableHeader: React.FC<GadgetTableHeaderProps> = ({
   return (
     <TableHeader>
       <TableRow>
+        <TableHead className="w-[40px]">
+          <Checkbox
+            checked={
+              allSelected ? true : someSelected ? "indeterminate" : false
+            }
+            onCheckedChange={(value) => onToggleAll?.(Boolean(value))}
+            aria-label="Select all"
+          />
+        </TableHead>
         <TableHead className="w-[80px]">Image</TableHead>
         {renderSortButton("name", "Product")}
         <TableHead>Category</TableHead>

@@ -25,18 +25,22 @@ import {
   Zap,
   Eye,
 } from "lucide-react";
-import type { TConnectivity, TProduct } from "@/types/product"; // Ensure these types are correctly imported
+import type { TConnectivity, TProduct } from "@/types/product";
 import { useNavigate } from "react-router-dom";
 import getCategoryColor from "@/utils/getCategoryColor";
 import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { canPerformGadgetActions } from "@/utils/permissions";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type GadgetTableRowProps = {
   gadget: TProduct;
   onUpdate: (gadget: TProduct) => void;
   onDuplicate: (gadget: TProduct) => void;
   onDelete: (gadget: TProduct) => void;
+  // bulk selection
+  selected?: boolean;
+  onToggleSelected?: (checked: boolean) => void;
 };
 
 const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
@@ -44,6 +48,8 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
   onUpdate,
   onDuplicate,
   onDelete,
+  selected = false,
+  onToggleSelected,
 }) => {
   const navigate = useNavigate();
   const user = useAppSelector(selectCurrentUser);
@@ -62,6 +68,14 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
 
   return (
     <TableRow>
+      {/* select */}
+      <TableCell className="w-[40px]">
+        <Checkbox
+          checked={selected}
+          onCheckedChange={(value) => onToggleSelected?.(Boolean(value))}
+          aria-label={`Select ${gadget.name}`}
+        />
+      </TableCell>
       {/* image */}
       <TableCell>
         <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted">
