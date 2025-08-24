@@ -74,6 +74,7 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
           checked={selected}
           onCheckedChange={(value) => onToggleSelected?.(Boolean(value))}
           aria-label={`Select ${gadget.name}`}
+          className="cursor-pointer"
         />
       </TableCell>
       {/* image */}

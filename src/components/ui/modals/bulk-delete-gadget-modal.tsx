@@ -29,15 +29,9 @@ const BulkDeleteGadgetModal = ({
   selectedGadgets,
   onSuccess,
 }: BulkDeleteGadgetModalProps) => {
-
-
-
   //state & api
   const [isDeleting, setIsDeleting] = useState(false);
   const [bulkDelete] = useBulkDeleteGadgetsMutation();
-
-
-
 
   // Handle bulk delete function
   const handleBulkDelete = async () => {
@@ -71,8 +65,6 @@ const BulkDeleteGadgetModal = ({
     }
   };
 
-
-
   if (!selectedGadgets || selectedGadgets.length === 0) return null;
 
   return (
@@ -92,7 +84,7 @@ const BulkDeleteGadgetModal = ({
 
         <div className="py-4">
           <div className="max-h-64 overflow-y-auto space-y-3">
-            {selectedGadgets.map((gadget) => (
+            {selectedGadgets.slice(0, 10).map((gadget) => (
               <div
                 key={gadget._id}
                 className="flex items-center gap-4 p-3 border rounded-lg"
