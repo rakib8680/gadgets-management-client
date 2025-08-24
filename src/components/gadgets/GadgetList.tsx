@@ -28,8 +28,12 @@ import type {
   TOperatingSystem,
   TPowerSource,
 } from "@/types/product";
-import { useGetAllGadgetsQuery } from "@/redux/features/productsApi";
+import {
+  useBulkDeleteGadgetsMutation,
+  useGetAllGadgetsQuery,
+} from "@/redux/features/productsApi";
 import { useSelection } from "@/hooks/useSelection";
+import { toast } from "sonner";
 
 interface GadgetListProps {
   title: string;
@@ -57,7 +61,8 @@ export default function GadgetList({
   navigateLocation,
 }: GadgetListProps) {
 
-  
+
+
   // State management
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
@@ -73,6 +78,8 @@ export default function GadgetList({
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(50);
+  const [isDeleting, setIsDeleting] = useState(false);
+
 
 
 
@@ -93,6 +100,8 @@ export default function GadgetList({
 
 
 
+
+
   // Debounced query
   const query: Record<string, any> = {};
   const debouncedTerm = useDebounced({ searchQuery: searchTerm, delay: 600 });
@@ -107,6 +116,7 @@ export default function GadgetList({
   if (debouncedTerm) query.searchTerm = debouncedTerm;
   if (debouncedMinPrice) query.minPrice = Number(debouncedMinPrice);
   if (debouncedMaxPrice) query.maxPrice = Number(debouncedMaxPrice);
+
 
 
 
@@ -136,31 +146,10 @@ export default function GadgetList({
         new Set((allBrandsData.data as TProduct[]).map((g) => g.brand))
       ).sort()
     : [];
+  const [bulkDelete] = useBulkDeleteGadgetsMutation();
 
 
 
-  // Determine if filters should be shown based on total count
-  const shouldShowFilters = showFiltersCondition(meta.total);
-
-
-  // Handlers
-  const handleSort = (column: string) => {
-    if (sortBy === column) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortBy(column);
-      setSortOrder("asc");
-    }
-  };
-  const handleClearFilters = () => {
-    setSearchTerm("");
-    setFilterCategory("all");
-    setFilterBrand("all");
-    setFilterOS("all");
-    setFilterPowerSource("all");
-    setPriceRange({ min: "", max: "" });
-    setCurrentPage(1);
-  };
 
 
   // Get the ID of the gadget for selection
@@ -168,8 +157,60 @@ export default function GadgetList({
   const { selectedIds, allSelected, someSelected, toggleSelectAll, toggleRow } =
     useSelection<TProduct>(gadgets, getId);
 
+    
 
 
+  // Handlers
+  const handleSort = (column: string) => {
+      if (sortBy === column) {
+        setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+      } else {
+        setSortBy(column);
+        setSortOrder("asc");
+      }
+  };
+  const handleClearFilters = () => {
+      setSearchTerm("");
+      setFilterCategory("all");
+      setFilterBrand("all");
+      setFilterOS("all");
+      setFilterPowerSource("all");
+      setPriceRange({ min: "", max: "" });
+      setCurrentPage(1);
+  };
+  const handleBulkDelete = async () => {
+    const selectedGadgets = selectedIds
+    setIsDeleting(true);
+    
+    try {
+      const res = await bulkDelete(selectedGadgets).unwrap();
+      if(res.success){
+        toast.success("Gadgets deleted",{
+          description: `${selectedGadgets.length} gadgets have been successfully deleted.`,
+          position: "top-center",
+          duration: 3000,
+        })
+      }
+    } catch (error) {
+      toast.error("Failed to delete gadgets",{
+        description: `Failed to delete ${selectedGadgets.length} gadgets. Please try again.`,
+        position: "top-center",
+        duration: 3000,
+      })
+      
+    }finally{
+      setIsDeleting(false);
+    }
+  };
+
+    
+    
+    
+    
+  // Determine if filters should be shown based on total count
+  const shouldShowFilters = showFiltersCondition(meta.total);
+    
+    
   if (error) {
     return (
       <Card className="w-full max-w-md mx-auto mt-8">
@@ -239,17 +280,15 @@ export default function GadgetList({
           <LoadingHamster />
         ) : (
           <>
-            {selectedIds.length > 0 && (
+             {selectedIds.length > 0 && (
               <div className="mb-3 flex justify-end">
                 <Button
                   variant="destructive"
                   className="cursor-pointer"
-                  onClick={() => {
-                    // You can replace this with your API call
-                    console.log("Delete All IDs:", selectedIds);
-                  }}
+                  onClick={handleBulkDelete}
+                  disabled={isDeleting}
                 >
-                  Delete All ({selectedIds.length})
+                  {isDeleting ? "Deleting..." : `Delete All (${selectedIds.length})`}
                 </Button>
               </div>
             )}
