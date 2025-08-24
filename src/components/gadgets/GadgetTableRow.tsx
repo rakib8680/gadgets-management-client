@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -28,10 +28,8 @@ import {
 import type { TConnectivity, TProduct } from "@/types/product";
 import { useNavigate } from "react-router-dom";
 import getCategoryColor from "@/utils/getCategoryColor";
-import { useAppSelector } from "@/redux/hooks";
-import { selectCurrentUser } from "@/redux/features/auth/authSlice";
-import { canPerformGadgetActions } from "@/utils/permissions";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useCanPerformGadgetActions } from "@/utils/permissions";
 
 type GadgetTableRowProps = {
   gadget: TProduct;
@@ -52,12 +50,9 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
   onToggleSelected,
 }) => {
   const navigate = useNavigate();
-  const user = useAppSelector(selectCurrentUser);
 
   //check if user can perform actions on the gadget
-  const canPerformActions = useMemo(() => {
-    return canPerformGadgetActions(user, gadget);
-  }, [user, gadget]);
+  const canPerformActions = useCanPerformGadgetActions(gadget);
 
   const formatConnectivity = (connectivity: TConnectivity[]) => {
     return (
@@ -70,12 +65,15 @@ const GadgetTableRow: React.FC<GadgetTableRowProps> = ({
     <TableRow>
       {/* select */}
       <TableCell className="w-[40px]">
-        <Checkbox
-          checked={selected}
-          onCheckedChange={(value) => onToggleSelected?.(Boolean(value))}
-          aria-label={`Select ${gadget.name}`}
-          className="cursor-pointer"
-        />
+        {canPerformActions && (
+          <Checkbox
+            checked={selected}
+            onCheckedChange={(value) => onToggleSelected?.(Boolean(value))}
+            aria-label={`Select ${gadget.name}`}
+            className="cursor-pointer border-gray-300"
+            disabled={!canPerformActions}
+          />
+        )}
       </TableCell>
       {/* image */}
       <TableCell>

@@ -33,24 +33,22 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { selectCurrentUser } from "@/redux/features/auth/authSlice";
-import { useAppSelector } from "@/redux/hooks";
-import { canPerformGadgetActions } from "@/utils/permissions";
+import { useCanPerformGadgetActions } from "@/utils/permissions";
 
 const GadgetDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, isLoading, error } = useGetSingleGadgetQuery(id);
   const gadget = data?.data as TProduct | undefined;
-  const user = useAppSelector(selectCurrentUser);
   const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
   const [duplicateModalOpen, setDuplicateModalOpen] = React.useState(false);
   const [updateModalOpen, setUpdateModalOpen] = React.useState(false);
 
+
   // Check if user can perform actions on this gadget
-  const canPerformActions = React.useMemo(() => {
-    return canPerformGadgetActions(user, gadget);
-  }, [user, gadget]);
+  const canPerformActions = useCanPerformGadgetActions(gadget);
+
+
 
   // Fetch all gadgets (unfiltered, just for brands)
   const { data: allBrandsData } = useGetAllGadgetsQuery({
@@ -63,6 +61,10 @@ const GadgetDetail = () => {
         )
       ).sort()
     : [];
+
+
+
+  // If loading, error, or no gadget found
   if (isLoading)
     return (
       <div className="flex justify-center items-center min-h-[300px]">
@@ -91,6 +93,7 @@ const GadgetDetail = () => {
         </CardHeader>
       </Card>
     );
+
 
   return (
     <Card className="w-full max-w-6xl mx-auto mt-10 mb-20 p-6 lg:p-12 border border-gray-200 ">
