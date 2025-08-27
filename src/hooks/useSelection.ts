@@ -12,9 +12,13 @@ type SelectionApi = {
 
 export function useSelection<TItem>(
   items: TItem[],
-  getId: (item: TItem) => string
+  getId: (item: TItem) => string,
+  options?: {
+    isSelectable?: (item: TItem) => boolean;
+  }
 ): SelectionApi {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const isSelectable = options?.isSelectable ?? (() => true);
 
   // When the item list changes, prune any selected ids that are no longer present
   useEffect(() => {
@@ -33,25 +37,35 @@ export function useSelection<TItem>(
   }, [items, getId]);
 
   const allSelected = useMemo(() => {
-    if (items.length === 0) return false;
-    if (selectedIds.length !== items.length) return false;
-    const currentIds = new Set(items.map(getId));
-    return selectedIds.every((id) => currentIds.has(id));
-  }, [items, selectedIds, getId]);
+    const selectableItems = items.filter(isSelectable);
+    if (selectableItems.length === 0) return false;
+    const selectableIds = new Set(selectableItems.map(getId));
+    const selectedSelectableCount = selectedIds.filter((id) =>
+      selectableIds.has(id)
+    ).length;
+    return selectedSelectableCount === selectableItems.length;
+  }, [items, selectedIds, getId, isSelectable]);
 
   const someSelected = useMemo(() => {
-    return selectedIds.length > 0 && !allSelected;
-  }, [selectedIds.length, allSelected]);
+    const selectableIds = new Set(
+      items.filter(isSelectable).map((item) => getId(item))
+    );
+    const selectedSelectableCount = selectedIds.filter((id) =>
+      selectableIds.has(id)
+    ).length;
+    return selectedSelectableCount > 0 && !allSelected;
+  }, [items, selectedIds, getId, isSelectable, allSelected]);
 
   const toggleSelectAll = useCallback(
     (checked: boolean) => {
       if (checked) {
-        setSelectedIds(items.map(getId));
+        const selectable = items.filter(isSelectable).map(getId);
+        setSelectedIds(selectable);
       } else {
         setSelectedIds([]);
       }
     },
-    [items, getId]
+    [items, getId, isSelectable]
   );
 
   const toggleRow = useCallback((id: string, checked: boolean) => {

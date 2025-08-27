@@ -50,7 +50,7 @@ const GadgetTableHeader: React.FC<GadgetTableHeaderProps> = ({
             }
             onCheckedChange={(value) => onToggleAll?.(Boolean(value))}
             aria-label="Select all"
-          className="cursor-pointer"
+            className="cursor-pointer"
           />
         </TableHead>
         <TableHead className="w-[80px]">Image</TableHead>

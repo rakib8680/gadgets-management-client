@@ -1,4 +1,3 @@
-// components/gadgets/GadgetList.tsx
 import { useCallback, useState } from "react";
 import { Plus, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,6 +30,8 @@ import type {
 } from "@/types/product";
 import { useGetAllGadgetsQuery } from "@/redux/features/productsApi";
 import { useSelection } from "@/hooks/useSelection";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 interface GadgetListProps {
   title: string;
@@ -60,6 +61,7 @@ export default function GadgetList({
 
 
 
+
   // State management
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
@@ -70,10 +72,12 @@ export default function GadgetList({
   const [filterBrand, setFilterBrand] = useState("all");
   const [filterOS, setFilterOS] = useState<TOperatingSystem | "all">("all");
   const [filterPowerSource, setFilterPowerSource] = useState<
-    TPowerSource | "all">("all");
+    TPowerSource | "all"
+  >("all");
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(50);
+
 
 
 
@@ -97,6 +101,7 @@ export default function GadgetList({
 
 
 
+
   // Debounced query
   const query: Record<string, any> = {};
   const debouncedTerm = useDebounced({ searchQuery: searchTerm, delay: 600 });
@@ -111,6 +116,7 @@ export default function GadgetList({
   if (debouncedTerm) query.searchTerm = debouncedTerm;
   if (debouncedMinPrice) query.minPrice = Number(debouncedMinPrice);
   if (debouncedMaxPrice) query.maxPrice = Number(debouncedMaxPrice);
+
 
 
 
@@ -144,8 +150,22 @@ export default function GadgetList({
 
 
 
+
   // Get the ID of the gadget for selection
   const getId = useCallback((g: TProduct) => g._id, []);
+  const currentUser = useAppSelector(selectCurrentUser);
+  const isSelectable = useCallback(
+    (g: TProduct) => {
+      if (!currentUser) return false;
+      if (currentUser.role === "admin") return true;
+      if (currentUser.role === "seller") {
+        const sellerId = (g.seller_id as any)?._id || g.seller_id;
+        return currentUser._id === sellerId;
+      }
+      return false;
+    },
+    [currentUser]
+  );
   const {
     selectedIds,
     allSelected,
@@ -153,11 +173,12 @@ export default function GadgetList({
     toggleSelectAll,
     toggleRow,
     resetSelection,
-  } = useSelection<TProduct>(gadgets, getId);
+  } = useSelection<TProduct>(gadgets, getId, { isSelectable });
   // Get selected gadgets objects
   const selectedGadgets = gadgets.filter((gadget) =>
     selectedIds.includes(gadget._id)
   );
+
 
 
 
@@ -186,7 +207,6 @@ export default function GadgetList({
 
 
 
-  
   // Determine if filters should be shown based on total count
   const shouldShowFilters = showFiltersCondition(meta.total);
 
@@ -203,6 +223,7 @@ export default function GadgetList({
     );
   }
 
+  
   return (
     <TooltipProvider>
       <div className="container mx-auto py-6 space-y-6 mb-24">
