@@ -59,21 +59,17 @@ const router = createBrowserRouter([
       },
       {
         path: "sales-history",
-        element: (
-          <ProtectedRoute role={["admin", "seller"]}>
-            <SalesHistory />
-          </ProtectedRoute>
-        ),
+        element: <SalesHistory />,
       },
     ],
   },
   {
     path: "/settings",
-    element: (
-      <ProtectedRoute role={["admin", "seller"]}>
+    element:(
+      <ProtectedRoute >
         <Settings />
       </ProtectedRoute>
-    ),
+    )
   },
   {
     path: "/login",
