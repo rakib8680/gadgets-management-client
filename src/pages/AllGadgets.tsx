@@ -13,5 +13,4 @@ export default function AllGadgets() {
   );
 }
 
-//todo- fix check all boxes in table head. Only admin can check all boxes
 //todo- add new brand add functionality

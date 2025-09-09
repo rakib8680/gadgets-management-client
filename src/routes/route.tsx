@@ -12,6 +12,7 @@ import SalesHistory from "@/pages/SalesHistory";
 import PublicRoute from "@/components/layout/PublicRoute";
 import Analytics from "@/pages/Analytics";
 import GadgetDetail from "@/pages/GadgetDetail";
+import Settings from "@/pages/Settings";
 
 const router = createBrowserRouter([
   {
@@ -58,9 +59,21 @@ const router = createBrowserRouter([
       },
       {
         path: "sales-history",
-        element: <SalesHistory />,
+        element: (
+          <ProtectedRoute role={["admin", "seller"]}>
+            <SalesHistory />
+          </ProtectedRoute>
+        ),
       },
     ],
+  },
+  {
+    path: "/settings",
+    element: (
+      <ProtectedRoute role={["admin", "seller"]}>
+        <Settings />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/login",

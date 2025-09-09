@@ -76,14 +76,16 @@ const Home = () => {
                     Go to Dashboard
                   </Button>
                 </NavLink>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 text-lg"
-                >
-                  <Settings className="w-5 h-5 mr-2" />
-                  Settings
-                </Button>
+                <NavLink to="/settings">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-gray-300 text-gray-700 hover:bg-gray-100 px-8 py-3 text-lg cursor-pointer"
+                  >
+                    <Settings className="w-5 h-5 mr-2" />
+                    Settings
+                  </Button>
+                </NavLink>
               </div>
 
               {/* Simple Info Cards */}
