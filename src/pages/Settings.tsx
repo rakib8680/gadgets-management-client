@@ -1,4 +1,8 @@
-import { useGetMyProfileQuery } from "@/redux/features/userAPi";
+import {
+  useGetMyProfileQuery,
+  // useUpdateMyProfileMutation,
+  // useDeleteMyAccountMutation,
+} from "@/redux/features/userAPi";
 import {
   Card,
   CardAction,
@@ -20,7 +24,21 @@ import {
   RefreshCw,
   Copy,
   Download,
+  Pencil,
+  Trash2,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 const Settings = () => {
   const {
@@ -32,7 +50,17 @@ const Settings = () => {
     refetch,
   } = useGetMyProfileQuery({});
 
+  // const [updateMyProfile, { isLoading: isUpdating }] =
+  //   useUpdateMyProfileMutation();
+  // const [deleteMyAccount, { isLoading: isDeleting }] =
+  //   useDeleteMyAccountMutation();
+
   const user = profileData?.data;
+
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [name, setName] = useState(user?.name || "");
+  const [image, setImage] = useState(user?.image || "");
 
   const handleCopyEmail = async () => {
     if (!user?.email) return;
@@ -56,9 +84,26 @@ const Settings = () => {
     URL.revokeObjectURL(url);
   };
 
+  const handleSubmitUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // await updateMyProfile({ name, image }).unwrap();
+      setEditOpen(false);
+      refetch();
+    } catch {}
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      // await deleteMyAccount().unwrap();
+      setDeleteOpen(false);
+      // Optionally you could redirect or auto-logout; keeping simple here
+    } catch {}
+  };
+
   if (isLoading) {
     return (
-      <div className="max-w-4xl mx-auto p-4 md:p-6">
+      <div className="max-w-6xl mx-auto p-4 md:p-6 grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader className="flex items-start gap-4">
             <div className="flex items-center gap-4">
@@ -84,6 +129,17 @@ const Settings = () => {
               <Skeleton className="h-4 w-56" />
               <Skeleton className="h-4 w-48" />
             </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-5 w-40 mb-2" />
+            <Skeleton className="h-4 w-72" />
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-4/6" />
           </CardContent>
         </Card>
       </div>
@@ -121,8 +177,8 @@ const Settings = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-6">
-      <Card>
+    <div className="max-w-6xl mx-auto p-4 md:p-6 grid gap-6 md:grid-cols-2">
+      <Card className="md:col-span-2">
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -155,6 +211,81 @@ const Settings = () => {
                 />{" "}
                 Refresh
               </Button>
+              <Dialog open={editOpen} onOpenChange={setEditOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="secondary" className="gap-2">
+                    <Pencil className="size-4" /> Edit profile
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Edit profile</DialogTitle>
+                    <DialogDescription>
+                      Update your basic information. Changes will be saved to
+                      your account.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form onSubmit={handleSubmitUpdate} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Name</Label>
+                      <Input
+                        id="name"
+                        placeholder="Your name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="image">Image URL</Label>
+                      <Input
+                        id="image"
+                        placeholder="https://..."
+                        value={image}
+                        onChange={(e) => setImage(e.target.value)}
+                      />
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={() => setEditOpen(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="submit"
+                        // disabled={isUpdating}
+                        className="gap-2"
+                      >
+                        {/* {isUpdating && (
+                          <RefreshCw className="size-4 animate-spin" />
+                        )} */}
+                        Save changes
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+              <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="destructive" className="gap-2">
+                    <Trash2 className="size-4" /> Delete account
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Delete account</DialogTitle>
+                    <DialogDescription>
+                      This action is permanent and cannot be undone. Type DELETE
+                      to confirm.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DeleteConfirm
+                    onConfirm={handleConfirmDelete}
+                    // loading={isDeleting}
+                  />
+                </DialogContent>
+              </Dialog>
               <LogoutButton variant="outline" />
             </div>
           </div>
@@ -259,8 +390,86 @@ const Settings = () => {
           </div>
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Account preferences</CardTitle>
+          <CardDescription>
+            Configure display, notifications, and privacy.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm text-muted-foreground">
+          <div className="flex items-center justify-between">
+            <span>Theme</span>
+            <Badge variant="outline">System</Badge>
+          </div>
+          <div className="flex items-center justify-between">
+            <span>Email notifications</span>
+            <Badge>Enabled</Badge>
+          </div>
+          <div className="flex items-center justify-between">
+            <span>Privacy</span>
+            <Badge variant="secondary">Standard</Badge>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Professional profile</CardTitle>
+          <CardDescription>
+            Information visible to collaborators and in shared reports.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm">
+          <div className="flex items-center gap-2">
+            <Shield className="size-4 text-muted-foreground" />
+            <span className="text-muted-foreground">Role</span>
+            <span className="font-medium capitalize">{user?.role}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Mail className="size-4 text-muted-foreground" />
+            <span className="text-muted-foreground">Contact</span>
+            <span className="font-medium break-all">{user?.email}</span>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
+
+function DeleteConfirm({
+  onConfirm,
+  loading,
+}: {
+  onConfirm: () => void;
+  loading?: boolean;
+}) {
+  const [text, setText] = useState("");
+  const canDelete = text.trim() === "DELETE";
+  return (
+    <div className="space-y-4">
+      <Input
+        placeholder="Type DELETE"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <DialogFooter>
+        <Button variant="ghost" type="button">
+          Cancel
+        </Button>
+        <Button
+          variant="destructive"
+          onClick={onConfirm}
+          disabled={!canDelete || loading}
+          className="gap-2"
+        >
+          {loading && <RefreshCw className="size-4 animate-spin" />}
+          Permanently delete
+        </Button>
+      </DialogFooter>
+    </div>
+  );
+}
 
 export default Settings;
