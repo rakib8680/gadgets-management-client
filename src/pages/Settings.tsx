@@ -221,7 +221,7 @@ const Settings = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      <div className="max-w-7xl mx-auto p-4 md:p-6">
+      <div className="container mx-auto p-4 md:p-6">
         {/* Header Section */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-4">
@@ -423,6 +423,71 @@ const Settings = () => {
                     </div>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Zap className="size-5 text-yellow-600" />
+                  Quick Actions
+                </CardTitle>
+                <CardDescription>
+                  Common account management tasks
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                >
+                  <Key className="size-4" />
+                  Change Password
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                >
+                  <Database className="size-4" />
+                  Download Data
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                >
+                  <FileText className="size-4" />
+                  View Activity Log
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                >
+                  <HelpCircle className="size-4" />
+                  Help & Support
+                </Button>
+                <Separator />
+                <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="destructive"
+                      className="w-full justify-start gap-2"
+                    >
+                      <Trash2 className="size-4" />
+                      Delete Account
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Delete Account</DialogTitle>
+                      <DialogDescription>
+                        This action is permanent and cannot be undone. Type
+                        DELETE to confirm.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DeleteConfirm onConfirm={handleConfirmDelete} />
+                  </DialogContent>
+                </Dialog>
               </CardContent>
             </Card>
 
@@ -769,71 +834,6 @@ const Settings = () => {
                     <span className="font-medium">2.4 GB / 10 GB</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="size-5 text-yellow-600" />
-                  Quick Actions
-                </CardTitle>
-                <CardDescription>
-                  Common account management tasks
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-2"
-                >
-                  <Key className="size-4" />
-                  Change Password
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-2"
-                >
-                  <Database className="size-4" />
-                  Download Data
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-2"
-                >
-                  <FileText className="size-4" />
-                  View Activity Log
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-2"
-                >
-                  <HelpCircle className="size-4" />
-                  Help & Support
-                </Button>
-                <Separator />
-                <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="destructive"
-                      className="w-full justify-start gap-2"
-                    >
-                      <Trash2 className="size-4" />
-                      Delete Account
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Delete Account</DialogTitle>
-                      <DialogDescription>
-                        This action is permanent and cannot be undone. Type
-                        DELETE to confirm.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DeleteConfirm onConfirm={handleConfirmDelete} />
-                  </DialogContent>
-                </Dialog>
               </CardContent>
             </Card>
           </div>
