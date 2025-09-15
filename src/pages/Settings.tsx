@@ -239,7 +239,7 @@ const Settings = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate(-1)}
-              className="gap-2"
+              className="gap-2 cursor-pointer"
             >
               <ArrowLeft className="size-4" />
               Back
@@ -248,7 +248,7 @@ const Settings = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate("/")}
-              className="gap-2"
+              className="gap-2 cursor-pointer"
             >
               <Home className="size-4" />
               Home
@@ -310,7 +310,7 @@ const Settings = () => {
                       variant="outline"
                       onClick={() => refetch()}
                       disabled={isFetching}
-                      className="gap-2"
+                      className="gap-2 cursor-pointer"
                     >
                       <RefreshCw
                         className={`size-4 ${isFetching ? "animate-spin" : ""}`}
@@ -319,7 +319,10 @@ const Settings = () => {
                     </Button>
                     <Dialog open={editOpen} onOpenChange={setEditOpen}>
                       <DialogTrigger asChild>
-                        <Button variant="secondary" className="gap-2">
+                        <Button
+                          variant="secondary"
+                          className="gap-2 cursor-pointer"
+                        >
                           <Pencil className="size-4" /> Edit Profile
                         </Button>
                       </DialogTrigger>
@@ -355,10 +358,14 @@ const Settings = () => {
                               type="button"
                               variant="ghost"
                               onClick={() => setEditOpen(false)}
+                              className="cursor-pointer"
                             >
                               Cancel
                             </Button>
-                            <Button type="submit" className="gap-2">
+                            <Button
+                              type="submit"
+                              className="gap-2 cursor-pointer"
+                            >
                               Save Changes
                             </Button>
                           </DialogFooter>
@@ -385,7 +392,7 @@ const Settings = () => {
                           variant="ghost"
                           size="sm"
                           onClick={handleCopyEmail}
-                          className="ml-1"
+                          className="ml-1 cursor-pointer"
                         >
                           <Copy className="size-4" />
                         </Button>
@@ -416,14 +423,14 @@ const Settings = () => {
                       <Button
                         variant="outline"
                         onClick={handleDownloadJson}
-                        className="gap-2"
+                        className="gap-2 cursor-pointer"
                       >
                         <Download className="size-4" /> Export Data
                       </Button>
                       <Button
                         variant="secondary"
                         onClick={handleCopyEmail}
-                        className="gap-2"
+                        className="gap-2 cursor-pointer"
                       >
                         <Copy className="size-4" /> Copy Email
                       </Button>
@@ -511,6 +518,7 @@ const Settings = () => {
                           <Button
                             variant={security.twoFactor ? "default" : "outline"}
                             size="sm"
+                            className="cursor-pointer"
                             onClick={() =>
                               setSecurity((prev) => ({
                                 ...prev,
@@ -533,6 +541,7 @@ const Settings = () => {
                               security.loginAlerts ? "default" : "outline"
                             }
                             size="sm"
+                            className="cursor-pointer"
                             onClick={() =>
                               setSecurity((prev) => ({
                                 ...prev,
@@ -574,6 +583,7 @@ const Settings = () => {
                           <Button
                             variant={privacy.showEmail ? "default" : "outline"}
                             size="sm"
+                            className="cursor-pointer"
                             onClick={() =>
                               setPrivacy((prev) => ({
                                 ...prev,
@@ -742,7 +752,7 @@ const Settings = () => {
                           appearance.theme === key ? "default" : "outline"
                         }
                         size="sm"
-                        className="flex-1 gap-2"
+                        className="flex-1 gap-2 cursor-pointer"
                         onClick={() =>
                           setAppearance((prev) => ({
                             ...prev,
@@ -762,7 +772,7 @@ const Settings = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1 gap-2"
+                      className="flex-1 gap-2 cursor-pointer"
                     >
                       <Languages className="size-4" />
                       English
@@ -775,7 +785,7 @@ const Settings = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1 gap-2"
+                      className="flex-1 gap-2 cursor-pointer"
                     >
                       <MapPin className="size-4" />
                       UTC
@@ -799,28 +809,28 @@ const Settings = () => {
               <CardContent className="space-y-3">
                 <Button
                   variant="outline"
-                  className="w-full justify-start gap-2"
+                  className="w-full justify-start gap-2 cursor-pointer"
                 >
                   <Key className="size-4" />
                   Change Password
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full justify-start gap-2"
+                  className="w-full justify-start gap-2 cursor-pointer"
                 >
                   <Database className="size-4" />
                   Download Data
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full justify-start gap-2"
+                  className="w-full justify-start gap-2 cursor-pointer"
                 >
                   <FileText className="size-4" />
                   View Activity Log
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full justify-start gap-2"
+                  className="w-full justify-start gap-2 cursor-pointer"
                 >
                   <HelpCircle className="size-4" />
                   Help & Support
@@ -830,7 +840,7 @@ const Settings = () => {
                   <DialogTrigger asChild>
                     <Button
                       variant="destructive"
-                      className="w-full justify-start gap-2"
+                      className="w-full justify-start gap-2 cursor-pointer"
                     >
                       <Trash2 className="size-4" />
                       Delete Account
@@ -873,14 +883,14 @@ function DeleteConfirm({
         onChange={(e) => setText(e.target.value)}
       />
       <DialogFooter>
-        <Button variant="ghost" type="button">
+        <Button variant="ghost" type="button" className="cursor-pointer">
           Cancel
         </Button>
         <Button
           variant="destructive"
           onClick={onConfirm}
           disabled={!canDelete || loading}
-          className="gap-2"
+          className="gap-2 cursor-pointer"
         >
           {loading && <RefreshCw className="size-4 animate-spin" />}
           Permanently delete
