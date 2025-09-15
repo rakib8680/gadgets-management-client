@@ -1,6 +1,4 @@
-import {
-  useGetMyProfileQuery,
-} from "@/redux/features/userAPi";
+import { useGetMyProfileQuery } from "@/redux/features/userAPi";
 import {
   Card,
   CardAction,
