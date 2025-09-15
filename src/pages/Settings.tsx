@@ -221,7 +221,7 @@ const Settings = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 pb-20">
       <div className="container mx-auto p-4 md:p-6">
         {/* Header Section */}
         <div className="mb-8">
@@ -424,177 +424,163 @@ const Settings = () => {
               </CardContent>
             </Card>
 
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="size-5 text-yellow-600" />
-                  Quick Actions
-                </CardTitle>
-                <CardDescription>
-                  Common account management tasks
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-2"
-                >
-                  <Key className="size-4" />
-                  Change Password
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-2"
-                >
-                  <Database className="size-4" />
-                  Download Data
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-2"
-                >
-                  <FileText className="size-4" />
-                  View Activity Log
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-2"
-                >
-                  <HelpCircle className="size-4" />
-                  Help & Support
-                </Button>
-                <Separator />
-                <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="destructive"
-                      className="w-full justify-start gap-2"
-                    >
-                      <Trash2 className="size-4" />
-                      Delete Account
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Delete Account</DialogTitle>
-                      <DialogDescription>
-                        This action is permanent and cannot be undone. Type
-                        DELETE to confirm.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DeleteConfirm onConfirm={handleConfirmDelete} />
-                  </DialogContent>
-                </Dialog>
-              </CardContent>
-            </Card>
+            <div className="flex gap-6">
+              {/* Account Statistic */}
+              <Card className="flex-1">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="size-5 text-orange-600" />
+                    Account Statistics
+                  </CardTitle>
+                  <CardDescription>
+                    Overview of your account activity
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-center p-3 bg-muted rounded-lg">
+                      <div className="text-2xl font-bold text-primary">12</div>
+                      <div className="text-xs text-muted-foreground">
+                        Gadgets Listed
+                      </div>
+                    </div>
+                    <div className="text-center p-3 bg-muted rounded-lg">
+                      <div className="text-2xl font-bold text-green-600">8</div>
+                      <div className="text-xs text-muted-foreground">
+                        Items Sold
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Account Health</span>
+                      <span className="font-medium text-green-600">
+                        Excellent
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Last Login</span>
+                      <span className="font-medium">2 hours ago</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Storage Used</span>
+                      <span className="font-medium">2.4 GB / 10 GB</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-            {/* Security Settings */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <ShieldCheck className="size-5 text-green-600" />
-                  Security & Privacy
-                </CardTitle>
-                <CardDescription>
-                  Manage your account security, privacy settings, and data
-                  preferences
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <h4 className="font-semibold flex items-center gap-2">
-                      <Lock className="size-4" />
-                      Authentication
-                    </h4>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium">
-                            Two-Factor Authentication
+              {/* Security Settings */}
+              <Card className="flex-2">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ShieldCheck className="size-5 text-green-600" />
+                    Security & Privacy
+                  </CardTitle>
+                  <CardDescription>
+                    Manage your account security, privacy settings, and data
+                    preferences
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <h4 className="font-semibold flex items-center gap-2">
+                        <Lock className="size-4" />
+                        Authentication
+                      </h4>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-medium">
+                              Two-Factor Authentication
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              Add an extra layer of security
+                            </div>
                           </div>
-                          <div className="text-sm text-muted-foreground">
-                            Add an extra layer of security
-                          </div>
+                          <Button
+                            variant={security.twoFactor ? "default" : "outline"}
+                            size="sm"
+                            onClick={() =>
+                              setSecurity((prev) => ({
+                                ...prev,
+                                twoFactor: !prev.twoFactor,
+                              }))
+                            }
+                          >
+                            {security.twoFactor ? "Enabled" : "Enable"}
+                          </Button>
                         </div>
-                        <Button
-                          variant={security.twoFactor ? "default" : "outline"}
-                          size="sm"
-                          onClick={() =>
-                            setSecurity((prev) => ({
-                              ...prev,
-                              twoFactor: !prev.twoFactor,
-                            }))
-                          }
-                        >
-                          {security.twoFactor ? "Enabled" : "Enable"}
-                        </Button>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-medium">Login Alerts</div>
+                            <div className="text-sm text-muted-foreground">
+                              Get notified of new sign-ins
+                            </div>
+                          </div>
+                          <Button
+                            variant={
+                              security.loginAlerts ? "default" : "outline"
+                            }
+                            size="sm"
+                            onClick={() =>
+                              setSecurity((prev) => ({
+                                ...prev,
+                                loginAlerts: !prev.loginAlerts,
+                              }))
+                            }
+                          >
+                            {security.loginAlerts ? "On" : "Off"}
+                          </Button>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium">Login Alerts</div>
-                          <div className="text-sm text-muted-foreground">
-                            Get notified of new sign-ins
+                    </div>
+                    <div className="space-y-4">
+                      <h4 className="font-semibold flex items-center gap-2">
+                        <Eye className="size-4" />
+                        Privacy
+                      </h4>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-medium">
+                              Profile Visibility
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              Who can see your profile
+                            </div>
                           </div>
+                          <Badge variant="outline">
+                            {privacy.profileVisibility}
+                          </Badge>
                         </div>
-                        <Button
-                          variant={security.loginAlerts ? "default" : "outline"}
-                          size="sm"
-                          onClick={() =>
-                            setSecurity((prev) => ({
-                              ...prev,
-                              loginAlerts: !prev.loginAlerts,
-                            }))
-                          }
-                        >
-                          {security.loginAlerts ? "On" : "Off"}
-                        </Button>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-medium">Show Email</div>
+                            <div className="text-sm text-muted-foreground">
+                              Display email in profile
+                            </div>
+                          </div>
+                          <Button
+                            variant={privacy.showEmail ? "default" : "outline"}
+                            size="sm"
+                            onClick={() =>
+                              setPrivacy((prev) => ({
+                                ...prev,
+                                showEmail: !prev.showEmail,
+                              }))
+                            }
+                          >
+                            {privacy.showEmail ? "Show" : "Hide"}
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className="space-y-4">
-                    <h4 className="font-semibold flex items-center gap-2">
-                      <Eye className="size-4" />
-                      Privacy
-                    </h4>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium">Profile Visibility</div>
-                          <div className="text-sm text-muted-foreground">
-                            Who can see your profile
-                          </div>
-                        </div>
-                        <Badge variant="outline">
-                          {privacy.profileVisibility}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium">Show Email</div>
-                          <div className="text-sm text-muted-foreground">
-                            Display email in profile
-                          </div>
-                        </div>
-                        <Button
-                          variant={privacy.showEmail ? "default" : "outline"}
-                          size="sm"
-                          onClick={() =>
-                            setPrivacy((prev) => ({
-                              ...prev,
-                              showEmail: !prev.showEmail,
-                            }))
-                          }
-                        >
-                          {privacy.showEmail ? "Show" : "Hide"}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
 
             {/* Notifications Settings */}
             <Card>
@@ -790,48 +776,68 @@ const Settings = () => {
               </CardContent>
             </Card>
 
-            {/* Account Statistics */}
+            {/* Quick Actions (moved) */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="size-5 text-orange-600" />
-                  Account Statistics
+                  <Zap className="size-5 text-yellow-600" />
+                  Quick Actions
                 </CardTitle>
                 <CardDescription>
-                  Overview of your account activity
+                  Common account management tasks
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-3 bg-muted rounded-lg">
-                    <div className="text-2xl font-bold text-primary">12</div>
-                    <div className="text-xs text-muted-foreground">
-                      Gadgets Listed
-                    </div>
-                  </div>
-                  <div className="text-center p-3 bg-muted rounded-lg">
-                    <div className="text-2xl font-bold text-green-600">8</div>
-                    <div className="text-xs text-muted-foreground">
-                      Items Sold
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Account Health</span>
-                    <span className="font-medium text-green-600">
-                      Excellent
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Last Login</span>
-                    <span className="font-medium">2 hours ago</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Storage Used</span>
-                    <span className="font-medium">2.4 GB / 10 GB</span>
-                  </div>
-                </div>
+              <CardContent className="space-y-3">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                >
+                  <Key className="size-4" />
+                  Change Password
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                >
+                  <Database className="size-4" />
+                  Download Data
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                >
+                  <FileText className="size-4" />
+                  View Activity Log
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                >
+                  <HelpCircle className="size-4" />
+                  Help & Support
+                </Button>
+                <Separator />
+                <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="destructive"
+                      className="w-full justify-start gap-2"
+                    >
+                      <Trash2 className="size-4" />
+                      Delete Account
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Delete Account</DialogTitle>
+                      <DialogDescription>
+                        This action is permanent and cannot be undone. Type
+                        DELETE to confirm.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DeleteConfirm onConfirm={handleConfirmDelete} />
+                  </DialogContent>
+                </Dialog>
               </CardContent>
             </Card>
           </div>
