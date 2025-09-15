@@ -1,7 +1,5 @@
 import {
   useGetMyProfileQuery,
-  // useUpdateMyProfileMutation,
-  // useDeleteMyAccountMutation,
 } from "@/redux/features/userAPi";
 import {
   Card,
@@ -138,6 +136,7 @@ const Settings = () => {
     URL.revokeObjectURL(url);
   };
 
+  //function to update user profile
   const handleSubmitUpdate = async (data: any) => {
     try {
       const payload = { name: data?.name, image: data?.image };
@@ -148,6 +147,7 @@ const Settings = () => {
     } catch {}
   };
 
+  //function to delete user account
   const handleConfirmDelete = async () => {
     try {
       // await deleteMyAccount().unwrap();
