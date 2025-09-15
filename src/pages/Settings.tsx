@@ -59,6 +59,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GM_Form from "@/components/form/GM_Form";
 import GM_Input from "@/components/form/GM_Input";
+import { toast } from "sonner";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -115,8 +116,16 @@ const Settings = () => {
     if (!user?.email) return;
     try {
       await navigator.clipboard.writeText(user.email);
+      toast.success("Email copied to clipboard", {
+        description: user.email,
+        position: "top-center",
+        duration: 2000,
+      });
     } catch (e) {
-      // noop: clipboard may be blocked
+      toast.error("Failed to copy email", {
+        position: "top-center",
+        duration: 2000,
+      });
     }
   };
 
