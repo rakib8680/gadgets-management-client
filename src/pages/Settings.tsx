@@ -61,6 +61,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import GM_Form from "@/components/form/GM_Form";
+import GM_Input from "@/components/form/GM_Input";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -82,8 +84,6 @@ const Settings = () => {
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [name, setName] = useState(user?.name || "");
-  const [image, setImage] = useState(user?.image || "");
 
   // Settings state
   const [notifications, setNotifications] = useState({
@@ -114,6 +114,7 @@ const Settings = () => {
     passwordExpiry: 90,
   });
 
+  //function to copy email
   const handleCopyEmail = async () => {
     if (!user?.email) return;
     try {
@@ -123,6 +124,7 @@ const Settings = () => {
     }
   };
 
+  //function download user data
   const handleDownloadJson = () => {
     if (!profileData) return;
     const blob = new Blob([JSON.stringify(profileData, null, 2)], {
@@ -136,10 +138,11 @@ const Settings = () => {
     URL.revokeObjectURL(url);
   };
 
-  const handleSubmitUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmitUpdate = async (data: any) => {
     try {
-      // await updateMyProfile({ name, image }).unwrap();
+      const payload = { name: data?.name, image: data?.image };
+      void payload;
+      // await updateMyProfile(payload).unwrap();
       setEditOpen(false);
       refetch();
     } catch {}
@@ -321,28 +324,25 @@ const Settings = () => {
                             to your account.
                           </DialogDescription>
                         </DialogHeader>
-                        <form
+                        <GM_Form
                           onSubmit={handleSubmitUpdate}
+                          defaultValues={{
+                            name: user?.name || "",
+                            image: user?.image || "",
+                          }}
                           className="space-y-4"
                         >
-                          <div className="space-y-2">
-                            <Label htmlFor="name">Name</Label>
-                            <Input
-                              id="name"
-                              placeholder="Your name"
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="image">Image URL</Label>
-                            <Input
-                              id="image"
-                              placeholder="https://..."
-                              value={image}
-                              onChange={(e) => setImage(e.target.value)}
-                            />
-                          </div>
+                          <GM_Input
+                            name="name"
+                            label="Name"
+                            placeholder="Your name"
+                            required
+                          />
+                          <GM_Input
+                            name="image"
+                            label="Image URL"
+                            placeholder="https://..."
+                          />
                           <DialogFooter>
                             <Button
                               type="button"
@@ -355,7 +355,7 @@ const Settings = () => {
                               Save Changes
                             </Button>
                           </DialogFooter>
-                        </form>
+                        </GM_Form>
                       </DialogContent>
                     </Dialog>
                     <LogoutButton variant="outline" />
