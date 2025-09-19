@@ -5,6 +5,7 @@ import {
   PlusCircle,
   Package,
   History,
+  Settings,
 } from "lucide-react";
 import { useLocation, NavLink } from "react-router-dom";
 import { useAppSelector } from "@/redux/hooks";
@@ -52,6 +53,11 @@ const items = [
     title: "Sales History",
     url: "sales-history",
     icon: History,
+  },
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: Settings,
   },
 ];
 
