@@ -5,9 +5,12 @@ import { NavLink } from "react-router-dom";
 import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import LogoutButton from "@/components/auth/LogOutButton";
+import { useGetMyProfileQuery } from "@/redux/features/userAPi";
 
 const Home = () => {
   const user = useAppSelector(selectCurrentUser);
+  const { data, isLoading } = useGetMyProfileQuery({});
+  const userInfo = data?.data;
 
   return (
     <div className="min-h-screen ">
@@ -26,12 +29,16 @@ const Home = () => {
             {/*User Profile and Logout Button */}
             {user ? (
               <div className="flex items-center space-x-4">
-                <Avatar className="w-8 h-8">
-                  <AvatarImage src="/placeholder.svg?height=32&width=32" />
-                  <AvatarFallback className="bg-gray-200 text-gray-700">
-                    JD
-                  </AvatarFallback>
-                </Avatar>
+                {isLoading ? (
+                  <div className="w-6 h-6 border-2 mr-5  border-gray-300 border-t-gray-400 rounded-full animate-spin" />
+                ) : (
+                  <Avatar className="w-8 h-8">
+                    <AvatarImage src={userInfo?.image} />
+                    <AvatarFallback className="bg-gray-200 text-gray-700">
+                      JD
+                    </AvatarFallback>
+                  </Avatar>
+                )}
                 <LogoutButton /> {/* Logout Button Component */}
               </div>
             ) : (
