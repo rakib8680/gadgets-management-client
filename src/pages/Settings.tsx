@@ -198,8 +198,8 @@ const Settings = () => {
 
   if (isError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center">
-        <div className="max-w-2xl mx-auto p-4 md:p-6">
+      <div className="min-h-screen  bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center">
+        <div className="max-w-2xl w-full mx-auto p-4 md:p-6">
           <Card className="border-destructive/40">
             <CardHeader>
               <CardTitle className="text-destructive flex items-center gap-2">
@@ -217,7 +217,7 @@ const Settings = () => {
                 <Button
                   variant="outline"
                   onClick={() => refetch()}
-                  className="gap-2"
+                  className="gap-2 cursor-pointer"
                 >
                   <RefreshCw className="size-4" /> Try again
                 </Button>
@@ -252,6 +252,15 @@ const Settings = () => {
             >
               <Home className="size-4" />
               Home
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate("/dashboard/analytics")}
+              className="gap-2 cursor-pointer"
+            >
+              <BarChart3 className="size-4" />
+              Dashboard
             </Button>
           </div>
           <div className="flex items-center gap-3 mb-2">
@@ -854,7 +863,10 @@ const Settings = () => {
                         DELETE to confirm.
                       </DialogDescription>
                     </DialogHeader>
-                    <DeleteConfirm onConfirm={handleConfirmDelete} />
+                    <DeleteConfirm
+                      onConfirm={handleConfirmDelete}
+                      onCancel={() => setDeleteOpen(false)}
+                    />
                   </DialogContent>
                 </Dialog>
               </CardContent>
@@ -868,9 +880,11 @@ const Settings = () => {
 
 function DeleteConfirm({
   onConfirm,
+  onCancel,
   loading,
 }: {
   onConfirm: () => void;
+  onCancel: () => void;
   loading?: boolean;
 }) {
   const [text, setText] = useState("");
@@ -883,7 +897,12 @@ function DeleteConfirm({
         onChange={(e) => setText(e.target.value)}
       />
       <DialogFooter>
-        <Button variant="ghost" type="button" className="cursor-pointer">
+        <Button
+          variant="ghost"
+          type="button"
+          onClick={onCancel}
+          className="cursor-pointer"
+        >
           Cancel
         </Button>
         <Button
