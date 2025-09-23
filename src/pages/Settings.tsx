@@ -1,4 +1,7 @@
-import { useGetMyProfileQuery } from "@/redux/features/userAPi";
+import {
+  useGetMyProfileQuery,
+  useUpdateProfileMutation,
+} from "@/redux/features/userAPi";
 import {
   Card,
   CardAction,
@@ -43,6 +46,7 @@ import {
   Zap,
   BarChart3,
   HelpCircle,
+  Save,
 } from "lucide-react";
 import {
   Dialog,
@@ -72,8 +76,7 @@ const Settings = () => {
     refetch,
   } = useGetMyProfileQuery({});
 
-  // const [updateMyProfile, { isLoading: isUpdating }] =
-  //   useUpdateMyProfileMutation();
+  const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
   // const [deleteMyAccount, { isLoading: isDeleting }] =
   //   useDeleteMyAccountMutation();
 
@@ -147,11 +150,22 @@ const Settings = () => {
   const handleSubmitUpdate = async (data: any) => {
     try {
       const payload = { name: data?.name, image: data?.image };
-      void payload;
-      // await updateMyProfile(payload).unwrap();
-      setEditOpen(false);
-      refetch();
-    } catch {}
+      const res = await updateProfile(payload).unwrap();
+      if (res.success) {
+        toast.success("Profile updated", {
+          description: `${data.name} has been successfully updated.`,
+          position: "top-center",
+          duration: 2500,
+        });
+        setEditOpen(false);
+        void refetch();
+      }
+    } catch (error) {
+      toast.error("Failed to update profile. Please try again.", {
+        position: "top-center",
+        duration: 2500,
+      });
+    }
   };
 
   //function to delete user account
@@ -367,15 +381,22 @@ const Settings = () => {
                               type="button"
                               variant="ghost"
                               onClick={() => setEditOpen(false)}
+                              disabled={isUpdating}
                               className="cursor-pointer"
                             >
                               Cancel
                             </Button>
                             <Button
                               type="submit"
+                              disabled={isUpdating}
                               className="gap-2 cursor-pointer"
                             >
-                              Save Changes
+                              {isUpdating ? (
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                              ) : (
+                                <Save className="mr-2 h-4 w-4" />
+                              )}
+                              {isUpdating ? "Updating..." : "Save Changes"}
                             </Button>
                           </DialogFooter>
                         </GM_Form>
