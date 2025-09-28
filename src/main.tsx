@@ -6,12 +6,15 @@ import { Provider } from "react-redux";
 import { persistor, store } from "./redux/store";
 import { Toaster } from "sonner";
 import { PersistGate } from "redux-persist/integration/react";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
-      <RouterProvider router={router} />
-      <Toaster />
+      <ThemeProvider>
+        <RouterProvider router={router} />
+        <Toaster />
+      </ThemeProvider>
     </PersistGate>
   </Provider>
 );

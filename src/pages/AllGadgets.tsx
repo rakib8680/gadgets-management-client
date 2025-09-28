@@ -14,4 +14,4 @@ export default function AllGadgets() {
 }
 
 //todo- add new brand add functionality
-//todo - update profile page layout
+//todo - update profile page features

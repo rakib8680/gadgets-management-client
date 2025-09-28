@@ -64,9 +64,11 @@ import { useNavigate } from "react-router-dom";
 import GM_Form from "@/components/form/GM_Form";
 import GM_Input from "@/components/form/GM_Input";
 import { toast } from "sonner";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const Settings = () => {
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
   const {
     data: profileData,
     isLoading,
@@ -100,12 +102,6 @@ const Settings = () => {
     showActivity: true,
     dataCollection: true,
     analytics: true,
-  });
-  const [appearance, setAppearance] = useState({
-    theme: "system",
-    language: "en",
-    timezone: "UTC",
-    density: "comfortable",
   });
   const [security, setSecurity] = useState({
     twoFactor: false,
@@ -778,17 +774,10 @@ const Settings = () => {
                     ].map(({ key, icon: Icon, label }) => (
                       <Button
                         key={key}
-                        variant={
-                          appearance.theme === key ? "default" : "outline"
-                        }
+                        variant={theme === key ? "default" : "outline"}
                         size="sm"
                         className="flex-1 gap-2 cursor-pointer"
-                        onClick={() =>
-                          setAppearance((prev) => ({
-                            ...prev,
-                            theme: key as any,
-                          }))
-                        }
+                        onClick={() => setTheme(key as any)}
                       >
                         <Icon className="size-4" />
                         {label}
@@ -825,7 +814,7 @@ const Settings = () => {
               </CardContent>
             </Card>
 
-            {/* Quick Actions (moved) */}
+            {/* Quick Actions */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
