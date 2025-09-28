@@ -6,6 +6,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import LogoutButton from "@/components/auth/LogOutButton";
 import { useGetMyProfileQuery } from "@/redux/features/userAPi";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const Home = () => {
   const user = useAppSelector(selectCurrentUser);
@@ -26,32 +27,35 @@ const Home = () => {
                 Gadget Management System
               </h1>
             </div>
-            {/*User Profile and Logout Button */}
-            {user ? (
-              <div className="flex items-center space-x-4">
-                {isLoading ? (
-                  <div className="w-6 h-6 border-2 mr-5  border-gray-300 border-t-gray-400 rounded-full animate-spin" />
-                ) : (
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage src={userInfo?.image} />
-                    <AvatarFallback className="bg-gray-200 text-gray-700">
-                      JD
-                    </AvatarFallback>
-                  </Avatar>
-                )}
-                <LogoutButton /> {/* Logout Button Component */}
-              </div>
-            ) : (
-              <NavLink to="/login">
-                <Button
-                  variant="outline"
-                  className="text-gray-700 border-gray-300 cursor-pointer"
-                >
-                  <LogIn className="w-4 h-4 mr-2" />
-                  Login
-                </Button>
-              </NavLink>
-            )}
+            {/*User Profile, Theme Toggle and Logout Button */}
+            <div className="flex items-center space-x-4">
+              <ThemeToggle />
+              {user ? (
+                <>
+                  {isLoading ? (
+                    <div className="w-6 h-6 border-2 mr-5  border-gray-300 border-t-gray-400 rounded-full animate-spin" />
+                  ) : (
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src={userInfo?.image} />
+                      <AvatarFallback className="bg-gray-200 text-gray-700">
+                        JD
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
+                  <LogoutButton /> {/* Logout Button Component */}
+                </>
+              ) : (
+                <NavLink to="/login">
+                  <Button
+                    variant="outline"
+                    className="text-gray-700 border-gray-300 cursor-pointer"
+                  >
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Login
+                  </Button>
+                </NavLink>
+              )}
+            </div>
           </div>
         </div>
       </header>

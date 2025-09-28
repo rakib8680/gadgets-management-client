@@ -33,10 +33,14 @@ export function ThemeToggle() {
       variant="outline"
       size="sm"
       onClick={cycleTheme}
-      className="gap-2 transition-colors duration-200 hover:bg-accent"
+      className="gap-2 transition-all duration-300 ease-in-out hover:bg-accent hover:scale-105 active:scale-95"
     >
-      {getIcon()}
-      <span className="capitalize text-sm font-medium">{theme}</span>
+      <div className="transition-transform duration-300 ease-in-out">
+        {getIcon()}
+      </div>
+      <span className="capitalize text-sm font-medium transition-all duration-300">
+        {theme}
+      </span>
     </Button>
   );
 }

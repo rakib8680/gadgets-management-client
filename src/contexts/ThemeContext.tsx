@@ -30,6 +30,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const applyTheme = (newTheme: "light" | "dark") => {
     const root = document.documentElement;
 
+    // Add transition class for smooth animation
+    root.classList.add("theme-transitioning");
+
     // Remove existing theme classes
     root.classList.remove("light", "dark");
 
@@ -37,6 +40,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     root.classList.add(newTheme);
 
     setActualTheme(newTheme);
+
+    // Remove transition class after animation completes
+    setTimeout(() => {
+      root.classList.remove("theme-transitioning");
+    }, 300);
   };
 
   // Update theme function
