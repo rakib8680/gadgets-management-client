@@ -122,49 +122,90 @@
     @apply bg-background text-foreground;
   }
 
-  /* Smooth theme transitions */
-  *,
-  *::before,
-  *::after {
-    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      fill 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      stroke 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Ultra-smooth theme transitions - minimal properties for maximum performance */
+  * {
+    transition: background-color 0.1s ease-out, border-color 0.1s ease-out,
+      color 0.1s ease-out;
   }
 
-  /* Enhanced transitions during theme switching */
-  .theme-transitioning *,
-  .theme-transitioning *::before,
-  .theme-transitioning *::after {
-    transition-duration: 0.3s !important;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  /* Use CSS custom properties for the smoothest possible transitions */
+  :root {
+    transition: --background 0.1s ease-out, --foreground 0.1s ease-out,
+      --card 0.1s ease-out, --card-foreground 0.1s ease-out,
+      --popover 0.1s ease-out, --popover-foreground 0.1s ease-out,
+      --primary 0.1s ease-out, --primary-foreground 0.1s ease-out,
+      --secondary 0.1s ease-out, --secondary-foreground 0.1s ease-out,
+      --muted 0.1s ease-out, --muted-foreground 0.1s ease-out,
+      --accent 0.1s ease-out, --accent-foreground 0.1s ease-out,
+      --destructive 0.1s ease-out, --border 0.1s ease-out, --input 0.1s ease-out,
+      --ring 0.1s ease-out;
+  }
+
+  /* Enhanced transitions during theme switching with better performance */
+  .theme-transitioning {
+    /* Force hardware acceleration for smoother animations */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    /* Optimize rendering performance */
+    contain: layout style paint;
+  }
+
+  .theme-transitioning * {
+    transition: background-color 0.1s ease-out, border-color 0.1s ease-out,
+      color 0.1s ease-out !important;
+    /* Force hardware acceleration */
+    transform: translateZ(0);
+    will-change: background-color, border-color, color;
+  }
+
+  /* Alternative: Use opacity transition for ultra-smooth effect */
+  .theme-transitioning-smooth {
+    position: relative;
+  }
+
+  .theme-transitioning-smooth::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--background);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.15s ease-out;
+    pointer-events: none;
+  }
+
+  .theme-transitioning-smooth.theme-transitioning::before {
+    opacity: 1;
   }
 
   /* Disable transitions for elements that shouldn't animate */
   .no-transition,
-  .no-transition *,
-  .no-transition *::before,
-  .no-transition *::after {
+  .no-transition * {
     transition: none !important;
+    transform: none !important;
+    will-change: auto !important;
   }
 
-  /* Smooth transitions for specific elements */
+  /* Optimized transitions for interactive elements */
   button,
   input,
   textarea,
   select {
-    transition: background-color 0.2s ease, border-color 0.2s ease,
-      color 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.08s ease-out, border-color 0.08s ease-out,
+      color 0.08s ease-out;
+    will-change: background-color, border-color, color;
   }
 
-  /* Smooth transitions for cards and containers */
+  /* Optimized transitions for cards and containers */
   [class*="bg-"],
   [class*="border-"],
   [class*="text-"] {
-    transition: background-color 0.3s ease, border-color 0.3s ease,
-      color 0.3s ease;
+    transition: background-color 0.1s ease-out, border-color 0.1s ease-out,
+      color 0.1s ease-out;
+    will-change: background-color, border-color, color;
   }
 }

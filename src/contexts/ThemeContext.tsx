@@ -30,21 +30,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const applyTheme = (newTheme: "light" | "dark") => {
     const root = document.documentElement;
 
-    // Add transition class for smooth animation
-    root.classList.add("theme-transitioning");
+    // Use requestAnimationFrame for smoother transitions
+    requestAnimationFrame(() => {
+      // Add transition class for smooth animation
+      root.classList.add("theme-transitioning");
 
-    // Remove existing theme classes
-    root.classList.remove("light", "dark");
+      // Remove existing theme classes
+      root.classList.remove("light", "dark");
 
-    // Add the new theme class
-    root.classList.add(newTheme);
+      // Add the new theme class
+      root.classList.add(newTheme);
 
-    setActualTheme(newTheme);
+      setActualTheme(newTheme);
 
-    // Remove transition class after animation completes
-    setTimeout(() => {
-      root.classList.remove("theme-transitioning");
-    }, 300);
+      // Remove transition class after animation completes
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          root.classList.remove("theme-transitioning");
+        }, 100);
+      });
+    });
   };
 
   // Update theme function
