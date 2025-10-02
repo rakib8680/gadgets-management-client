@@ -2,6 +2,13 @@ import { baseApi } from "../api/baseApi";
 
 const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getAllUsers: builder.query({
+      query: () => ({
+        url: "/user/all-users",
+        method: "GET",
+      }),
+      providesTags: ["User"],
+    }),
     getMyProfile: builder.query({
       query: () => ({
         url: "/user/profile",
@@ -20,4 +27,8 @@ const userApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetMyProfileQuery, useUpdateProfileMutation } = userApi;
+export const {
+  useGetMyProfileQuery,
+  useUpdateProfileMutation,
+  useGetAllUsersQuery,
+} = userApi;
