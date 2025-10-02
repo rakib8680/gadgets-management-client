@@ -6,6 +6,7 @@ import {
   Package,
   History,
   Settings,
+  UsersIcon,
 } from "lucide-react";
 import { useLocation, NavLink } from "react-router-dom";
 import { useAppSelector } from "@/redux/hooks";
@@ -55,6 +56,11 @@ const items = [
     icon: History,
   },
   {
+    title: "All Users",
+    url: "all-users",
+    icon: UsersIcon,
+  },
+  {
     title: "Settings",
     url: "/settings",
     icon: Settings,
@@ -70,7 +76,9 @@ export function AppSidebar() {
   // Filter menu items based on role
   const filteredItems =
     role === "seller"
-      ? items.filter((item) => item.title !== "Analytics")
+      ? items.filter(
+          (item) => item.title !== "Analytics" && item.title !== "All Users"
+        )
       : items.filter((item) => item.title !== "My Gadgets"); //for admin, removed My Gadgets
 
   return (

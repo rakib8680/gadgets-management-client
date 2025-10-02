@@ -15,3 +15,4 @@ export default function AllGadgets() {
 
 //todo- add new brand add functionality
 //todo - update  - now its good not jittery but its not smooth transition, how can i get smoothness, also make the transition happening from one corner of the page
+//todo - add all users page
