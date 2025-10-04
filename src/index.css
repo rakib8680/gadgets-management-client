@@ -120,11 +120,16 @@
   }
   body {
     @apply bg-background text-foreground;
-    /* 
-      Apply a smooth transition ONLY to the body's background and text color.
-      This is much more performant than a universal (*) selector.
-      For other elements, opt-in to transitions using Tailwind's `transition-colors` class.
-    */
-    transition: background-color 0.3s ease, color 0.3s ease;
   }
+}
+
+/*
+  The new styles for the View Transition API.
+  We only need to specify that the old and new views should blend.
+  The animation itself is now controlled by JavaScript for the circular reveal effect.
+*/
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
