@@ -28,28 +28,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Function to apply theme to document using Tailwind's dark mode approach
   const applyTheme = (newTheme: "light" | "dark") => {
-    const root = document.documentElement;
-
-    // Use requestAnimationFrame for smoother transitions
-    requestAnimationFrame(() => {
-      // Add transition class for smooth animation
-      root.classList.add("theme-transitioning");
-
-      // Remove existing theme classes
-      root.classList.remove("light", "dark");
-
-      // Add the new theme class
-      root.classList.add(newTheme);
-
-      setActualTheme(newTheme);
-
-      // Remove transition class after animation completes
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          root.classList.remove("theme-transitioning");
-        }, 100);
-      });
-    });
+    const root = window.document.documentElement;
+    // 1. Remove the old theme class
+    root.classList.remove("light", "dark");
+    // 2. Add the new theme class
+    root.classList.add(newTheme);
+    // 3. Update the state
+    setActualTheme(newTheme);
   };
 
   // Update theme function
