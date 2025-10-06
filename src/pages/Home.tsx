@@ -6,6 +6,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import LogoutButton from "@/components/auth/LogOutButton";
 import { useGetMyProfileQuery } from "@/redux/features/userAPi";
+import { getDashboardPath } from "@/utils/routeUtils";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const Home = () => {
@@ -21,7 +22,7 @@ const Home = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gray-900 dark:bg-gray-100 rounded-lg flex items-center justify-center">
-                <Package className="w-5 h-5 text-white" />
+                <Package className="w-5 h-5 text-white dark:text-gray-900" />
               </div>
               <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                 Gadget Management System
@@ -78,7 +79,7 @@ const Home = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                <NavLink to="/dashboard">
+                <NavLink to={getDashboardPath(userInfo?.role)}>
                   <Button
                     size="lg"
                     className="bg-gray-900 hover:bg-gray-800 text-white dark:bg-primary dark:hover:bg-primary/90 px-8 py-3 text-lg cursor-pointer"

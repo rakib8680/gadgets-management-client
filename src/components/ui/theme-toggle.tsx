@@ -33,7 +33,7 @@ export function ThemeToggle() {
       variant="outline"
       size="sm"
       onClick={cycleTheme}
-      className="gap-2 transition-all duration-300 ease-in-out hover:bg-accent hover:scale-105 active:scale-95"
+      className="gap-2 transition-all duration-300 ease-in-out hover:bg-accent hover:scale-105 active:scale-95 cursor-pointer"
     >
       <div className="transition-transform duration-300 ease-in-out">
         {getIcon()}
