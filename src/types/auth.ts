@@ -17,3 +17,13 @@ export type TUser = {
   exp: number;
   iat: number;
 };
+
+export type TUserInfo = {
+  _id: string;
+  name: string;
+  role: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+  image: string;
+};
