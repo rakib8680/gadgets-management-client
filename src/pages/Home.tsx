@@ -8,6 +8,12 @@ import LogoutButton from "@/components/auth/LogOutButton";
 import { useGetMyProfileQuery } from "@/redux/features/userAPi";
 import { getDashboardPath } from "@/utils/routeUtils";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Home = () => {
   const user = useAppSelector(selectCurrentUser);
@@ -36,12 +42,22 @@ const Home = () => {
                   {isLoading ? (
                     <div className="w-6 h-6 border-2 mr-5  border-gray-300 border-t-gray-400 rounded-full animate-spin" />
                   ) : (
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage src={userInfo?.image} />
-                      <AvatarFallback className="bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200">
-                        JD
-                      </AvatarFallback>
-                    </Avatar>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Avatar className="w-8 h-8 cursor-pointer">
+                            <AvatarImage src={userInfo?.image} />
+                            <AvatarFallback className="bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200">
+                              {userInfo?.name?.slice(0, 2)?.toUpperCase() ||
+                                "U"}
+                            </AvatarFallback>
+                          </Avatar>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{userInfo?.email}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   )}
                   <LogoutButton /> {/* Logout Button Component */}
                 </>
@@ -69,7 +85,9 @@ const Home = () => {
               {/* Welcome Section */}
               <div className="mb-12">
                 <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-                  Welcome To Gadget Management System
+                  {user && userInfo?.name
+                    ? `Welcome, ${userInfo.name}!`
+                    : "Welcome To Gadget Management System"}
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
                   Manage your gadgets efficiently with our comprehensive
