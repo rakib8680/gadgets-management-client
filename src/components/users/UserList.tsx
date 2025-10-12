@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Users, Filter } from "lucide-react";
+import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,9 +12,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import PaginationComponent from "@/components/ui/pagination-component";
 import LoadingHamster from "@/components/ui/loading-hamster/LoadingHamster";
+import UserFilters from "./UserFilters";
 import { useDebounced } from "@/redux/hooks";
 import type { TUserInfo } from "@/types/auth";
-import { useGetAllUsersQuery } from "@/redux/features/userAPi";
 import { useSelection } from "@/hooks/useSelection";
 import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
@@ -76,10 +76,10 @@ export default function UserList({
   };
 
   // Get the ID of the user for selection
-  const getId = useCallback((u: TUserInfo) => u._id, []);
+  const getId = useCallback((user: TUserInfo) => user._id, []);
   const currentUser = useAppSelector(selectCurrentUser);
   const isSelectable = useCallback(
-    (u: TUserInfo) => {
+    (_user: TUserInfo) => {
       if (!currentUser) return false;
       // Only admin can select users
       return currentUser.role === "admin";
@@ -87,17 +87,8 @@ export default function UserList({
     [currentUser]
   );
 
-  const {
-    selectedIds,
-    allSelected,
-    someSelected,
-    toggleSelectAll,
-    toggleRow,
-    resetSelection,
-  } = useSelection<TUserInfo>(users, getId, { isSelectable });
-
-  // Get selected users objects
-  const selectedUsers = users.filter((user) => selectedIds.includes(user._id));
+  const { selectedIds, allSelected, someSelected, toggleSelectAll, toggleRow } =
+    useSelection<TUserInfo>(users, getId, { isSelectable });
 
   // Handlers
   const handleSort = (column: string) => {
@@ -114,9 +105,6 @@ export default function UserList({
     setFilterRole("all");
     setCurrentPage(1);
   };
-
-  // Role options
-  const roleOptions = ["admin", "seller", "buyer"];
 
   // Determine if filters should be shown based on total count
   const shouldShowFilters = showFiltersCondition(meta.total);
@@ -155,77 +143,17 @@ export default function UserList({
 
         {/* Filters */}
         {shouldShowFilters && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Filters</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Search */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Search Users</label>
-                  <input
-                    type="text"
-                    placeholder="Search by name or email..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-                  />
-                </div>
-
-                {/* Role Filter */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Role</label>
-                  <select
-                    value={filterRole}
-                    onChange={(e) => setFilterRole(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-                  >
-                    <option value="all">All Roles</option>
-                    {roleOptions.map((role) => (
-                      <option key={role} value={role}>
-                        {role.charAt(0).toUpperCase() + role.slice(1)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Page Size */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Items per page</label>
-                  <select
-                    value={pageSize}
-                    onChange={(e) => setPageSize(Number(e.target.value))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-                  >
-                    <option value={10}>10</option>
-                    <option value={25}>25</option>
-                    <option value={50}>50</option>
-                    <option value={100}>100</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Filter Actions */}
-              <div className="flex justify-between items-center">
-                <Button
-                  variant="outline"
-                  onClick={handleClearFilters}
-                  className="cursor-pointer"
-                >
-                  Clear Filters
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={refetch}
-                  disabled={isFetching}
-                  className="cursor-pointer"
-                >
-                  {isFetching ? "Refreshing..." : "Refresh"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <UserFilters
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            filterRole={filterRole}
+            setFilterRole={setFilterRole}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+            onClearFilters={handleClearFilters}
+            isFetching={isFetching}
+            onReload={refetch}
+          />
         )}
 
         {/* Table */}
