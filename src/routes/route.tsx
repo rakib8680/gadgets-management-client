@@ -13,6 +13,7 @@ import PublicRoute from "@/components/layout/PublicRoute";
 import Analytics from "@/pages/Analytics";
 import GadgetDetail from "@/pages/GadgetDetail";
 import Settings from "@/pages/Settings";
+import User from "@/pages/User";
 
 const router = createBrowserRouter([
   {
@@ -44,7 +45,6 @@ const router = createBrowserRouter([
         path: "gadgets/add",
         element: <AddGadget />,
       },
-      // Add the detail route
       {
         path: "gadgets/:id",
         element: <GadgetDetail />,
@@ -54,6 +54,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute role="seller">
             <MyGadgets />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "all-users",
+        element: (
+          <ProtectedRoute role={"admin"}>
+            <User />
           </ProtectedRoute>
         ),
       },
