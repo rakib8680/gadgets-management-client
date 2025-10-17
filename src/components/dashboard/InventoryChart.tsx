@@ -37,11 +37,11 @@ export default function InventoryChart({ data }: InventoryChartProps) {
             config={{
               sold: {
                 label: "Sold",
-                color: "hsl(var(--chart-2))",
+                color: "var(--foreground)",
               },
               remaining: {
                 label: "Remaining",
-                color: "hsl(var(--chart-3))",
+                color: "var(--muted-foreground)",
               },
             }}
             className="h-[240px] min-w-[320px] sm:h-[300px] sm:min-w-[400px] md:min-w-[480px] lg:min-w-[560px]"

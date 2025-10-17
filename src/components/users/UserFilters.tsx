@@ -100,7 +100,7 @@ const UserFilters = ({
           {/* Reload Button */}
           <div className="flex justify-end absolute right-0 top-1">
             {isFetching && (
-              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-b-gray-600 absolute top-24 right-16" />
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-b-gray-600 absolute top-17 right-16" />
             )}
             <Button
               className={`shadow-none ${
