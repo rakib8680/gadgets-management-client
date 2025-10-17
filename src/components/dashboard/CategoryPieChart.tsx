@@ -22,10 +22,10 @@ interface CategoryPieChartProps {
 }
 
 const PIE_COLORS = [
-  "oklch(0.18 0 0)", // darkest
-  "oklch(0.28 0 0)", // dark
-  "oklch(0.38 0 0)", // medium-dark
-  "oklch(0.48 0 0)", // medium
+  "var(--foreground)",
+  "color-mix(in oklab, var(--foreground) 70%, transparent)",
+  "color-mix(in oklab, var(--foreground) 50%, transparent)",
+  "color-mix(in oklab, var(--foreground) 30%, transparent)",
 ];
 
 export default function CategoryPieChart({ data }: CategoryPieChartProps) {

@@ -34,7 +34,7 @@ export default function UserGrowthChart({ data }: UserGrowthChartProps) {
             config={{
               users: {
                 label: "New Users",
-                color: "hsl(var(--chart-4))",
+                color: "var(--foreground)",
               },
             }}
             className="h-[200px] min-w-[320px] sm:h-[250px] sm:min-w-[400px] md:min-w-[480px] lg:min-w-[560px]"
@@ -47,9 +47,9 @@ export default function UserGrowthChart({ data }: UserGrowthChartProps) {
               <Line
                 type="monotone"
                 dataKey="users"
-                stroke="#a3a3a3"
+                stroke="var(--color-users)"
                 strokeWidth={3}
-                dot={{ fill: "#000", strokeWidth: 2, r: 4 }}
+                dot={{ fill: "currentColor", strokeWidth: 2, r: 4 }}
               />
             </LineChart>
           </ChartContainer>

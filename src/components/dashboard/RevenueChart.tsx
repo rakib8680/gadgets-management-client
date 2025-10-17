@@ -36,7 +36,7 @@ export default function RevenueChart({ data }: RevenueChartProps) {
             config={{
               revenue: {
                 label: "Revenue",
-                color: "hsl(var(--chart-1))",
+                color: "var(--foreground)",
               },
             }}
             className="h-[240px] min-w-[320px] sm:h-[300px] sm:min-w-[400px] md:min-w-[480px] lg:min-w-[560px]"
