@@ -30,7 +30,7 @@ export default function AnalyticsCards({ data }: AnalyticsCardsProps) {
       value: formatNumber(data.totalGadgets),
       change: "+12%",
       icon: Package,
-      iconBg: "bg-blue-100",
+      iconBg: "bg-blue-100 dark:bg-blue-900/50",
       iconColor: "text-blue-600",
       gradient: "from-blue-500 to-blue-600",
     },
@@ -39,7 +39,7 @@ export default function AnalyticsCards({ data }: AnalyticsCardsProps) {
       value: formatNumber(data.gadgetsSold),
       change: "+8%",
       icon: ShoppingCart,
-      iconBg: "bg-green-100",
+      iconBg: "bg-green-100 dark:bg-green-900/50",
       iconColor: "text-green-600",
       gradient: "from-green-500 to-green-600",
     },
@@ -48,7 +48,7 @@ export default function AnalyticsCards({ data }: AnalyticsCardsProps) {
       value: formatCurrency(data.totalIncome),
       change: "+15%",
       icon: DollarSign,
-      iconBg: "bg-emerald-100",
+      iconBg: "bg-emerald-100 dark:bg-emerald-900/50",
       iconColor: "text-emerald-600",
       gradient: "from-emerald-500 to-emerald-600",
     },
@@ -57,7 +57,7 @@ export default function AnalyticsCards({ data }: AnalyticsCardsProps) {
       value: formatNumber(data.totalUsers),
       change: "+23%",
       icon: Users,
-      iconBg: "bg-purple-100",
+      iconBg: "bg-purple-100 dark:bg-purple-900/50",
       iconColor: "text-purple-600",
       gradient: "from-purple-500 to-purple-600",
     },
@@ -70,7 +70,7 @@ export default function AnalyticsCards({ data }: AnalyticsCardsProps) {
         return (
           <Card key={index} className="relative overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
+              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 {card.title}
               </CardTitle>
               <div
@@ -80,10 +80,10 @@ export default function AnalyticsCards({ data }: AnalyticsCardsProps) {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                 {card.value}
               </div>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 <span className="text-green-600 font-medium">
                   {card.change}
                 </span>{" "}

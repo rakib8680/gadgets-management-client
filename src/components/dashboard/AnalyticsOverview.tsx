@@ -6,10 +6,12 @@ export default function AnalyticsOverview() {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between my-4 text-center sm:text-left">
       <div>
-        <h2 className="text-lg font-semibold text-gray-900">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
           Analytics Overview
         </h2>
-        <p className="text-sm text-gray-500">Track your business performance</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Track your business performance
+        </p>
       </div>
       <div className="flex flex-col gap-2 items-center sm:flex-row sm:items-center sm:gap-2 sm:justify-end">
         <Button variant="outline" size="sm">
