@@ -24,7 +24,8 @@ const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
-    updateUser: builder.mutation({ //dummy
+    updateUser: builder.mutation({
+      //dummy
       query: ({ userId, payload }) => ({
         url: `/user/${userId}`,
         method: "PATCH",
@@ -32,10 +33,19 @@ const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
-    deleteUser: builder.mutation({ //dummy
+    deleteUser: builder.mutation({
+      //dummy
       query: (userId) => ({
         url: `/user/${userId}`,
         method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
+    }),
+    bulkDeleteUsers: builder.mutation({
+      query: (payload) => ({
+        url: "/user/bulk-delete",
+        method: "DELETE",
+        body: payload,
       }),
       invalidatesTags: ["User"],
     }),
@@ -48,4 +58,5 @@ export const {
   useGetAllUsersQuery,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useBulkDeleteUsersMutation,
 } = userApi;

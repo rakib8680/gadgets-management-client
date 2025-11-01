@@ -22,6 +22,7 @@ import UserTableHeader from "./UserTableHeader";
 import UserTableRow from "./UserTableRow";
 import UpdateUserModal from "../ui/modals/update-user-modal";
 import DeleteUserModal from "../ui/modals/delete-user-modal";
+import BulkDeleteUserModal from "../ui/modals/bulk-delete-user-modal";
 
 interface UserListProps {
   title: string;
@@ -57,6 +58,7 @@ export default function UserList({
   // Modal states
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<TUserInfo | null>(null);
 
   // Debounced query
@@ -86,16 +88,25 @@ export default function UserList({
   const getId = useCallback((user: TUserInfo) => user._id, []);
   const currentUser = useAppSelector(selectCurrentUser);
   const isSelectable = useCallback(
-    (_user: TUserInfo) => {
+    (user: TUserInfo) => {
       if (!currentUser) return false;
-      // Only admin can select users
-      return currentUser.role === "admin";
+      // Admin can select any user except themselves
+      if (currentUser.role === "admin") {
+        return user._id !== currentUser._id;
+      }
+      return false; // Other roles cannot select
     },
     [currentUser]
   );
 
-  const { selectedIds, allSelected, someSelected, toggleSelectAll, toggleRow } =
-    useSelection<TUserInfo>(users, getId, { isSelectable });
+  const {
+    selectedIds,
+    allSelected,
+    someSelected,
+    toggleSelectAll,
+    toggleRow,
+    resetSelection,
+  } = useSelection<TUserInfo>(users, getId, { isSelectable });
 
   // Handlers
   const handleSort = (column: string) => {
@@ -126,6 +137,13 @@ export default function UserList({
   const handleModalSuccess = () => {
     refetch();
   };
+
+  const handleBulkDeleteSuccess = () => {
+    refetch();
+    resetSelection();
+  };
+
+  const selectedUsers = users.filter((user) => selectedIds.includes(user._id));
 
   // Determine if filters should be shown based on total count
   const shouldShowFilters = showFiltersCondition(meta.total);
@@ -185,12 +203,11 @@ export default function UserList({
             {selectedIds.length > 0 && (
               <div className="mb-3 flex justify-end">
                 <Button
+                  onClick={() => setBulkDeleteModalOpen(true)}
                   variant="destructive"
                   className="cursor-pointer"
-                  disabled
-                  title="Bulk actions not implemented yet"
                 >
-                  Selected ({selectedIds.length})
+                  Delete Selected ({selectedIds.length})
                 </Button>
               </div>
             )}
@@ -266,6 +283,12 @@ export default function UserList({
           onOpenChange={setDeleteModalOpen}
           user={selectedUser}
           onSuccess={handleModalSuccess}
+        />
+        <BulkDeleteUserModal
+          open={bulkDeleteModalOpen}
+          onOpenChange={setBulkDeleteModalOpen}
+          selectedUsers={selectedUsers}
+          onSuccess={handleBulkDeleteSuccess}
         />
       </div>
     </TooltipProvider>

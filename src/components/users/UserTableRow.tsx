@@ -21,6 +21,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { TUserInfo } from "@/types/auth";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 type UserTableRowProps = {
   user: TUserInfo;
@@ -37,6 +39,9 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
   onUpdate,
   onDelete,
 }) => {
+  const currentUser = useAppSelector(selectCurrentUser);
+  const isCurrentUser = currentUser?._id === user._id;
+
   // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -79,6 +84,7 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
           checked={selected}
           onCheckedChange={(value) => onToggleSelected?.(Boolean(value))}
           aria-label={`Select ${user.name}`}
+          disabled={isCurrentUser}
           className="cursor-pointer"
         />
       </TableCell>
