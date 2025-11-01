@@ -4,25 +4,38 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MoreHorizontal, User, Mail, Calendar, Clock } from "lucide-react";
+import {
+  MoreHorizontal,
+  Mail,
+  Calendar,
+  Clock,
+  Edit,
+  Trash2,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { TUserInfo } from "@/types/auth";
 
 type UserTableRowProps = {
   user: TUserInfo;
-  selected: boolean;
-  onToggleSelected: (checked: boolean) => void;
+  selected?: boolean;
+  onToggleSelected?: (checked: boolean) => void;
+  onUpdate: (user: TUserInfo) => void;
+  onDelete: (user: TUserInfo) => void;
 };
 
 const UserTableRow: React.FC<UserTableRowProps> = ({
   user,
   selected,
   onToggleSelected,
+  onUpdate,
+  onDelete,
 }) => {
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -60,16 +73,16 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
 
   return (
     <TableRow className="hover:bg-muted/50">
-      //checkbox
+      {/* checkbox */}
       <TableCell>
         <Checkbox
           checked={selected}
-          onCheckedChange={onToggleSelected}
+          onCheckedChange={(value) => onToggleSelected?.(Boolean(value))}
           aria-label={`Select ${user.name}`}
           className="cursor-pointer"
         />
       </TableCell>
-      //avatar
+      {/* avatar */}
       <TableCell>
         <Avatar className="h-8 w-8">
           <AvatarImage src={user.image} alt={user.name} />
@@ -78,7 +91,7 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
           </AvatarFallback>
         </Avatar>
       </TableCell>
-      //name
+      {/* name */}
       <TableCell>
         <div className="flex flex-col">
           <span className="font-medium text-foreground">{user.name}</span>
@@ -87,34 +100,34 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
           </span>
         </div>
       </TableCell>
-      //email
+      {/* email */}
       <TableCell>
         <div className="flex items-center gap-2">
           <Mail className="h-3 w-3 text-muted-foreground" />
           <span className="text-sm">{user.email}</span>
         </div>
       </TableCell>
-      //role
+      {/* role */}
       <TableCell>
         <Badge variant={getRoleVariant(user.role)} className="capitalize">
           {user.role}
         </Badge>
       </TableCell>
-      //joined date
+      {/* joined date */}
       <TableCell>
         <div className="flex items-center gap-2">
           <Calendar className="h-3 w-3 text-muted-foreground" />
           <span className="text-sm">{formatDate(user.createdAt)}</span>
         </div>
       </TableCell>
-      //last updated
+      {/* last updated */}
       <TableCell>
         <div className="flex items-center gap-2">
           <Clock className="h-3 w-3 text-muted-foreground" />
           <span className="text-sm">{formatDate(user.updatedAt)}</span>
         </div>
       </TableCell>
-      //actions
+      {/* actions */}
       <TableCell className="text-right">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -123,33 +136,21 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-[160px]">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={() => {
-                // TODO: Implement view user details
-                console.log("View user:", user._id);
-              }}
+              onClick={() => onUpdate(user)}
             >
-              <User className="mr-2 h-4 w-4" />
-              View Details
+              <Edit className="mr-2 h-4 w-4" />
+              Update Role
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={() => {
-                // TODO: Implement edit user
-                console.log("Edit user:", user._id);
-              }}
+              className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive"
+              onClick={() => onDelete(user)}
             >
-              Edit User
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer text-destructive focus:text-destructive"
-              onClick={() => {
-                // TODO: Implement delete user
-                console.log("Delete user:", user._id);
-              }}
-            >
+              <Trash2 className="mr-2 h-4 w-4" />
               Delete User
             </DropdownMenuItem>
           </DropdownMenuContent>

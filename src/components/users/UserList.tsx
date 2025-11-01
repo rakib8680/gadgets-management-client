@@ -20,6 +20,8 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import UserTableHeader from "./UserTableHeader";
 import UserTableRow from "./UserTableRow";
+import UpdateUserModal from "../ui/modals/update-user-modal";
+import DeleteUserModal from "../ui/modals/delete-user-modal";
 
 interface UserListProps {
   title: string;
@@ -51,6 +53,11 @@ export default function UserList({
   const [filterRole, setFilterRole] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(50);
+
+  // Modal states
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<TUserInfo | null>(null);
 
   // Debounced query
   const query: Record<string, any> = {};
@@ -104,6 +111,20 @@ export default function UserList({
     setSearchTerm("");
     setFilterRole("all");
     setCurrentPage(1);
+  };
+
+  const handleUpdate = (user: TUserInfo) => {
+    setSelectedUser(user);
+    setUpdateModalOpen(true);
+  };
+
+  const handleDelete = (user: TUserInfo) => {
+    setSelectedUser(user);
+    setDeleteModalOpen(true);
+  };
+
+  const handleModalSuccess = () => {
+    refetch();
   };
 
   // Determine if filters should be shown based on total count
@@ -209,6 +230,8 @@ export default function UserList({
                             onToggleSelected={(checked) =>
                               toggleRow(user._id, checked)
                             }
+                            onUpdate={handleUpdate}
+                            onDelete={handleDelete}
                           />
                         ))
                       )}
@@ -230,6 +253,20 @@ export default function UserList({
             onPageChange={setCurrentPage}
           />
         )}
+
+        {/* Modals */}
+        <UpdateUserModal
+          open={updateModalOpen}
+          onOpenChange={setUpdateModalOpen}
+          user={selectedUser}
+          onSuccess={handleModalSuccess}
+        />
+        <DeleteUserModal
+          open={deleteModalOpen}
+          onOpenChange={setDeleteModalOpen}
+          user={selectedUser}
+          onSuccess={handleModalSuccess}
+        />
       </div>
     </TooltipProvider>
   );
