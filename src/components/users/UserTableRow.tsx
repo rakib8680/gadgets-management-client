@@ -60,6 +60,7 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
 
   return (
     <TableRow className="hover:bg-muted/50">
+      //checkbox
       <TableCell>
         <Checkbox
           checked={selected}
@@ -68,7 +69,7 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
           className="cursor-pointer"
         />
       </TableCell>
-
+      //avatar
       <TableCell>
         <Avatar className="h-8 w-8">
           <AvatarImage src={user.image} alt={user.name} />
@@ -77,7 +78,7 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
           </AvatarFallback>
         </Avatar>
       </TableCell>
-
+      //name
       <TableCell>
         <div className="flex flex-col">
           <span className="font-medium text-foreground">{user.name}</span>
@@ -86,34 +87,34 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
           </span>
         </div>
       </TableCell>
-
+      //email
       <TableCell>
         <div className="flex items-center gap-2">
           <Mail className="h-3 w-3 text-muted-foreground" />
           <span className="text-sm">{user.email}</span>
         </div>
       </TableCell>
-
+      //role
       <TableCell>
         <Badge variant={getRoleVariant(user.role)} className="capitalize">
           {user.role}
         </Badge>
       </TableCell>
-
+      //joined date
       <TableCell>
         <div className="flex items-center gap-2">
           <Calendar className="h-3 w-3 text-muted-foreground" />
           <span className="text-sm">{formatDate(user.createdAt)}</span>
         </div>
       </TableCell>
-
+      //last updated
       <TableCell>
         <div className="flex items-center gap-2">
           <Clock className="h-3 w-3 text-muted-foreground" />
           <span className="text-sm">{formatDate(user.updatedAt)}</span>
         </div>
       </TableCell>
-
+      //actions
       <TableCell className="text-right">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
