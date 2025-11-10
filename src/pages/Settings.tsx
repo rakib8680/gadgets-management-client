@@ -468,7 +468,10 @@ const Settings = () => {
 
             <div className="flex gap-6">
               {/* Account Statistic */}
-              <Card className="flex-1">
+              <Card className="flex-1 relative">
+                <Badge className="absolute top-0 right-0  text-sm font-semibold text-gray-600 px-4 py-2 bg-gray-300 rounded-l-none rounded-b-none">
+                  DEMO
+                </Badge>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <BarChart3 className="size-5 text-orange-600" />
@@ -513,7 +516,10 @@ const Settings = () => {
               </Card>
 
               {/* Security Settings */}
-              <Card className="flex-2">
+              <Card className="flex-2 relative">
+                <Badge className="absolute top-0 right-0  text-sm font-semibold text-gray-600 px-4 py-2 bg-gray-300 rounded-l-none rounded-b-none">
+                  DEMO
+                </Badge>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <ShieldCheck className="size-5 text-green-600" />
@@ -628,7 +634,10 @@ const Settings = () => {
             </div>
 
             {/* Notifications Settings */}
-            <Card>
+            <Card className="relative">
+              <Badge className="absolute top-0 right-0  text-sm font-semibold text-gray-600 px-4 py-2 bg-gray-300 rounded-l-none rounded-b-none">
+                DEMO
+              </Badge>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Bell className="size-5 text-blue-600" />
