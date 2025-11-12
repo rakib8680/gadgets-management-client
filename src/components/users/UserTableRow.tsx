@@ -11,6 +11,7 @@ import {
   Clock,
   Edit,
   Trash2,
+  Eye,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -20,9 +21,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type { TUserInfo } from "@/types/auth";
 import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 type UserTableRowProps = {
   user: TUserInfo;
@@ -39,6 +46,7 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
   onUpdate,
   onDelete,
 }) => {
+  const navigate = useNavigate();
   const currentUser = useAppSelector(selectCurrentUser);
   const isCurrentUser = currentUser?._id === user._id;
 
@@ -134,33 +142,51 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
         </div>
       </TableCell>
       {/* actions */}
-      <TableCell className="text-right">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-[160px]">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={() => onUpdate(user)}
-            >
-              <Edit className="mr-2 h-4 w-4" />
-              Update Role
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive"
-              onClick={() => onDelete(user)}
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete User
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <TableCell className="h-20 w-[120px]">
+        <div className="w-full flex items-center gap-2 justify-end">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 p-0 cursor-pointer"
+                onClick={() => {
+                  navigate(`/dashboard/all-users/${user._id}`);
+                }}
+              >
+                <span className="sr-only">View user</span>
+                <Eye className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>View details</TooltipContent>
+          </Tooltip>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[160px]">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => onUpdate(user)}
+              >
+                <Edit className="mr-2 h-4 w-4" />
+                Update User
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive"
+                onClick={() => onDelete(user)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete User
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </TableCell>
     </TableRow>
   );

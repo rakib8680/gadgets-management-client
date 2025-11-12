@@ -14,6 +14,7 @@ import Analytics from "@/pages/Analytics";
 import GadgetDetail from "@/pages/GadgetDetail";
 import Settings from "@/pages/Settings";
 import User from "@/pages/User";
+import UserDetail from "@/pages/UserDetail";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute role={"admin"}>
             <User />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "all-users/:id",
+        element: (
+          <ProtectedRoute role={"admin"}>
+            <UserDetail />
           </ProtectedRoute>
         ),
       },
