@@ -75,6 +75,11 @@ export default function ChangePassword() {
                 <GM_Form
                     onSubmit={handleChangePassword}
                     resolver={zodResolver(changePasswordValidationSchema)}
+                    defaultValues={{
+                        currentPassword: "",
+                        newPassword: "",
+                        confirmPassword: "",
+                    }}
                     className="space-y-6"
                 >
                     {/* Current Password */}
