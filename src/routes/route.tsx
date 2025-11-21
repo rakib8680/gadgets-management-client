@@ -15,6 +15,7 @@ import GadgetDetail from "@/pages/GadgetDetail";
 import Settings from "@/pages/Settings";
 import User from "@/pages/User";
 import UserDetail from "@/pages/UserDetail";
+import ChangePassword from "@/pages/ChangePassword";
 
 const router = createBrowserRouter([
   {
@@ -89,6 +90,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute role={["admin", "seller"]}>
         <Settings />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/change-password",
+    element: (
+      <ProtectedRoute role={["admin", "seller"]}>
+        <ChangePassword />
       </ProtectedRoute>
     ),
   },

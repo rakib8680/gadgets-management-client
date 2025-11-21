@@ -170,7 +170,7 @@ const Settings = () => {
       // await deleteMyAccount().unwrap();
       setDeleteOpen(false);
       // Optionally you could redirect or auto-logout; keeping simple here
-    } catch {}
+    } catch { }
   };
 
   if (isLoading) {
@@ -218,8 +218,8 @@ const Settings = () => {
               </CardTitle>
               <CardDescription>
                 {typeof error === "object" &&
-                error !== null &&
-                "status" in (error as any)
+                  error !== null &&
+                  "status" in (error as any)
                   ? `Error ${(error as any).status}`
                   : "Something went wrong while fetching your profile."}
               </CardDescription>
@@ -561,6 +561,23 @@ const Settings = () => {
                             {security.twoFactor ? "Enabled" : "Enable"}
                           </Button>
                         </div>
+                        {/* change password */}
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-medium">Change Password</div>
+                            <div className="text-sm text-muted-foreground">
+                              Update your account password
+                            </div>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="cursor-pointer"
+                            onClick={() => navigate("/change-password")}
+                          >
+                            Update
+                          </Button>
+                        </div>
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="font-medium">Login Alerts</div>
@@ -838,6 +855,7 @@ const Settings = () => {
                 <Button
                   variant="outline"
                   className="w-full justify-start gap-2 cursor-pointer"
+                  onClick={() => navigate("/change-password")}
                 >
                   <Key className="size-4" />
                   Change Password
